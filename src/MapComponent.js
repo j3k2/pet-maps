@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose, withProps, withHandlers, withState } from 'recompose'
+import { compose, withProps, withHandlers } from 'recompose'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { connect } from 'react-redux';
 import { fetchShelters } from './actions';
@@ -15,9 +15,6 @@ const MapComponent = connect(state => {
     containerElement: <div style={{ height: `400px` }} />,
     mapElement: <div style={{ height: `100%` }} />,
   }),
-  withState({
-    shelters: null
-  }),
   withHandlers((props) => {
     const refs = {
       map: undefined,
@@ -27,7 +24,7 @@ const MapComponent = connect(state => {
       onMapMounted: () => ref => {
         refs.map = ref
       },
-      onBoundsChanged: () => () => {
+      onTilesLoaded: () => () => {
         props.fetchShelters(refs.map.getCenter());
       }
     }
@@ -41,8 +38,14 @@ const MapComponent = connect(state => {
       defaultCenter={{ lat: 37.7432421, lng: -122.497668 }}
       center={props.center}
       ref={props.onMapMounted}
-      onBoundsChanged={props.onBoundsChanged}
+      onTilesLoaded={props.onTilesLoaded}
     >
+    {props.shelters && props.shelters.map((shelter, id)=>{
+      return (<Marker
+        key={id}
+        position={{ lat: parseFloat(shelter.latitude.$t), lng: parseFloat(shelter.longitude.$t)}}
+      ></Marker>);
+    })}
     </GoogleMap>
     <div>
       {JSON.stringify(props.shelters)}
