@@ -1,12 +1,16 @@
 import React from 'react';
 import { compose, withProps, withHandlers } from 'recompose'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
+import { InfoBox } from 'react-google-maps/lib/components/addons/InfoBox';
+import _ from 'lodash';
 import { connect } from 'react-redux';
 import { fetchShelters } from './actions';
+import Geocode from 'react-geocode';
 
 const MapComponent = connect(state => {
   return {
-    shelters: state.shelters
+    shelters: state.shelters,
+    markers: state.markers
   }
 }, { fetchShelters })(compose(
   withProps({
@@ -25,7 +29,27 @@ const MapComponent = connect(state => {
         refs.map = ref
       },
       onTilesLoaded: () => () => {
-        props.fetchShelters(refs.map.getCenter());
+        console.log('otc');
+      },
+      onMarkerClick: () => (idx) => {
+        console.log(idx);
+        //action to update shelters in redux state -> which will update shelters in component props
+      },
+      onCenterChanged: () => () => {
+
+      },
+      onBoundsChanged: () => () => {
+        _.debounce(()=>{
+          Geocode.fromLatLng(refs.map.getCenter().lat(), refs.map.getCenter().lng()).then(
+            response => {
+              const zip = _.find(response.results[0].address_components, (component) => {
+                return component.types[0] === "postal_code"
+              });
+              if(zip) {
+                props.fetchShelters(zip.long_name, refs.map.getBounds());
+              }
+            });
+        }, 500)();
       }
     }
   }),
@@ -39,18 +63,28 @@ const MapComponent = connect(state => {
       center={props.center}
       ref={props.onMapMounted}
       onTilesLoaded={props.onTilesLoaded}
+      onBoundsChanged={props.onBoundsChanged}
+      onCenterChanged={props.onCenterChanged}
     >
-    {props.shelters && props.shelters.map((shelter, id)=>{
-      return (<Marker
-        key={id}
-        position={{ lat: parseFloat(shelter.latitude.$t), lng: parseFloat(shelter.longitude.$t)}}
-      ></Marker>);
-    })}
+      {props.markers && props.markers.length && props.markers.map((marker, idx) => {
+        return (<Marker
+          key={idx}
+          style={{background: 'pink'}}
+          position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
+          onClick={() => { props.onMarkerClick(idx) }}
+        >
+          {/* <InfoBox>
+            <div style={{ background: 'yellow', width: 100}}>
+            {marker.shelters[0].name.$t}
+            </div>
+          </InfoBox> */}
+        </Marker>);
+      })}
     </GoogleMap>
     <div>
-      {JSON.stringify(props.shelters)}
+      {JSON.stringify(props)}
     </div>
   </div>
-  ));
+));
 
 export default MapComponent;
