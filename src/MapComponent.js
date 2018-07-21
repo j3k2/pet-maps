@@ -1,5 +1,5 @@
 import React from 'react';
-import { compose, withProps, withHandlers } from 'recompose'
+import { compose, withProps, withHandlers, withState } from 'recompose'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { InfoBox } from 'react-google-maps/lib/components/addons/InfoBox';
 import _ from 'lodash';
@@ -19,6 +19,7 @@ const MapComponent = connect(state => {
     containerElement: <div style={{ height: `400px` }} />,
     mapElement: <div style={{ height: `100%` }} />,
   }),
+  withState('zip', 'setZip'),
   withHandlers((props) => {
     const refs = {
       map: undefined,
@@ -38,15 +39,16 @@ const MapComponent = connect(state => {
       onCenterChanged: () => () => {
 
       },
-      onBoundsChanged: () => () => {
+      onBoundsChanged: ({zip, setZip}) => () => {
         _.debounce(()=>{
           Geocode.fromLatLng(refs.map.getCenter().lat(), refs.map.getCenter().lng()).then(
             response => {
-              const zip = _.find(response.results[0].address_components, (component) => {
+              const changedZip = _.find(response.results[0].address_components, (component) => {
                 return component.types[0] === "postal_code"
               });
-              if(zip) {
-                props.fetchShelters(zip.long_name, refs.map.getBounds());
+              if(changedZip && (!zip || changedZip.long_name !== zip.long_name)) {
+                props.fetchShelters(changedZip.long_name, refs.map.getBounds());
+                setZip(changedZip);
               }
             });
         }, 500)();
@@ -69,7 +71,6 @@ const MapComponent = connect(state => {
       {props.markers && props.markers.length && props.markers.map((marker, idx) => {
         return (<Marker
           key={idx}
-          style={{background: 'pink'}}
           position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
           onClick={() => { props.onMarkerClick(idx) }}
         >
