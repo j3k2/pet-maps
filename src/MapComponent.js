@@ -16,10 +16,11 @@ const MapComponent = connect(state => {
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `400px` }} />,
+    containerElement: <div style={{ height: `400px`, width: '400px'}} />,
     mapElement: <div style={{ height: `100%` }} />,
   }),
   withState('zip', 'setZip'),
+  withState('zoom', 'setZoom'),
   withHandlers((props) => {
     const refs = {
       map: undefined,
@@ -27,28 +28,35 @@ const MapComponent = connect(state => {
 
     return {
       onMapMounted: () => ref => {
-        refs.map = ref
+        refs.map = ref;
       },
       onTilesLoaded: () => () => {
-        console.log('otc');
       },
-      onMarkerClick: () => (idx) => {
-        console.log(idx);
-        //action to update shelters in redux state -> which will update shelters in component props
+      onMarkerClick: () => () => {
       },
       onCenterChanged: () => () => {
+        console.log('occ');
 
       },
-      onBoundsChanged: ({zip, setZip}) => () => {
-        _.debounce(()=>{
+      onZoomChanged: () => () => {
+        console.log('ozc');
+      },
+      onBoundsChanged: ({ zip, setZip, zoom, setZoom }) => (update) => {
+        console.log('obc');
+        if (!update) {
+          return;
+        }
+        _.debounce(() => {
           Geocode.fromLatLng(refs.map.getCenter().lat(), refs.map.getCenter().lng()).then(
             response => {
               const changedZip = _.find(response.results[0].address_components, (component) => {
                 return component.types[0] === "postal_code"
               });
-              if(changedZip && (!zip || changedZip.long_name !== zip.long_name)) {
-                props.fetchShelters(changedZip.long_name, refs.map.getBounds());
+              if (refs.map.getZoom() !== zoom || 
+              (changedZip && (!zip || changedZip.long_name !== zip.long_name))) {
+                props.fetchShelters(changedZip.long_name, refs.map.getBounds(), refs.map.getZoom());
                 setZip(changedZip);
+                setZoom(refs.map.getZoom());
               }
             });
         }, 500)();
@@ -64,9 +72,10 @@ const MapComponent = connect(state => {
       defaultCenter={{ lat: 37.7432421, lng: -122.497668 }}
       center={props.center}
       ref={props.onMapMounted}
-      onTilesLoaded={props.onTilesLoaded}
-      onBoundsChanged={props.onBoundsChanged}
-      onCenterChanged={props.onCenterChanged}
+      onTilesLoaded={() => { props.onTilesLoaded(props.update) }}
+      onBoundsChanged={() => { props.onBoundsChanged(props.update) }}
+      onCenterChanged={() => { props.onCenterChanged(props.update) }}
+      onZoomChanged={() => { props.onZoomChanged(props.update) }}
     >
       {props.markers && props.markers.length && props.markers.map((marker, idx) => {
         return (<Marker

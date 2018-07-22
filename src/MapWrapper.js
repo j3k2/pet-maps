@@ -4,8 +4,9 @@ import Geocode from 'react-geocode';
 
 class MapWrapper extends React.PureComponent {
   state = {
-    center: { lat: 37.7432421, lng: -122.497668 },
-    inputValue: ''
+    center: null,
+    inputValue: '',
+    update: true
   }
 
   handleButton = () => {
@@ -13,7 +14,8 @@ class MapWrapper extends React.PureComponent {
       response => {
         const { lat, lng } = response.results[0].geometry.location;
         this.setState({
-          center: { lat, lng }
+          center: { lat, lng },
+          update: true
         });
       },
       error => {
@@ -34,13 +36,23 @@ class MapWrapper extends React.PureComponent {
     }
   }
 
+  handleCheckbox = (e) => {
+    this.setState({
+      update: e.target.checked
+    });
+  }
+
   render() {
     return (
       <div>
         <input type="text" onKeyDown={this.handleKeyDown} onChange={this.handleChange} value={this.state.inputValue} />
-        <MyMapComponent
+        {this.state.center && <div>
+          Update results as map is updated: <input type="checkbox" checked={this.state.update} onChange={this.handleCheckbox}/>
+          <MyMapComponent
           center={this.state.center}
+          update={this.state.update}
         />
+        </div>}
       </div>
     )
   }
