@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { connect } from 'react-redux';
 import { fetchShelters } from './actions';
 import Geocode from 'react-geocode';
+import paw from './animal-paw-print.png';
 
 const MapComponent = connect(state => {
   return {
@@ -80,6 +81,8 @@ const MapComponent = connect(state => {
       {props.markers && props.markers.length && props.markers.map((marker, idx) => {
         return (<Marker
           key={idx}
+          opacity={0.5}
+          icon={paw}
           position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
           onClick={() => { props.onMarkerClick(idx) }}
         >
@@ -91,9 +94,9 @@ const MapComponent = connect(state => {
         </Marker>);
       })}
     </GoogleMap>
-    <div>
+    {/* <div>
       {JSON.stringify(props)}
-    </div>
+    </div> */}
   </div>
 ));
 

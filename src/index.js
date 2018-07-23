@@ -3,6 +3,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import reducers from './reducers';
 import MapWrapper from './MapWrapper';
+import PetsView from './PetsView';
 import { createStore, applyMiddleware } from 'redux';
 import promise from 'redux-promise';
 import Geocode from "react-geocode";
@@ -15,7 +16,10 @@ class App extends Component {
   render() {
     return (
       <Provider store={createStoreWithMiddleware(reducers)}>
-        <MapWrapper />
+        <div>
+          <MapWrapper />
+          <PetsView />
+        </div>
       </Provider>
     )
   }

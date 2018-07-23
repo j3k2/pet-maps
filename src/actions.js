@@ -1,4 +1,5 @@
 import { getJSON } from 'jquery';
+import _ from 'lodash';
 
 function fetchShelters(zip, bounds, zoom) {
   const req = getJSON(`https://api.petfinder.com/shelter.find?location=${zip}&count=${Math.round(1000/(zoom))}&key=90d01a3ac254f887ffd89ccb11322d58&format=json&callback=?`);
@@ -10,6 +11,17 @@ function fetchShelters(zip, bounds, zoom) {
   }
 }
 
+function fetchPets(shelters) {
+  const requests = _.map(shelters, (shelter) => {
+    return getJSON(`https://api.petfinder.com/shelter.getPets?id=${shelter.id.$t}&key=90d01a3ac254f887ffd89ccb11322d58&format=json&callback=?`);
+  });
+  return {
+    type: 'FETCH_PETS',
+    payload: Promise.all(requests)
+  }
+} 
+
 export {
-  fetchShelters
+  fetchShelters,
+  fetchPets
 }

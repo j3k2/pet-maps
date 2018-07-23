@@ -31,8 +31,15 @@ export default (state = [], action) => {
       } else {
         return state;
       }
-
+    case "FETCH_PETS":
+      const pets = _.reduce(action.payload, (result, value, key) => {
+        return result.concat(value.petfinder.pets.pet);
+      }, []);
+      console.log(pets);
+      return Object.assign({}, state, {
+        pets: pets
+      });
     default:
-      return state
+      return state;
   }
 };
