@@ -17,7 +17,7 @@ const MapComponent = connect(state => {
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `400px`, width: '400px'}} />,
+    containerElement: <div style={{ height: `400px`, width: '400px', display: 'inline-block'}} />,
     mapElement: <div style={{ height: `100%` }} />,
   }),
   withState('zip', 'setZip'),
@@ -67,7 +67,7 @@ const MapComponent = connect(state => {
   withScriptjs,
   withGoogleMap
 )((props) =>
-  <div>
+  <div style={{display: 'inline'}}>
     <GoogleMap
       defaultZoom={12}
       defaultCenter={{ lat: 37.7432421, lng: -122.497668 }}

@@ -44,15 +44,15 @@ class MapWrapper extends React.PureComponent {
 
   render() {
     return (
-      <div>
-        <input type="text" onKeyDown={this.handleKeyDown} onChange={this.handleChange} value={this.state.inputValue} />
+      <div style={{marginTop: 40}}>
+        <input type="text" style={{margin: 'auto'}} onKeyDown={this.handleKeyDown} onChange={this.handleChange} value={this.state.inputValue} />
         {this.state.center && <div>
           Update results as map is updated: <input type="checkbox" checked={this.state.update} onChange={this.handleCheckbox}/>
-          <MyMapComponent
+        </div>}
+        {this.state.center && <MyMapComponent
           center={this.state.center}
           update={this.state.update}
-        />
-        </div>}
+        />}
       </div>
     )
   }

@@ -7,7 +7,7 @@ import PetsView from './PetsView';
 import { createStore, applyMiddleware } from 'redux';
 import promise from 'redux-promise';
 import Geocode from "react-geocode";
-
+import 'semantic-ui-css/semantic.min.css';
 Geocode.setApiKey("AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c");
 
 const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
@@ -17,9 +17,19 @@ class App extends Component {
     return (
       <Provider store={createStoreWithMiddleware(reducers)}>
         <div>
-          <MapWrapper />
-          <PetsView />
+          <div style={{ position: 'fixed', zIndex: 999, width: '100%', background: 'black', color: 'white' }}>
+            PET RADAR
+          </div>
+          <div>
+            <div style={{position: 'fixed', textAlign: 'center'}}>
+              <MapWrapper />
+            </div>
+            <div style={{position: 'relative', left: 400, width: 1024}}>
+              <PetsView />
+            </div>
+          </div>
         </div>
+
       </Provider>
     )
   }

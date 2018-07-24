@@ -32,9 +32,17 @@ export default (state = [], action) => {
         return state;
       }
     case "FETCH_PETS":
-      const pets = _.reduce(action.payload, (result, value, key) => {
+      let pets = _.reduce(action.payload, (result, value) => {
         return result.concat(value.petfinder.pets.pet);
       }, []);
+      pets = _.map(pets, (pet) => {
+        if (pet && pet.media.photos) {
+          pet.media.photos.photo = _.filter(pet.media.photos.photo, (photo) => {
+            return photo['@size'] === 'x'
+          });
+        }
+        return pet;
+      })
       console.log(pets);
       return Object.assign({}, state, {
         pets: pets
