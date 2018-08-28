@@ -44,7 +44,7 @@ const MapComponent = connect(state => {
       },
       onBoundsChanged: ({ zip, setZip, zoom, setZoom }) => (update) => {
         console.log('obc');
-        if (!update) {
+        if (!update || !refs.map.getCenter()) {
           return;
         }
         _.debounce(() => {

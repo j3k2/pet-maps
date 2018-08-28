@@ -1,39 +1,11 @@
 import React from 'react';
 import MyMapComponent from './MapComponent';
-import Geocode from 'react-geocode';
+import { connect } from 'react-redux';
+
 
 class MapWrapper extends React.PureComponent {
   state = {
-    center: null,
-    inputValue: '',
     update: true
-  }
-
-  handleButton = () => {
-    Geocode.fromAddress(this.state.inputValue).then(
-      response => {
-        const { lat, lng } = response.results[0].geometry.location;
-        this.setState({
-          center: { lat, lng },
-          update: true
-        });
-      },
-      error => {
-        console.error(error);
-      }
-    );
-  }
-
-  handleChange = (e) => {
-    this.setState({
-      inputValue: e.target.value
-    })
-  }
-
-  handleKeyDown = (e) => {
-    if (e.keyCode === 13) {
-      this.handleButton();
-    }
   }
 
   handleCheckbox = (e) => {
@@ -44,13 +16,12 @@ class MapWrapper extends React.PureComponent {
 
   render() {
     return (
-      <div style={{marginTop: 40}}>
-        <input type="text" style={{margin: 'auto'}} onKeyDown={this.handleKeyDown} onChange={this.handleChange} value={this.state.inputValue} />
-        {this.state.center && <div>
-          Update results as map is updated: <input type="checkbox" checked={this.state.update} onChange={this.handleCheckbox}/>
+      <div style={{}}>
+        {<div>
+          Update results as map is updated: <input type="checkbox" checked={this.state.update} onChange={this.handleCheckbox} />
         </div>}
-        {this.state.center && <MyMapComponent
-          center={this.state.center}
+        {<MyMapComponent
+          center={this.props.center}
           update={this.state.update}
         />}
       </div>
@@ -58,4 +29,6 @@ class MapWrapper extends React.PureComponent {
   }
 }
 
-export default MapWrapper;
+export default connect(state => {
+  return { center: state.center }
+}, {})(MapWrapper);

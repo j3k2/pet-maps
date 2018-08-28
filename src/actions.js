@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 
 function requestShelters(zip, zoom) {
-  return getJSON(`https://api.petfinder.com/shelter.find?location=${zip}&count=${Math.round(1000/(zoom))}&key=90d01a3ac254f887ffd89ccb11322d58&format=json&callback=?`);
+  return getJSON(`https://api.petfinder.com/shelter.find?location=${zip}&count=${Math.round(1000 / (zoom))}&key=90d01a3ac254f887ffd89ccb11322d58&format=json&callback=?`);
 }
 
 function fetchShelters(zip, bounds, zoom) {
@@ -13,7 +13,7 @@ function fetchShelters(zip, bounds, zoom) {
     });
 
     requestShelters(zip, zoom)
-      .then((res)=>{
+      .then((res) => {
         console.log('###shelters: ', res);
         dispatch({
           type: 'RECEIVE_SHELTERS',
@@ -24,6 +24,12 @@ function fetchShelters(zip, bounds, zoom) {
   }
 }
 
+function setCenter(lat, lng) {
+  return {
+    type: 'SET_CENTER',
+    payload: { lat, lng }
+  }
+}
 
 
 function fetchPets(shelters) {
@@ -37,7 +43,7 @@ function fetchPets(shelters) {
     });
 
     Promise.all(requests)
-      .then((res)=>{
+      .then((res) => {
         console.log('###pets: ', res);
         dispatch({
           type: 'RECEIVE_PETS',
@@ -51,10 +57,11 @@ function fetchPets(shelters) {
       payload: Promise.all(requests)
     }
   }
-  
-} 
+
+}
 
 export {
   fetchShelters,
-  fetchPets
+  fetchPets,
+  setCenter
 }

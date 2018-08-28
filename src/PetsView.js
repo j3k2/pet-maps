@@ -61,8 +61,7 @@ class PetsView extends Component {
         return (
             <div>
                 {this.props.pets && <div style={{ padding: 40 }}>
-                    {/* {JSON.stringify(this.props.pets)} */}
-                    {this.renderShelterLabels(this.props.shelters)}
+                    {this.renderShelterLabels(this.props.activeShelters)}
                     <br/>
                     {this.renderPetCards(this.props.pets)}
                 </div>}
@@ -81,5 +80,5 @@ class PetsView extends Component {
 }
 
 export default connect(state => {
-    return { shelters: state.shelters, pets: state.pets }
+    return { shelters: state.shelters, activeShelters: state.activeShelters, pets: state.pets }
 }, { fetchPets })(PetsView);

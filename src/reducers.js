@@ -47,6 +47,10 @@ export default (state = [], action) => {
       return Object.assign({}, state, {
         pets: pets
       });
+    case "SET_CENTER":
+      return Object.assign({}, state, {
+        center: action.payload
+      });
     default:
       return state;
   }
