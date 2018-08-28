@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { fetchPets } from './actions';
-import { Card, Icon, Image } from 'semantic-ui-react'
+import { Card, Label, Image, Icon } from 'semantic-ui-react'
 
 class PetsView extends Component {
     constructor(props) {
@@ -48,23 +48,36 @@ class PetsView extends Component {
         });
     }
 
+    renderShelterLabels(shelters) {
+        return _.map(shelters, (shelter, idx) => {
+            return (<Label active={shelter.active} as="a" style={{margin: 4}} key={idx}>
+                <Icon name={shelter.active ? "remove circle" : "add circle"}></Icon>
+                {shelter.name.$t}
+                </Label>);
+        });
+    }
 
     render() {
         return (
             <div>
                 {this.props.pets && <div style={{ padding: 40 }}>
                     {/* {JSON.stringify(this.props.pets)} */}
+                    {this.renderShelterLabels(this.props.shelters)}
+                    <br/>
                     {this.renderPetCards(this.props.pets)}
                 </div>}
             </div>
         )
     }
     componentDidUpdate(prevProps) {
-        console.log('cdu');
-        if (this.props.shelters && !_.isEqual(this.props.shelters, prevProps.shelters)) {
-            this.props.fetchPets(this.props.shelters);
-        }
-    }
+        console.log('cdu', this.props, prevProps);
+        if (!_.isEqual(this.props.shelters, prevProps.shelters)) {
+            console.log('fetching Pets...');
+            if(this.props.shelters && this.props.shelters.length) {
+                this.props.fetchPets(this.props.shelters);
+            }
+        } 
+   }
 }
 
 export default connect(state => {
