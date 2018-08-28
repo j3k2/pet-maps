@@ -5,12 +5,12 @@ import reducers from './reducers';
 import MapWrapper from './MapWrapper';
 import PetsView from './PetsView';
 import { createStore, applyMiddleware } from 'redux';
-import promise from 'redux-promise';
+import thunk from 'redux-thunk';
 import Geocode from "react-geocode";
 import 'semantic-ui-css/semantic.min.css';
 Geocode.setApiKey("AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c");
 
-const createStoreWithMiddleware = applyMiddleware(promise)(createStore);
+const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
 class App extends Component {
   render() {

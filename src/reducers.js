@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 export default (state = [], action) => {
   switch (action.type) {
-    case 'FETCH_SHELTERS':
+    case 'RECEIVE_SHELTERS':
       if (action.payload.petfinder && action.payload.petfinder.shelters && action.payload.petfinder.shelters.shelter) {
         const shelters = _.filter(action.payload.petfinder.shelters.shelter, (shelter) => {
           const lat = parseFloat(shelter.latitude.$t);
@@ -31,7 +31,7 @@ export default (state = [], action) => {
       } else {
         return state;
       }
-    case "FETCH_PETS":
+    case "RECEIVE_PETS":
       let pets = _.reduce(action.payload, (result, value) => {
         return result.concat(value.petfinder.pets.pet);
       }, []);
