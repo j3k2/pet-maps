@@ -1,7 +1,7 @@
 {
-  "name": "pet-radar",
+  "name": "pet-maps",
   "description": "",
-  "homepage": "https://stackblitz.com/edit/pet-radar",
+  "homepage": "",
   "dependencies": {
     "@types/googlemaps": "3.30.11",
     "@types/markerclustererplus": "2.1.33",
