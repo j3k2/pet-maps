@@ -18,23 +18,24 @@ class SlidingPanel extends Component {
             <div style={{
                 textAlign: 'center',
                 position: 'fixed',
-                height: this.state.visible ? 460 : 20,
+                height: this.state.visible ? 460 : 0,
                 zIndex: 999,
                 width: '100%',
                 background: 'lightgrey',
-                transition: 'all 1s'
+                color: 'black',
+                transition: 'all 0.4s'
             }}>
                 <div style={{
                     minWidth: 800,
                     marginTop: 20,
-                    transition: 'all 1s'
+                    transition: 'all 0.4s'
                 }}>
                     <div style={{
                         display: 'inline-block',
                         height: this.state.visible ? 420 : 0,
                         overflowY: 'hidden',
                         position: 'relative',
-                        transition: 'all 1s'
+                        transition: 'all 0.4s'
                     }}>
                         <MapWrapper />
                     </div>
@@ -43,15 +44,11 @@ class SlidingPanel extends Component {
                         height: this.state.visible ? 420 : 0,
                         overflowY: 'hidden',
                         position: 'relative',
-                        transition: 'all 1s'
+                        transition: 'all 0.4s'
                     }}>
                         <SheltersList />
                     </div>
                 </div>
-
-                <a style={{ position: 'absolute', bottom: 0, right: 0 }} onClick={() => {
-                    this.props.toggleVisibility();
-                }}>{this.state.visible ? 'Hide' : 'Show'}</a>
             </div >
         )
     }
