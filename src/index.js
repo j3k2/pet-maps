@@ -23,7 +23,7 @@ class App extends Component {
     return (
       <Provider store={createStoreWithMiddleware(reducers)}>
         <div>
-          <div style={{ position: 'fixed', height: 70, zIndex: 999, width: '100%', fontSize: 18, background: 'maroon', color: 'white' }}>
+          <div style={{ position: 'fixed', height: 70, zIndex: 999, width: '100%', fontSize: 18, background: 'maroon'}}>
             <div style={{ padding: 10 }}>
               <img src={paw} />
               <span style={{ marginLeft: 10, marginRight: 10 }}>PET RADAR</span>
@@ -34,7 +34,7 @@ class App extends Component {
               this.setState({ panelVisible: !this.state.panelVisible })
             }} />
           </div>
-          <div style={{ display: 'inline-block', marginTop: this.state.panelVisible ? 480 : 70, transition: 'all 1s' }}>
+          <div style={{ display: 'inline-block', marginTop: this.state.panelVisible ? 530 : 90, transition: 'all 1s' }}>
             <PetsView />
 
           </div>
