@@ -10,6 +10,7 @@ import SearchInput from './SearchInput';
 import SlidingPanel from './SlidingPanel';
 import { Icon } from 'semantic-ui-react';
 import WebFont from 'webfontloader';
+import './main.css';
 
 import 'semantic-ui-css/semantic.min.css';
 Geocode.setApiKey("AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c");

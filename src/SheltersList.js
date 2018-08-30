@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { Icon, List } from 'semantic-ui-react'
+import { Icon, List, Loader } from 'semantic-ui-react'
 
 class SheltersList extends Component {
     constructor(props) {
@@ -24,7 +24,7 @@ class SheltersList extends Component {
                     style={{ overflowY: 'scroll', padding: 20, height: '400px' }}>
                     {this.renderShelters(this.props.shelters)}
                 </List>}
-                {this.props.loading.shelters && 'Loading'}
+                {this.props.loading.shelters && <Loader active inline='centered'>Loading Shelters</Loader>}
             </div>
         )
     }

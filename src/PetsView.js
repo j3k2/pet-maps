@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { fetchPets } from './actions';
-import { Card, Label, Image, Icon } from 'semantic-ui-react'
+import { Card, Label, Image, Icon, Loader } from 'semantic-ui-react'
 
 class PetsView extends Component {
     constructor(props) {
@@ -65,7 +65,7 @@ class PetsView extends Component {
                     <br/>
                     {this.renderPetCards(this.props.pets)}
                 </div>}
-                {this.props.loading.pets && 'LOADING'}
+                {this.props.loading.pets && <Loader active inline='centered'>Loading Pets</Loader>}
             </div>
         )
     }
