@@ -31,7 +31,7 @@ class App extends Component {
     return (
       <Provider store={createStoreWithMiddleware(reducers)}>
         <div>
-          <div style={{ position: 'fixed', height: 70, zIndex: 999, width: '100%', fontSize: 18, background: 'orangered', color: 'white' }}>
+          <div style={{ position: 'fixed', height: 70, zIndex: 999, width: '100%', fontSize: 18, background: '#f2711c', color: 'white' }}>
             <div style={{ padding: 10, paddingLeft: 20 }}>
               <Icon name="paw" />
               <span style={{ fontFamily: 'Luckiest Guy', marginLeft: 5, marginRight: 30 }}>PET MAPS</span>

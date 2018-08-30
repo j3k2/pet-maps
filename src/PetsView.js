@@ -26,7 +26,7 @@ class PetsView extends Component {
                 key={pet.id.$t}>
                 <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
                 <Card.Content>
-                    <Label style={{ position: 'relative', top: '-6px' }} color='blue' ribbon>
+                    <Label style={{ position: 'relative', top: '-8px' }} color='orange' ribbon>
                         {this.getShelterName(pet.shelterId.$t)}
                     </Label>
                     <Card.Header style={{ height: 24, overflow: 'hidden' }}>
