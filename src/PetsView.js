@@ -8,6 +8,14 @@ class PetsView extends Component {
     constructor(props) {
         super(props);
     }
+    getShelterName(shelterId) {
+        const shelter = _.find(this.props.shelters, (shelter) => {
+            return shelterId === shelter.id.$t;
+        });
+        if (shelter) {
+            return shelter.name.$t.substring(0, 32);
+        }
+    }
     renderPetCards(pets) {
         return _.map(pets, (pet) => {
             if (!pet) {
@@ -18,7 +26,10 @@ class PetsView extends Component {
                 key={pet.id.$t}>
                 <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
                 <Card.Content>
-                    <Card.Header style={{height: 24, overflow: 'hidden'}}>
+                    <Label style={{ position: 'relative', top: '-6px' }} color='blue' ribbon>
+                        {this.getShelterName(pet.shelterId.$t)}
+                    </Label>
+                    <Card.Header style={{ height: 24, overflow: 'hidden' }}>
                         {pet.name.$t}
                     </Card.Header>
                     <Card.Meta>
@@ -50,10 +61,10 @@ class PetsView extends Component {
 
     renderShelterLabels(shelters) {
         return _.map(shelters, (shelter, idx) => {
-            return (<Label active={shelter.active} as="a" style={{margin: 4}} key={idx}>
+            return (<Label active={shelter.active} as="a" style={{ margin: 4 }} key={idx}>
                 <Icon name={shelter.active ? "remove circle" : "add circle"}></Icon>
                 {shelter.name.$t}
-                </Label>);
+            </Label>);
         });
     }
 
@@ -61,8 +72,8 @@ class PetsView extends Component {
         return (
             <div>
                 {!this.props.loading.pets && this.props.pets && <div style={{ padding: 40 }}>
-                    {this.renderShelterLabels(this.props.activeShelters)}
-                    <br/>
+                    {/* {this.renderShelterLabels(this.props.shelters)} */}
+                    <br />
                     {this.renderPetCards(this.props.pets)}
                 </div>}
                 {this.props.loading.pets && <Loader active inline='centered'>Loading Pets</Loader>}
@@ -73,13 +84,13 @@ class PetsView extends Component {
         console.log('cdu', this.props, prevProps);
         if (!_.isEqual(this.props.shelters, prevProps.shelters)) {
             console.log('fetching Pets...');
-            if(this.props.shelters && this.props.shelters.length) {
+            if (this.props.shelters && this.props.shelters.length) {
                 this.props.fetchPets(this.props.shelters);
             }
-        } 
-   }
+        }
+    }
 }
 
 export default connect(state => {
-    return { shelters: state.shelters, activeShelters: state.activeShelters, pets: state.pets, loading: state.loading }
+    return { shelters: state.shelters, shelters: state.shelters, pets: state.pets, loading: state.loading }
 }, { fetchPets })(PetsView);
