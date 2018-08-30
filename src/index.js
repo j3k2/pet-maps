@@ -21,7 +21,7 @@ const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
 WebFont.load({
   google: {
-    families: ['Luckiest Guy:300,400,700', 'sans-serif']
+    families: ['Luckiest Guy:700', 'Oxygen Mono:400']
   }
 });
 

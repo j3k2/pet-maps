@@ -13,7 +13,7 @@ class PetsView extends Component {
             return shelterId === shelter.id.$t;
         });
         if (shelter) {
-            return shelter.name.$t.substring(0, 32);
+            return shelter.name.$t.substring(0, 24) + (shelter.name.$t.length > 24 ? '...' : '');
         }
     }
     renderPetCards(pets) {
@@ -26,7 +26,7 @@ class PetsView extends Component {
                 key={pet.id.$t}>
                 <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
                 <Card.Content>
-                    <Label style={{ position: 'relative', top: '-8px' }} color='orange' ribbon>
+                    <Label style={{ fontFamily: 'Oxygen Mono', fontSize: 11, position: 'absolute', top: '210px', left: '242px'}} color='orange' ribbon="right">
                         {this.getShelterName(pet.shelterId.$t)}
                     </Label>
                     <Card.Header style={{ height: 24, overflow: 'hidden' }}>
