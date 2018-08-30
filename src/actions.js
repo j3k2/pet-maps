@@ -9,7 +9,7 @@ function requestShelters(zip, zoom) {
 function fetchShelters(zip, bounds, zoom) {
   return (dispatch) => {
     dispatch({
-      type: 'REQUEST_SHELTERS'
+      type: 'FETCH_SHELTERS'
     });
 
     requestShelters(zip, zoom)

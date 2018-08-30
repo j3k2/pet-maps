@@ -60,11 +60,12 @@ class PetsView extends Component {
     render() {
         return (
             <div>
-                {this.props.pets && <div style={{ padding: 40 }}>
+                {!this.props.loading.pets && this.props.pets && <div style={{ padding: 40 }}>
                     {this.renderShelterLabels(this.props.activeShelters)}
                     <br/>
                     {this.renderPetCards(this.props.pets)}
                 </div>}
+                {this.props.loading.pets && 'LOADING'}
             </div>
         )
     }
@@ -80,5 +81,5 @@ class PetsView extends Component {
 }
 
 export default connect(state => {
-    return { shelters: state.shelters, activeShelters: state.activeShelters, pets: state.pets }
+    return { shelters: state.shelters, activeShelters: state.activeShelters, pets: state.pets, loading: state.loading }
 }, { fetchPets })(PetsView);

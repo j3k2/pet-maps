@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export default (state = [], action) => {
+export default (state = { loading: {} }, action) => {
   switch (action.type) {
     case 'RECEIVE_SHELTERS':
       if (action.payload.petfinder && action.payload.petfinder.shelters && action.payload.petfinder.shelters.shelter) {
@@ -26,10 +26,17 @@ export default (state = [], action) => {
 
         return Object.assign({}, state, {
           shelters,
-          markers: Object.values(markers)
+          markers: Object.values(markers),
+          loading: Object.assign({}, state.loading, {
+            shelters: false
+          })
         })
       } else {
-        return state;
+        return Object.assign({}, state, {
+          loading: Object.assign({}, state.loading, {
+            shelters: false
+          })
+        })
       }
     case "RECEIVE_PETS":
       let pets = _.reduce(action.payload, (result, value) => {
@@ -45,8 +52,23 @@ export default (state = [], action) => {
       })
       console.log(pets);
       return Object.assign({}, state, {
-        pets: pets
+        pets: pets,
+        loading: Object.assign({}, state.loading, {
+          pets: false
+        })
       });
+    case "FETCH_PETS":
+      return Object.assign({}, state, {
+        loading: Object.assign({}, state.loading, {
+          pets: true
+        })
+      });
+    case "FETCH_SHELTERS":
+      return Object.assign({}, state, {
+        loading: Object.assign({}, state.loading, {
+          shelters: true
+        })
+      })
     case "SET_CENTER":
       console.log('set center', action);
       return Object.assign({}, state, {
