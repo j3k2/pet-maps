@@ -21,7 +21,7 @@ const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
 WebFont.load({
   google: {
-    families: ['Luckiest Guy:700', 'Oxygen Mono:400']
+    families: ['Luckiest Guy:400', 'Oxygen Mono:400']
   }
 });
 
