@@ -48,8 +48,14 @@ export default (state = [], action) => {
         pets: pets
       });
     case "SET_CENTER":
+      console.log('set center', action);
       return Object.assign({}, state, {
         center: action.payload
+      });
+    case "SET_UPDATE_OPTION":
+      console.log('set update option', action);
+      return Object.assign({}, state, {
+        update: action.payload
       });
     default:
       return state;

@@ -11,7 +11,9 @@ import paw from './animal-paw-print.png';
 const MapComponent = connect(state => {
   return {
     shelters: state.shelters,
-    markers: state.markers
+    markers: state.markers,
+    update: state.update,
+    center: state.center
   }
 }, { fetchShelters })(compose(
   withProps({
@@ -43,7 +45,6 @@ const MapComponent = connect(state => {
         console.log('ozc');
       },
       onBoundsChanged: ({ zip, setZip, zoom, setZoom }) => (update) => {
-        console.log('obc');
         if (!update || !refs.map.getCenter()) {
           return;
         }
@@ -94,9 +95,6 @@ const MapComponent = connect(state => {
         </Marker>);
       })}
     </GoogleMap>
-    {/* <div>
-      {JSON.stringify(props)}
-    </div> */}
   </div>
 ));
 

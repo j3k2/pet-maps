@@ -6,10 +6,9 @@ import PetsView from './PetsView';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import Geocode from "react-geocode";
-import paw from './animal-paw-print.png';
 import SearchInput from './SearchInput';
 import SlidingPanel from './SlidingPanel';
-import { Icon, Message } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import WebFont from 'webfontloader';
 
 import 'semantic-ui-css/semantic.min.css';
@@ -25,8 +24,7 @@ WebFont.load({
 
 class App extends Component {
   state = {
-    panelVisible: false,
-    center: null
+    panelVisible: false
   }
   render() {
     return (
@@ -36,12 +34,22 @@ class App extends Component {
             <div style={{ padding: 10, paddingLeft: 20 }}>
               <Icon name="paw" />
               <span style={{ fontFamily: 'Luckiest Guy', marginLeft: 5, marginRight: 30 }}>PET MAPS</span>
-              <SearchInput showPanel={() => {
-                this.setState({ panelVisible: true });
-              }} />
-              <Icon style={{ float: 'right', paddingTop: 10, paddingRight: 15, cursor: 'pointer' }} className={this.state.panelVisible ? '' : 'disabled'} name="map" onClick={() => {
-                this.setState({ panelVisible: !this.state.panelVisible })
-              }}></Icon>
+              <SearchInput
+                showPanel={() => {
+                  this.setState({ panelVisible: true });
+                }}
+              />
+              <span
+                style={{ float: 'right', paddingTop: 10, paddingRight: 15, cursor: 'pointer' }}
+                onClick={() => {
+                  this.setState({ panelVisible: !this.state.panelVisible })
+                }}>
+                {/* <span style={{ marginRight: 10 }}>
+                  Toggle Map
+                </span> */}
+                <Icon name="map"></Icon>
+                <Icon name={this.state.panelVisible ? 'toggle on' : 'toggle off'}></Icon>
+                </span>
             </div>
             <SlidingPanel visible={this.state.panelVisible} center={this.state.center} />
           </div>

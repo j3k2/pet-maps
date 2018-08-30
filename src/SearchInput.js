@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Input } from 'semantic-ui-react';
 import Geocode from 'react-geocode';
 import { connect } from 'react-redux';
-import { setCenter } from './actions';
+import { setCenterAndUpdateMap } from './actions';
 
 class SearchInput extends Component {
     state = {
@@ -12,7 +12,7 @@ class SearchInput extends Component {
         Geocode.fromAddress(this.state.inputValue).then(
             response => {
                 const { lat, lng } = response.results[0].geometry.location;
-                this.props.setCenter(lat, lng);
+                this.props.setCenterAndUpdateMap(lat, lng);
                 this.props.showPanel();
             },
             error => {
@@ -45,4 +45,4 @@ class SearchInput extends Component {
 
 export default connect(state => {
     return { center: state.center }
-}, { setCenter })(SearchInput);
+}, { setCenterAndUpdateMap })(SearchInput);

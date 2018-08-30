@@ -24,16 +24,26 @@ function fetchShelters(zip, bounds, zoom) {
   }
 }
 
-function setCenter(lat, lng) {
-  return {
-    type: 'SET_CENTER',
-    payload: { lat, lng }
+function setCenterAndUpdateMap(lat, lng) {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_CENTER',
+      payload: { lat, lng }
+    });
+    dispatch(setUpdateOption(true));
   }
 }
 
+function setUpdateOption(val) {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_UPDATE_OPTION',
+      payload: val
+    });
+  }
+}
 
 function fetchPets(shelters) {
-
   return (dispatch) => {
     dispatch({
       type: 'FETCH_PETS'
@@ -57,11 +67,11 @@ function fetchPets(shelters) {
       payload: Promise.all(requests)
     }
   }
-
 }
 
 export {
   fetchShelters,
   fetchPets,
-  setCenter
+  setCenterAndUpdateMap,
+  setUpdateOption
 }
