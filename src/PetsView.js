@@ -71,7 +71,7 @@ class PetsView extends Component {
     render() {
         return (
             <div>
-                {!this.props.loading.pets && this.props.pets && <div style={{ padding: 40 }}>
+                {!this.props.loading.pets && this.props.pets && <div style={{ padding: 20 }}>
                     {/* {this.renderShelterLabels(this.props.shelters)} */}
                     <br />
                     {this.renderPetCards(this.props.pets)}

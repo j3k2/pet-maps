@@ -59,8 +59,8 @@ class App extends Component {
             <div style={{
               width: '100%',
               minWidth: 840,
-              padding: 20,
-              margin: '0 auto'
+              padding: 40,
+              whiteSpace: 'nowrap'
             }}>
               <div style={{ display: 'inline-block' }}>
                 <MapWrapper />
