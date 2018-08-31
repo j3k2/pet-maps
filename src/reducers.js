@@ -47,16 +47,17 @@ export default (state = { loading: {}, activeFilters: {} }, action) => {
         }
       }, []);
 
+      const filters = {};
+
       function generateFilters(pet, fields) {
         fields.forEach((field) => {
           if (!filters[field]) {
             filters[field] = [];
           }
           filters[field].push(pet[field].$t);
-          filters[field] = _.uniq(filters[field]);
         });
       }
-      const filters = {};
+
       pets = _.map(pets, (pet) => {
         if (pet.media && pet.media.photos) {
           pet.media.photos.photo = _.filter(pet.media.photos.photo, (photo) => {
@@ -66,9 +67,15 @@ export default (state = { loading: {}, activeFilters: {} }, action) => {
         generateFilters(pet, ['animal', 'age', 'sex', 'size']);
         return pet;
       });
+      
+      const reducedFilters = _.reduce(filters, (result, value, field) => {
+        result[field] = _.countBy(value);
+        return result;
+      }, {});
+
       return Object.assign({}, state, {
         pets: pets,
-        filters: filters,
+        filters: reducedFilters,
         loading: Object.assign({}, state.loading, {
           pets: false
         })

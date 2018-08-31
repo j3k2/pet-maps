@@ -92,12 +92,12 @@ class PetsView extends Component {
         }
         function renderFilters() {
             return _.map(filters, (fieldValues, fieldName) => {
-                const options = _.map(fieldValues, (value) => {
-
+                const options = _.map(fieldValues, (count, key) => {
                     return {
-                        key: value,
-                        text: value,
-                        value: value
+                        key: key,
+                        text: `${key} (${count})`,
+                        value: key,
+                        count: count
                     }
                 });
                 return (
@@ -106,7 +106,7 @@ class PetsView extends Component {
                         label={fieldName.toUpperCase()}
                         placeholder={fieldName.toUpperCase()}
                         key={fieldName}
-                        options={options}
+                        options={_.sortBy(options, ['count']).reverse()}
                         onChange={(e, d) => {
                             handleDropdown(d, fieldName);
                         }} />
