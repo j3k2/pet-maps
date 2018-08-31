@@ -36,19 +36,19 @@ class PetsView extends Component {
                     <Card.Meta>
                         {pet.animal.$t}
                         <br />
-                        <Label size="mini">
+                        <Label size="tiny">
                             Age
                             <Label.Detail>
                                 {pet.age.$t}
                             </Label.Detail>
                         </Label>
-                        <Label size="mini">
+                        <Label size="tiny">
                             Sex
                             <Label.Detail>
                                 {pet.sex.$t}
                             </Label.Detail>
                         </Label>
-                        <Label size="mini">
+                        <Label size="tiny">
                             Size
                             <Label.Detail>
                                 {pet.size.$t}
