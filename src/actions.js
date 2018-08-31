@@ -54,7 +54,6 @@ function fetchPets(shelters) {
 
     Promise.all(requests)
       .then((res) => {
-        console.log('###pets: ', res);
         dispatch({
           type: 'RECEIVE_PETS',
           payload: res

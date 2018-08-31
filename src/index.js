@@ -39,21 +39,8 @@ class App extends Component {
                 <Icon name="paw" />
                 <span style={{ fontFamily: 'Luckiest Guy', marginLeft: 5, marginRight: 30 }}>PET MAPS</span>
               </div>
-              <SearchInput
-              // showPanel={() => {
-              //   this.setState({ panelVisible: true });
-              // }}
-              />
-              {/* <span
-                style={{ float: 'right', paddingTop: 10, paddingRight: 15, cursor: 'pointer' }}
-                onClick={() => {
-                  this.setState({ panelVisible: !this.state.panelVisible })
-                }}>
-                <Icon name="map"></Icon>
-                <Icon name={this.state.panelVisible ? 'toggle on' : 'toggle off'}></Icon>
-              </span> */}
+              <SearchInput />
             </div>
-            {/* <SlidingPanel visible={this.state.panelVisible} center={this.state.center} /> */}
           </div>
           <div style={{ display: 'inline-block', marginTop: 70 }}>
             <div style={{

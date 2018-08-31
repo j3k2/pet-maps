@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { fetchPets } from './actions';
-import { Card, Label, Image, Icon, Loader } from 'semantic-ui-react'
+import { Card, Label, Image, Icon, Loader, Menu, Form } from 'semantic-ui-react'
 
 class PetsView extends Component {
     constructor(props) {
@@ -22,20 +22,19 @@ class PetsView extends Component {
                 return;
             }
             return (<Card
-                style={{ display: 'inline-block', width: 228, margin: 10 }}
+                style={{ display: 'inline-block', width: 228, margin: 20 }}
                 key={pet.id.$t}>
                 <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
                 <Card.Content>
-                    <Label style={{ fontFamily: 'Oxygen Mono', fontSize: 11, position: 'absolute', top: '210px', left: '241px'}} color='orange' ribbon="right">
+                    <Label style={{ fontFamily: 'Oxygen Mono', fontSize: 11, position: 'absolute', top: '210px', left: '241px' }} color='orange' ribbon="right">
                         {this.getShelterName(pet.shelterId.$t)}
                     </Label>
                     <Card.Header style={{ height: 24, overflow: 'hidden' }}>
                         {pet.name.$t}
                     </Card.Header>
                     <Card.Meta>
-                        Sex: {pet.sex.$t} Size: {pet.size.$t}<br />
-                        {pet.age.$t} {pet.animal.$t}<br />
-
+                        {pet.animal.$t}<br />
+                        Age: {pet.age.$t} | Sex: {pet.sex.$t} | Size: {pet.size.$t}<br />
                     </Card.Meta>
                     {pet.breeds.breed.length && <Card.Description style={{ height: 60, overflow: 'hidden' }}>
                         {pet.description.$t}
@@ -68,12 +67,44 @@ class PetsView extends Component {
         });
     }
 
+    renderFiltersMenu(filters) {
+        function renderFilters() {
+            return _.map(filters, (fieldValues, fieldName) => {
+                const options = _.map(fieldValues, (value) => {
+                    return {
+                        key: value,
+                        text: value,
+                        value: value
+                    }
+                });
+                return (
+                    <Form.Dropdown
+                        multiple selection
+                        label={fieldName.toUpperCase()}
+                        placeholder={fieldName.toUpperCase()}
+                        key={fieldName}
+                        options={options}
+                        onChange={(e, d) => { console.log(e, d) }} />
+                )
+            });
+
+        }
+        return (
+            <Card fluid>
+                <Form>
+                    <Form.Group widths="equal" style={{ padding: 20 }}>
+                        {renderFilters()}
+                    </Form.Group>
+                </Form>
+            </Card>)
+    }
+
     render() {
         return (
             <div>
                 {!this.props.loading.pets && this.props.pets && <div style={{ padding: 20 }}>
                     {/* {this.renderShelterLabels(this.props.shelters)} */}
-                    <br />
+                    {this.renderFiltersMenu(this.props.filters)}
                     {this.renderPetCards(this.props.pets)}
                 </div>}
                 {this.props.loading.pets && <Loader active inline='centered'>Loading Pets</Loader>}
@@ -92,5 +123,5 @@ class PetsView extends Component {
 }
 
 export default connect(state => {
-    return { shelters: state.shelters, shelters: state.shelters, pets: state.pets, loading: state.loading }
+    return { shelters: state.shelters, pets: state.pets, loading: state.loading, filters: state.filters }
 }, { fetchPets })(PetsView);

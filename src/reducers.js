@@ -39,20 +39,36 @@ export default (state = { loading: {} }, action) => {
         })
       }
     case "RECEIVE_PETS":
-      let pets = _.reduce(action.payload, (result, value) => {
-        return result.concat(value.petfinder.pets.pet);
+      let pets = _.reduce(action.payload, (result, value, third) => {
+        if (!_.isEmpty(value.petfinder.pets)) {
+          return result.concat(value.petfinder.pets.pet);
+        } else {
+          return result;
+        }
       }, []);
+
+      function generateFilters(pet, fields) {
+        fields.forEach((field) => {
+          if (!filters[field]) {
+            filters[field] = [];
+          }
+          filters[field].push(pet[field].$t);
+          filters[field] = _.uniq(filters[field]);
+        });
+      }
+      const filters = {};
       pets = _.map(pets, (pet) => {
-        if (pet && pet.media.photos) {
+        if (pet.media && pet.media.photos) {
           pet.media.photos.photo = _.filter(pet.media.photos.photo, (photo) => {
             return photo['@size'] === 'x'
           });
         }
+        generateFilters(pet, ['animal', 'age', 'size', 'sex',]);
         return pet;
-      })
-      console.log(pets);
+      });
       return Object.assign({}, state, {
         pets: pets,
+        filters: filters,
         loading: Object.assign({}, state.loading, {
           pets: false
         })
