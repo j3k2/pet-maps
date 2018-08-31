@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { fetchPets, setActiveFilters } from './actions';
-import { Card, Label, Image, Icon, Loader, Menu, Form } from 'semantic-ui-react'
+import { Card, Label, Image, Icon, Loader, Form } from 'semantic-ui-react'
 
 class PetsView extends Component {
     constructor(props) {
@@ -27,15 +27,33 @@ class PetsView extends Component {
                 key={pet.id.$t}>
                 <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
                 <Card.Content>
-                    <Label style={{ fontFamily: 'Oxygen Mono', fontSize: 11, position: 'absolute', top: '210px', left: '241px' }} color='orange' ribbon="right">
+                    <Label style={{ fontFamily: 'Oxygen Mono', fontSize: 11, position: 'absolute', top: '210px', left: '241px' }} color='green' ribbon="right">
                         {this.getShelterName(pet.shelterId.$t)}
                     </Label>
                     <Card.Header style={{ height: 24, overflow: 'hidden' }}>
                         {pet.name.$t}
                     </Card.Header>
                     <Card.Meta>
-                        {pet.animal.$t}<br />
-                        Age: {pet.age.$t} | Sex: {pet.sex.$t} | Size: {pet.size.$t}<br />
+                        {pet.animal.$t}
+                        <br />
+                        <Label size="mini">
+                            Age
+                            <Label.Detail>
+                                {pet.age.$t}
+                            </Label.Detail>
+                        </Label>
+                        <Label size="mini">
+                            Sex
+                            <Label.Detail>
+                                {pet.sex.$t}
+                            </Label.Detail>
+                        </Label>
+                        <Label size="mini">
+                            Size
+                            <Label.Detail>
+                                {pet.size.$t}
+                            </Label.Detail>
+                        </Label>
                     </Card.Meta>
                     {pet.breeds.breed.length && <Card.Description style={{ height: 60, overflow: 'hidden' }}>
                         {pet.description.$t}
