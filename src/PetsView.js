@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { fetchPets } from './actions';
+import { fetchPets, setActiveFilters } from './actions';
 import { Card, Label, Image, Icon, Loader, Menu, Form } from 'semantic-ui-react'
 
 class PetsView extends Component {
@@ -16,7 +16,8 @@ class PetsView extends Component {
             return shelter.name.$t.substring(0, 24) + (shelter.name.$t.length > 24 ? '...' : '');
         }
     }
-    renderPetCards(pets) {
+    renderPetCards(pets, filters) {
+        console.log('FF', filters);
         return _.map(pets, (pet) => {
             if (!pet) {
                 return;
@@ -68,9 +69,13 @@ class PetsView extends Component {
     }
 
     renderFiltersMenu(filters) {
+        const handleDropdown = (data, fieldName) => {
+            this.props.setActiveFilters(data.value, fieldName);
+        }
         function renderFilters() {
             return _.map(filters, (fieldValues, fieldName) => {
                 const options = _.map(fieldValues, (value) => {
+
                     return {
                         key: value,
                         text: value,
@@ -84,7 +89,9 @@ class PetsView extends Component {
                         placeholder={fieldName.toUpperCase()}
                         key={fieldName}
                         options={options}
-                        onChange={(e, d) => { console.log(e, d) }} />
+                        onChange={(e, d) => {
+                            handleDropdown(d, fieldName);
+                        }} />
                 )
             });
 
@@ -103,9 +110,8 @@ class PetsView extends Component {
         return (
             <div>
                 {!this.props.loading.pets && this.props.pets && <div style={{ padding: 20 }}>
-                    {/* {this.renderShelterLabels(this.props.shelters)} */}
                     {this.renderFiltersMenu(this.props.filters)}
-                    {this.renderPetCards(this.props.pets)}
+                    {this.renderPetCards(this.props.pets, this.props.activeFilters)}
                 </div>}
                 {this.props.loading.pets && <Loader active inline='centered'>Loading Pets</Loader>}
             </div>
@@ -123,5 +129,5 @@ class PetsView extends Component {
 }
 
 export default connect(state => {
-    return { shelters: state.shelters, pets: state.pets, loading: state.loading, filters: state.filters }
-}, { fetchPets })(PetsView);
+    return { shelters: state.shelters, pets: state.pets, loading: state.loading, filters: state.filters, activeFilters: state.activeFilters }
+}, { fetchPets, setActiveFilters })(PetsView);

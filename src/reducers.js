@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export default (state = { loading: {} }, action) => {
+export default (state = { loading: {}, activeFilters: {} }, action) => {
   switch (action.type) {
     case 'RECEIVE_SHELTERS':
       if (action.payload.petfinder && action.payload.petfinder.shelters && action.payload.petfinder.shelters.shelter) {
@@ -94,6 +94,13 @@ export default (state = { loading: {} }, action) => {
       console.log('set update option', action);
       return Object.assign({}, state, {
         update: action.payload
+      });
+    case "SET_ACTIVE_FILTERS":
+      const activeFilters = {
+        [action.payload.field]: action.payload.value
+      };
+      return Object.assign({}, state, {
+        activeFilters: Object.assign({}, state.activeFilters, activeFilters)
       });
     default:
       return state;

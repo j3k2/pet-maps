@@ -68,9 +68,22 @@ function fetchPets(shelters) {
   }
 }
 
+function setActiveFilters(value, field) {
+  return (dispatch) => {
+    dispatch({
+      type: 'SET_ACTIVE_FILTERS',
+      payload: {
+        value,
+        field
+      }
+    });
+  }
+};
+
 export {
   fetchShelters,
   fetchPets,
   setCenterAndUpdateMap,
-  setUpdateOption
+  setUpdateOption,
+  setActiveFilters
 }
