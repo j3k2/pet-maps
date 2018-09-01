@@ -48,17 +48,17 @@ class App extends Component {
               <SearchInput />
             </div>
           </div>
-          <div style={{ display: 'inline-block', marginTop: 70, minWidth: 916, width: '100%'}}>
+          <div style={{ display: 'inline-block', marginTop: 70, minWidth: 902, width: '100%'}}>
             <div style={{
-              minWidth: 916,
-              padding: 40,
+              minWidth: 902,
+              padding: 20,
               whiteSpace: 'nowrap'
             }}>
-            <Segment>
+            <Segment style={{width: 902}}>
             <div style={{ display: 'inline-block' }}>
                 <MapWrapper />
               </div>
-              <div style={{ display: 'inline-block' }}>
+              <div style={{ display: 'inline-block', width: 454 }}>
                 <SheltersList />
               </div>
             </Segment>

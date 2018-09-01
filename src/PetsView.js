@@ -121,7 +121,7 @@ class PetsView extends Component {
 
     renderFiltersMenu(filters) {
         return (
-            <Segment>
+            <Segment style={{minWidth: 902}}>
                 <Form>
                     <Form.Group widths="equal" style={{ padding: 20 }}>
                         {this.renderFilters(filters)}

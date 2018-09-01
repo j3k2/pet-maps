@@ -10,7 +10,7 @@ class SheltersList extends Component {
     renderShelters(shelters) {
         return _.map(shelters, (shelter, idx) => {
             return (
-                <List.Item key={idx} style={{ textAlign: 'left' }}>
+                <List.Item key={idx} style={{ textAlign: 'left', whiteSpace: 'pre-wrap'}}>
                     {/* {`${idx+1}. ${shelter.name.$t}`} */}
                     {shelter.name.$t}
                     <Icon style={{float: 'right', marginLeft: 10}} name={shelter.active ? "remove circle" : "add circle"}></Icon>
@@ -24,7 +24,7 @@ class SheltersList extends Component {
                 {!this.props.loading.shelters && this.props.shelters && <List
                     ordered
                     selection
-                    style={{ overflowY: 'scroll', padding: 20, height: '400px' }}>
+                    style={{ overflowY: 'scroll', padding: 20, height: '400px', width: 454}}>
                     {this.renderShelters(this.props.shelters)}
                 </List>}
                 {this.props.loading.shelters && <Loader active inline='centered'>Loading Shelters</Loader>}
