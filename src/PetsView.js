@@ -27,7 +27,13 @@ class PetsView extends Component {
                 return;
             }
             return (<Card
-                style={{ cursor: 'pointer', display: 'inline-block', width: 228, margin: 20 }}
+                style={{ cursor: 'pointer', 
+                display: 'inline-block', 
+                width: 228, 
+                marginTop: 40,
+                marginRight: 20,
+                marginLeft: 20
+            }}
                 key={pet.id.$t}>
                 <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
                 <Card.Content>
@@ -117,7 +123,7 @@ class PetsView extends Component {
 
     renderFiltersMenu(filters) {
         return (
-            <Segment style={{minWidth: 902}}>
+            <Segment style={{minWidth: 902, background: '#198f35', color: '#004d00'}}>
                 <Form>
                     <Form.Group widths="equal" style={{ padding: 20 }}>
                         {this.renderFilters(filters)}
@@ -131,7 +137,10 @@ class PetsView extends Component {
             <div>
                 {!this.props.loading.pets && this.props.pets && <div style={{ padding: 20 }}>
                     {this.renderFiltersMenu(this.props.filters)}
+                    <Card.Group centered>
                     {this.renderPetCards(this.props.pets, this.props.activeFilters)}
+
+                    </Card.Group>
                 </div>}
                 {this.props.loading.pets && <Loader active inline='centered'>Loading Pets</Loader>}
             </div>

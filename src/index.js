@@ -54,7 +54,7 @@ class App extends Component {
               padding: 20,
               whiteSpace: 'nowrap'
             }}>
-            <Segment style={{width: 902}}>
+            <Segment style={{width: 902, background: '#198f35', color: '#004d00'}}>
             <div style={{ display: 'inline-block' }}>
                 <MapWrapper />
               </div>

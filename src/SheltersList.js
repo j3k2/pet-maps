@@ -21,7 +21,7 @@ class SheltersList extends Component {
                 {!this.props.loading.shelters && this.props.shelters && <List
                     ordered
                     selection
-                    style={{ overflowY: 'scroll', padding: 20, height: '400px', width: 454}}>
+                    style={{ overflowY: 'scroll', padding: 20, height: '400px', width: 454, background: 'white'}}>
                     {this.renderShelters(this.props.shelters)}
                 </List>}
                 {this.props.loading.shelters && <Loader active inline='centered'>Loading Shelters</Loader>}
