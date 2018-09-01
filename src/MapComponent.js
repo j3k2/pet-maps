@@ -1,7 +1,6 @@
 import React from 'react';
 import { compose, withProps, withHandlers, withState } from 'recompose'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
-import { InfoBox } from 'react-google-maps/lib/components/addons/InfoBox';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { fetchShelters } from './actions';

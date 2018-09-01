@@ -4,9 +4,6 @@ import { connect } from 'react-redux';
 import { Icon, List, Loader } from 'semantic-ui-react'
 
 class SheltersList extends Component {
-    constructor(props) {
-        super(props);
-    }
     renderShelters(shelters) {
         return _.map(shelters, (shelter, idx) => {
             return (

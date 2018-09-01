@@ -13,7 +13,6 @@ class SearchInput extends Component {
             response => {
                 const { lat, lng } = response.results[0].geometry.location;
                 this.props.setCenterAndUpdateMap(lat, lng);
-                this.props.showPanel();
             },
             error => {
                 console.error(error);

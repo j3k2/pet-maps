@@ -5,9 +5,6 @@ import { fetchPets, setActiveFilters } from './actions';
 import { Card, Label, Image, Icon, Loader, Form, Segment } from 'semantic-ui-react'
 
 class PetsView extends Component {
-    constructor(props) {
-        super(props);
-    }
     getShelterName(shelterId) {
         const shelter = _.find(this.props.shelters, (shelter) => {
             return shelterId === shelter.id.$t;
@@ -100,8 +97,7 @@ class PetsView extends Component {
                 return {
                     key: value,
                     text: value,
-                    value: value,
-                    fieldName: fieldName
+                    value: value
                 }
             });
             return (
