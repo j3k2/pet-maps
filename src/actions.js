@@ -57,9 +57,8 @@ function fetchPets(shelters) {
         dispatch({
           type: 'RECEIVE_PETS',
           payload: res
-        })
+        });
       })
-
 
     return {
       type: 'FETCH_PETS',

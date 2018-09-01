@@ -16,9 +16,16 @@ class PetsView extends Component {
             return shelter.name.$t.substring(0, 24) + (shelter.name.$t.length > 24 ? '...' : '');
         }
     }
-    renderPetCards(pets, filters) {
-        console.log('FF', filters);
-        return _.map(pets, (pet) => {
+    renderPetCards(pets, activeFilters) {
+        return _.map(_.reject(pets, (pet) => {
+            let rejectPet = false;
+            _.each(activeFilters, (activeFilter, fieldName) => {
+                if (activeFilter.length > 0 && activeFilters[fieldName].indexOf(pet[fieldName].$t) < 0) {
+                    rejectPet = true;
+                }
+            });
+            return rejectPet;
+        }), (pet) => {
             if (!pet) {
                 return;
             }
@@ -86,39 +93,38 @@ class PetsView extends Component {
         });
     }
 
-    renderFiltersMenu(filters) {
-        const handleDropdown = (data, fieldName) => {
-            this.props.setActiveFilters(data.value, fieldName);
-        }
-        function renderFilters() {
-            return _.map(filters, (fieldValues, fieldName) => {
-                const options = _.map(fieldValues, (value) => {
+    renderFilters(filters) {
+        return _.map(filters, (fieldValues, fieldName) => {
+            const options = _.map(fieldValues, (value) => {
 
-                    return {
-                        key: value,
-                        text: value,
-                        value: value
-                    }
-                });
-                return (
-                    <Form.Dropdown
-                        multiple selection
-                        label={fieldName.toUpperCase()}
-                        placeholder={fieldName.toUpperCase()}
-                        key={fieldName}
-                        options={options}
-                        onChange={(e, d) => {
-                            handleDropdown(d, fieldName);
-                        }} />
-                )
+                return {
+                    key: value,
+                    text: value,
+                    value: value,
+                    fieldName: fieldName
+                }
             });
+            return (
+                <Form.Dropdown
+                    multiple selection
+                    label={fieldName.toUpperCase()}
+                    placeholder={fieldName.toUpperCase()}
+                    key={fieldName}
+                    options={options}
+                    onChange={(e, d) => {
+                        this.props.setActiveFilters(d.value, fieldName);
+                    }} />
+            )
+        });
 
-        }
+    }
+
+    renderFiltersMenu(filters) {
         return (
             <Card fluid>
                 <Form>
                     <Form.Group widths="equal" style={{ padding: 20 }}>
-                        {renderFilters()}
+                        {this.renderFilters(filters)}
                     </Form.Group>
                 </Form>
             </Card>)

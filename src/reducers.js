@@ -69,6 +69,7 @@ export default (state = { loading: {}, activeFilters: {} }, action) => {
       return Object.assign({}, state, {
         pets: pets,
         filters: filters,
+        activeFilters: {},
         loading: Object.assign({}, state.loading, {
           pets: false
         })
