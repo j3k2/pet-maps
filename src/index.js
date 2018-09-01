@@ -7,10 +7,9 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import Geocode from "react-geocode";
 import SearchInput from './SearchInput';
-import SlidingPanel from './SlidingPanel';
 import SheltersList from './SheltersList';
 import MapWrapper from './MapWrapper';
-import { Icon } from 'semantic-ui-react';
+import { Icon, Segment } from 'semantic-ui-react';
 import WebFont from 'webfontloader';
 import './main.css';
 
@@ -49,19 +48,20 @@ class App extends Component {
               <SearchInput />
             </div>
           </div>
-          <div style={{ display: 'inline-block', marginTop: 70 }}>
+          <div style={{ display: 'inline-block', marginTop: 70, minWidth: 916, width: '100%'}}>
             <div style={{
-              width: '100%',
-              minWidth: 840,
+              minWidth: 916,
               padding: 40,
               whiteSpace: 'nowrap'
             }}>
-              <div style={{ display: 'inline-block' }}>
+            <Segment>
+            <div style={{ display: 'inline-block' }}>
                 <MapWrapper />
               </div>
-              <div style={{ display: 'inline-block', width: 400 }}>
+              <div style={{ display: 'inline-block' }}>
                 <SheltersList />
               </div>
+            </Segment>
             </div>
             <PetsView />
           </div>

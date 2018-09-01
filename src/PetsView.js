@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { fetchPets, setActiveFilters } from './actions';
-import { Card, Label, Image, Icon, Loader, Form } from 'semantic-ui-react'
+import { Card, Label, Image, Icon, Loader, Form, Segment } from 'semantic-ui-react'
 
 class PetsView extends Component {
     constructor(props) {
@@ -30,7 +30,7 @@ class PetsView extends Component {
                 return;
             }
             return (<Card
-                style={{ display: 'inline-block', width: 228, margin: 20 }}
+                style={{ cursor: 'pointer', display: 'inline-block', width: 228, margin: 20 }}
                 key={pet.id.$t}>
                 <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
                 <Card.Content>
@@ -121,13 +121,13 @@ class PetsView extends Component {
 
     renderFiltersMenu(filters) {
         return (
-            <Card fluid>
+            <Segment>
                 <Form>
                     <Form.Group widths="equal" style={{ padding: 20 }}>
                         {this.renderFilters(filters)}
                     </Form.Group>
                 </Form>
-            </Card>)
+            </Segment>)
     }
 
     render() {

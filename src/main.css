@@ -1,5 +1,6 @@
 body{
     font-variant-ligatures: no-common-ligatures;
+    overflow: scroll !important;
 }
 
 .ui.ribbon.right.label {
