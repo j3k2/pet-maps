@@ -32,14 +32,16 @@ class App extends Component {
     return (
       <Provider store={createStoreWithMiddleware(reducers)}>
         <div>
-          <div style={{ position: 'fixed', 
-          height: 70, 
-          zIndex: 999, 
-          width: '100%', 
-          minWidth: 840, 
-          fontSize: 18, 
-          background: '#198f35', 
-          color: 'white' }}>
+          <div style={{
+            position: 'fixed',
+            height: 70,
+            zIndex: 999,
+            width: '100%',
+            minWidth: 840,
+            fontSize: 18,
+            background: '#198f35',
+            color: 'white'
+          }}>
             <div style={{ padding: 10, paddingLeft: 20 }}>
               <div style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
                 <Icon name="paw" />
@@ -48,20 +50,33 @@ class App extends Component {
               <SearchInput />
             </div>
           </div>
-          <div style={{ display: 'inline-block', marginTop: 70, minWidth: 902, width: '100%'}}>
+          <div style={{
+            display: 'inline-block', 
+            marginTop: 70,
+            width: '100%'
+          }}>
             <div style={{
-              minWidth: 902,
               padding: 20,
-              whiteSpace: 'nowrap'
             }}>
-            <Segment style={{width: 902, background: '#198f35', color: 'white'}}>
-            <div style={{ display: 'inline-block' }}>
-                <MapWrapper />
-              </div>
-              <div style={{ display: 'inline-block', width: 454 }}>
-                <SheltersList />
-              </div>
-            </Segment>
+              <Segment style={{
+                background: '#198f35',
+                color: 'white',
+                padding: 20,
+                width: '100%',
+                minWidth: 441,
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  display: 'inline-block',
+                }}>
+                  <MapWrapper />
+                </div>
+                <div style={{
+                  display: 'inline-block',
+                }}>
+                  <SheltersList />
+                </div>
+              </Segment>
             </div>
             <PetsView />
           </div>

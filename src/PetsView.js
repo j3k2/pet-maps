@@ -109,8 +109,9 @@ class PetsView extends Component {
             });
             return (
                 <Form.Field>
-                    <label style={{color: 'white'}}>{fieldName.toUpperCase()}</label>
+                    <label style={{ color: 'white' }}>{fieldName.toUpperCase()}</label>
                     <Dropdown
+                        fluid
                         multiple selection
                         placeholder={fieldName.toUpperCase()}
                         key={fieldName}
@@ -119,6 +120,7 @@ class PetsView extends Component {
                             this.props.setActiveFilters(d.value, fieldName);
                         }} />
                 </Form.Field>
+
             )
         });
 
@@ -126,7 +128,10 @@ class PetsView extends Component {
 
     renderFiltersMenu(filters) {
         return (
-            <Segment style={{ minWidth: 902, background: '#198f35' }}>
+            <Segment style={{
+                minWidth: 441,
+                background: '#198f35'
+            }}>
                 <Form>
                     <Form.Group widths="equal" style={{ padding: 20 }}>
                         {this.renderFilters(filters)}
