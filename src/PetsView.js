@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { fetchPets, setActiveFilters } from './actions';
-import { Card, Label, Image, Icon, Loader, Form, Segment } from 'semantic-ui-react'
+import { Card, Label, Image, Icon, Loader, Form, Segment, Dropdown } from 'semantic-ui-react'
 
 class PetsView extends Component {
     getShelterName(shelterId) {
@@ -27,13 +27,14 @@ class PetsView extends Component {
                 return;
             }
             return (<Card
-                style={{ cursor: 'pointer', 
-                display: 'inline-block', 
-                width: 228, 
-                marginTop: 40,
-                marginRight: 20,
-                marginLeft: 20
-            }}
+                style={{
+                    cursor: 'pointer',
+                    display: 'inline-block',
+                    width: 228,
+                    marginTop: 40,
+                    marginRight: 20,
+                    marginLeft: 20
+                }}
                 key={pet.id.$t}>
                 <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
                 <Card.Content>
@@ -107,15 +108,17 @@ class PetsView extends Component {
                 }
             });
             return (
-                <Form.Dropdown
-                    multiple selection
-                    label={fieldName.toUpperCase()}
-                    placeholder={fieldName.toUpperCase()}
-                    key={fieldName}
-                    options={options}
-                    onChange={(e, d) => {
-                        this.props.setActiveFilters(d.value, fieldName);
-                    }} />
+                <Form.Field>
+                    <label style={{color: '#004d00'}}>{fieldName.toUpperCase()}</label>
+                    <Dropdown
+                        multiple selection
+                        placeholder={fieldName.toUpperCase()}
+                        key={fieldName}
+                        options={options}
+                        onChange={(e, d) => {
+                            this.props.setActiveFilters(d.value, fieldName);
+                        }} />
+                </Form.Field>
             )
         });
 
@@ -123,7 +126,7 @@ class PetsView extends Component {
 
     renderFiltersMenu(filters) {
         return (
-            <Segment style={{minWidth: 902, background: '#198f35', color: '#004d00'}}>
+            <Segment style={{ minWidth: 902, background: '#198f35' }}>
                 <Form>
                     <Form.Group widths="equal" style={{ padding: 20 }}>
                         {this.renderFilters(filters)}
@@ -138,7 +141,7 @@ class PetsView extends Component {
                 {!this.props.loading.pets && this.props.pets && <div style={{ padding: 20 }}>
                     {this.renderFiltersMenu(this.props.filters)}
                     <Card.Group centered>
-                    {this.renderPetCards(this.props.pets, this.props.activeFilters)}
+                        {this.renderPetCards(this.props.pets, this.props.activeFilters)}
 
                     </Card.Group>
                 </div>}
