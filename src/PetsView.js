@@ -109,7 +109,7 @@ class PetsView extends Component {
             });
             return (
                 <Form.Field>
-                    <label style={{color: '#004d00'}}>{fieldName.toUpperCase()}</label>
+                    <label style={{color: 'white'}}>{fieldName.toUpperCase()}</label>
                     <Dropdown
                         multiple selection
                         placeholder={fieldName.toUpperCase()}

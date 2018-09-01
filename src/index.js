@@ -39,7 +39,7 @@ class App extends Component {
           minWidth: 840, 
           fontSize: 18, 
           background: '#198f35', 
-          color: '#004d00' }}>
+          color: 'white' }}>
             <div style={{ padding: 10, paddingLeft: 20 }}>
               <div style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
                 <Icon name="paw" />
@@ -54,7 +54,7 @@ class App extends Component {
               padding: 20,
               whiteSpace: 'nowrap'
             }}>
-            <Segment style={{width: 902, background: '#198f35', color: '#004d00'}}>
+            <Segment style={{width: 902, background: '#198f35', color: 'white'}}>
             <div style={{ display: 'inline-block' }}>
                 <MapWrapper />
               </div>
