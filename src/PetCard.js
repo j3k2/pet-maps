@@ -1,9 +1,13 @@
-import React, {Component} from 'react';
-import {Image, Card, Label} from 'semantic-ui-react';
+import React, { Component } from 'react';
+import { Image, Card, Label, Modal } from 'semantic-ui-react';
 import _ from 'lodash';
 
 class PetCard extends Component {
-    render() {
+    state = {
+        modal: false
+    };
+
+    renderPetCardBody = () => {
         return (<Card
             style={{
                 cursor: 'pointer',
@@ -12,6 +16,9 @@ class PetCard extends Component {
                 marginTop: 40,
                 marginRight: 20,
                 marginLeft: 20
+            }}
+            onClick={() => {
+                this.setState({ modal: true });
             }}>
             <Image width={228} height={228} src={this.props.pet.media.photos ? this.props.pet.media.photos.photo[0].$t : ''}></Image>
             <Card.Content>
@@ -62,6 +69,31 @@ class PetCard extends Component {
                     })}
                 </Card.Content>}
         </Card>)
+    }
+
+    renderPetCardModal = () => {
+        return (<Modal open={this.state.modal}
+                    onClose={()=>{
+                        this.setState({modal: false})
+                    }}>
+                    <Modal.Header>Select a Photo</Modal.Header>
+                    <Modal.Content image>
+                        <Image wrapped size='medium' src='https://react.semantic-ui.com/images/avatar/large/rachel.png' />
+                        <Modal.Description>
+                            <p>We've found the following gravatar image associated with your e-mail address.</p>
+                            <p>Is it okay to use this photo?</p>
+                        </Modal.Description>
+                    </Modal.Content>
+                </Modal>);
+    }
+
+    render() {
+        return (
+            <div>
+                {this.renderPetCardBody()}
+                {this.renderPetCardModal()}
+            </div>
+        )
     }
 }
 
