@@ -2,17 +2,10 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { fetchPets, setActiveFilters } from './actions';
-import { Card, Label, Image, Icon, Loader, Form, Segment, Dropdown } from 'semantic-ui-react'
+import { Card, Label, Icon, Loader, Form, Segment, Dropdown } from 'semantic-ui-react'
+import PetCard from './PetCard';
 
 class PetsView extends Component {
-    getShelterName(shelterId) {
-        const shelter = _.find(this.props.shelters, (shelter) => {
-            return shelterId === shelter.id.$t;
-        });
-        if (shelter) {
-            return shelter.name.$t.substring(0, 24) + (shelter.name.$t.length > 24 ? '...' : '');
-        }
-    }
     renderPetCards(pets, activeFilters) {
         return _.map(_.reject(pets, (pet) => {
             let rejectPet = false;
@@ -26,65 +19,18 @@ class PetsView extends Component {
             if (!pet) {
                 return;
             }
-            return (<Card
-                style={{
-                    cursor: 'pointer',
-                    display: 'inline-block',
-                    width: 228,
-                    marginTop: 40,
-                    marginRight: 20,
-                    marginLeft: 20
+            return <PetCard
+                getShelterName={(shelterId) => {
+                    const shelter = _.find(this.props.shelters, (shelter) => {
+                        return shelterId === shelter.id.$t;
+                    });
+                    if (shelter) {
+                        return shelter.name.$t.substring(0, 24) + (shelter.name.$t.length > 24 ? '...' : '');
+                    }
                 }}
-                key={pet.id.$t}>
-                <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
-                <Card.Content>
-                    <Label style={{ fontFamily: 'Oxygen Mono', fontSize: 11, position: 'absolute', top: '210px', left: '241px' }} color='green' ribbon="right">
-                        {this.getShelterName(pet.shelterId.$t)}
-                    </Label>
-                    <Card.Header style={{ height: 24, overflow: 'hidden' }}>
-                        {pet.name.$t}
-                    </Card.Header>
-                    <Card.Meta>
-                        {pet.animal.$t}
-                        <br />
-                        <Label size="tiny">
-                            Age
-                            <Label.Detail>
-                                {pet.age.$t}
-                            </Label.Detail>
-                        </Label>
-                        <Label size="tiny">
-                            Sex
-                            <Label.Detail>
-                                {pet.sex.$t}
-                            </Label.Detail>
-                        </Label>
-                        <Label size="tiny">
-                            Size
-                            <Label.Detail>
-                                {pet.size.$t}
-                            </Label.Detail>
-                        </Label>
-                    </Card.Meta>
-                    {pet.breeds.breed.length && <Card.Description style={{ height: 60, overflow: 'hidden' }}>
-                        {pet.description.$t}
-                    </Card.Description>}
-                    {!pet.breeds.breed.length && <Card.Description style={{ height: 100, overflow: 'hidden' }}>
-                        {pet.description.$t}
-                    </Card.Description>}
+                key={pet.id.$t}
+                pet={pet}></PetCard>
 
-                </Card.Content>
-                {pet.breeds.breed.length &&
-                    <Card.Content style={{ overflow: 'hidden', height: 32, marginBottom: 10 }} extra>
-                        {pet.breeds.breed.length && _.map(pet.breeds.breed, (breed, idx) => {
-                            if (idx === pet.breeds.breed.length - 1) {
-                                return breed.$t || '';
-                            } else {
-                                return (breed.$t || '') + '/';
-                            }
-                        })}
-                    </Card.Content>}
-            </Card>)
         });
     }
 

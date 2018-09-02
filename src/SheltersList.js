@@ -7,27 +7,29 @@ class SheltersList extends Component {
     renderShelters(shelters) {
         return _.map(shelters, (shelter, idx) => {
             return (
-                <List.Item key={idx} style={{ textAlign: 'left', whiteSpace: 'pre-wrap'}}>
+                <List.Item key={idx} style={{ textAlign: 'left', whiteSpace: 'pre-wrap' }}>
                     {/* {`${idx+1}. ${shelter.name.$t}`} */}
                     {shelter.name.$t}
-                    <Icon style={{float: 'right', marginLeft: 10}} name={shelter.active ? "remove circle" : "add circle"}></Icon>
+                    <Icon style={{ float: 'right', marginLeft: 10 }} name={shelter.active ? "remove circle" : "add circle"}></Icon>
                 </List.Item>);
         });
     }
 
     render() {
         return (
-            <div>
-                {!this.props.loading.shelters && this.props.shelters && <List
-                    ordered
-                    selection
-                    style={{ overflowY: 'scroll', 
-                    padding: 20, 
-                    marginLeft: 0, 
-                    height: '400px', 
+            <div
+                style={{
+                    overflowY: 'scroll',
+                    padding: 20,
+                    marginLeft: 0,
+                    height: '400px',
                     // width: 454, 
                     width: 400,
-                    background: 'white'}}>
+                    background: 'white'
+                }}>
+                {!this.props.loading.shelters && this.props.shelters && <List
+                    ordered
+                    selection>
                     {this.renderShelters(this.props.shelters)}
                 </List>}
                 {this.props.loading.shelters && <Loader active inline='centered'>Loading Shelters</Loader>}
@@ -37,5 +39,5 @@ class SheltersList extends Component {
 }
 
 export default connect(state => {
-    return { shelters: state.shelters, loading: state.loading}
+    return { shelters: state.shelters, loading: state.loading }
 }, {})(SheltersList);
