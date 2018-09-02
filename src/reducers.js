@@ -63,7 +63,7 @@ export default (state = { loading: {}, activeFilters: {} }, action) => {
             return photo['@size'] === 'x'
           });
         }
-        generateFilters(pet, ['animal', 'age', 'sex', 'size']);
+        generateFilters(pet, ['animal', 'size', 'age', 'sex']);
         return pet;
       });
       return Object.assign({}, state, {

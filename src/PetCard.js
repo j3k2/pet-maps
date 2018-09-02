@@ -32,6 +32,12 @@ class PetCard extends Component {
                     {pet.animal.$t}
                     <br />
                     <Label size="tiny">
+                        Size
+                        <Label.Detail>
+                            {pet.size.$t}
+                        </Label.Detail>
+                    </Label>
+                    <Label size="tiny">
                         Age
                         <Label.Detail>
                             {pet.age.$t}
@@ -41,12 +47,6 @@ class PetCard extends Component {
                         Sex
                         <Label.Detail>
                             {pet.sex.$t}
-                        </Label.Detail>
-                    </Label>
-                    <Label size="tiny">
-                        Size
-                        <Label.Detail>
-                            {pet.size.$t}
                         </Label.Detail>
                     </Label>
                 </Card.Meta>
@@ -91,27 +91,7 @@ class PetCard extends Component {
                                     }
                                 })}
                                 {')'}</span>)}
-                            <br />
-                            <div style={{ position: 'relative', left: '-.5rem' }}>
-                                <Label size="tiny">
-                                    Age
-                                <Label.Detail>
-                                        {pet.age.$t}
-                                    </Label.Detail>
-                                </Label>
-                                <Label size="tiny">
-                                    Sex
-                                <Label.Detail>
-                                        {pet.sex.$t}
-                                    </Label.Detail>
-                                </Label>
-                                <Label size="tiny">
-                                    Size
-                                <Label.Detail>
-                                        {pet.size.$t}
-                                    </Label.Detail>
-                                </Label>
-                            </div>
+
                         </Header.Subheader>
                         <div style={{ position: 'relative', left: '-.5rem', top: '.5rem' }}>
                             {pet.contact.email.$t ? <Label as='a' color="green" href={`mailto:${pet.contact.email.$t}`} content={pet.contact.email.$t} icon='mail' /> : ''}
@@ -131,7 +111,27 @@ class PetCard extends Component {
                             {pet.contact.city.$t && pet.contact.state.$t && pet.contact.zip.$t && !pet.contact.address1.$t ? <span><Icon name="marker"></Icon>{` ${pet.contact.city.$t}, ${pet.contact.state.$t} ${pet.contact.zip.$t}`}</span> : ''}
                         </Segment>
                     </div>
-                    <Modal.Description style={{ width: 0, paddingLeft: 20}}>
+                    <Modal.Description style={{ width: 0, paddingLeft: 20 }}>
+                        <p>
+                            <Label>
+                                Size
+                                <Label.Detail>
+                                    {pet.size.$t}
+                                </Label.Detail>
+                            </Label>
+                            <Label>
+                                Age
+                                <Label.Detail>
+                                    {pet.age.$t}
+                                </Label.Detail>
+                            </Label>
+                            <Label>
+                                Sex
+                                <Label.Detail>
+                                    {pet.sex.$t}
+                                </Label.Detail>
+                            </Label>
+                        </p>
                         {pet.options.option && pet.options.option.length && <p>
                             {_.map(pet.options.option, (option) => {
                                 if (option.$t) {
