@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Image, Card, Label, Modal, Segment, Header } from 'semantic-ui-react';
+import { Image, Card, Label, Modal, Segment, Header, Icon } from 'semantic-ui-react';
 import _ from 'lodash';
 
 class PetCard extends Component {
@@ -91,36 +91,49 @@ class PetCard extends Component {
                                     }
                                 })}
                                 {')'}</span>)}
+                            <br />
+                            <div style={{position: 'relative', left: '-.5rem'}}>
+                                <Label size="tiny">
+                                    Age
+                                <Label.Detail>
+                                        {pet.age.$t}
+                                    </Label.Detail>
+                                </Label>
+                                <Label size="tiny">
+                                    Sex
+                                <Label.Detail>
+                                        {pet.sex.$t}
+                                    </Label.Detail>
+                                </Label>
+                                <Label size="tiny">
+                                    Size
+                                <Label.Detail>
+                                        {pet.size.$t}
+                                    </Label.Detail>
+                                </Label>
+                            </div>
                         </Header.Subheader>
-                        <Header.Subheader style={{position: 'relative', left: '-.5rem', top: '.5rem'}}>
-                            <Label size="tiny">
-                                Age
-                                <Label.Detail>
-                                    {pet.age.$t}
-                                </Label.Detail>
-                            </Label>
-                            <Label size="tiny">
-                                Sex
-                                <Label.Detail>
-                                    {pet.sex.$t}
-                                </Label.Detail>
-                            </Label>
-                            <Label size="tiny">
-                                Size
-                                <Label.Detail>
-                                    {pet.size.$t}
-                                </Label.Detail>
-                            </Label>
-                        </Header.Subheader>
+                        <div style={{ position: 'relative', left: '-.5rem', top: '.5rem' }}>
+                            {pet.contact.email.$t ? <Label as='a' color="green" href={`mailto:${pet.contact.email.$t}`} content={pet.contact.email.$t} icon='mail' /> : ''}
+                            {pet.contact.phone.$t ? <Label as='a' color="green" href={`tel:${pet.contact.phone.$t}`} content={pet.contact.phone.$t} icon='phone' /> : ''}
+                        </div>
                     </Header>
                 </Modal.Header >
                 <Modal.Content image scrolling>
                     <div>
-                        <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image><br />
-                        <Segment style={{ margin: 20 }}>asdf</Segment>
+                        <Segment>
+                            <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
+                        </Segment>
+                        <Segment>
+                            {pet.contact.address1.$t ? <span><Icon name="marker"></Icon> {pet.contact.address1.$t}<br /></span> : ''}
+                            {pet.contact.address2.$t ? <span>{pet.contact.address2.$t}<br /></span> : ''}
+                            {pet.contact.city.$t && pet.contact.state.$t && pet.contact.zip.$t && pet.contact.address1.$t ? <span>{`${pet.contact.city.$t}, ${pet.contact.state.$t} ${pet.contact.zip.$t}`}</span> : ''}
+                            {pet.contact.city.$t && pet.contact.state.$t && pet.contact.zip.$t && !pet.contact.address1.$t ? <span><Icon name="marker"></Icon>{` ${pet.contact.city.$t}, ${pet.contact.state.$t} ${pet.contact.zip.$t}`}</span> : ''}
+                        </Segment>
                     </div>
                     <Modal.Description style={{ width: 0, padding: 20 }}>
                         {pet.description.$t}
+                        {JSON.stringify(pet.options.option)}
                     </Modal.Description>
                 </Modal.Content>
             </Modal >);
