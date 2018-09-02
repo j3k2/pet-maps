@@ -131,11 +131,19 @@ class PetCard extends Component {
                             {pet.contact.city.$t && pet.contact.state.$t && pet.contact.zip.$t && !pet.contact.address1.$t ? <span><Icon name="marker"></Icon>{` ${pet.contact.city.$t}, ${pet.contact.state.$t} ${pet.contact.zip.$t}`}</span> : ''}
                         </Segment>
                     </div>
-                    <Modal.Description style={{ width: 0, padding: 20 }}>
-                        {_.map(pet.options.option, (option) => {
-                            return (<Label icon="check" content={_.startCase(option.$t)} />);
-                        })}
-                        <p style={{marginTop: 20}}>
+                    <Modal.Description style={{ width: 0, paddingLeft: 20}}>
+                        {pet.options.option && pet.options.option.length && <p>
+                            {_.map(pet.options.option, (option) => {
+                                if (option.$t) {
+                                    return (
+                                        <Label icon="check" content={_.startCase(option.$t)} />
+                                    );
+                                } else {
+                                    return null;
+                                }
+                            })}
+                        </p>}
+                        <p>
                             {pet.description.$t}
                         </p>
                     </Modal.Description>
