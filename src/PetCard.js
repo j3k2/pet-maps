@@ -92,7 +92,7 @@ class PetCard extends Component {
                                 })}
                                 {')'}</span>)}
                             <br />
-                            <div style={{position: 'relative', left: '-.5rem'}}>
+                            <div style={{ position: 'relative', left: '-.5rem' }}>
                                 <Label size="tiny">
                                     Age
                                 <Label.Detail>
@@ -132,8 +132,12 @@ class PetCard extends Component {
                         </Segment>
                     </div>
                     <Modal.Description style={{ width: 0, padding: 20 }}>
-                        {pet.description.$t}
-                        {JSON.stringify(pet.options.option)}
+                        {_.map(pet.options.option, (option) => {
+                            return (<Label icon="check" content={_.startCase(option.$t)} />);
+                        })}
+                        <p style={{marginTop: 20}}>
+                            {pet.description.$t}
+                        </p>
                     </Modal.Description>
                 </Modal.Content>
             </Modal >);
