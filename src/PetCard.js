@@ -104,10 +104,14 @@ class PetCard extends Component {
                     <div>
                         <ImageViewer images={pet.media.photos ? pet.media.photos.photo : null}></ImageViewer>
                         <Segment style={{ width: 268 }}>
-                            {pet.contact.address1.$t ? <span><Icon name="marker"></Icon> {pet.contact.address1.$t}<br /></span> : ''}
-                            {pet.contact.address2.$t ? <span>{pet.contact.address2.$t}<br /></span> : ''}
-                            {pet.contact.city.$t && pet.contact.state.$t && pet.contact.zip.$t && pet.contact.address1.$t ? <span>{`${pet.contact.city.$t}, ${pet.contact.state.$t} ${pet.contact.zip.$t}`}</span> : ''}
-                            {pet.contact.city.$t && pet.contact.state.$t && pet.contact.zip.$t && !pet.contact.address1.$t ? <span><Icon name="marker"></Icon>{` ${pet.contact.city.$t}, ${pet.contact.state.$t} ${pet.contact.zip.$t}`}</span> : ''}
+                            <span>
+                                <Icon name="marker"></Icon>
+                                {this.props.getShelterName(pet.shelterId.$t, true)}<br/>
+                                {pet.contact.address1.$t ? <span>{pet.contact.address1.$t}<br /></span> : ''}
+                                {pet.contact.address2.$t ? <span>{pet.contact.address2.$t}<br /></span> : ''}
+                                {pet.contact.city.$t && pet.contact.state.$t && pet.contact.zip.$t && pet.contact.address1.$t ? <span>{`${pet.contact.city.$t}, ${pet.contact.state.$t} ${pet.contact.zip.$t}`}</span> : ''}
+                                {pet.contact.city.$t && pet.contact.state.$t && pet.contact.zip.$t && !pet.contact.address1.$t ? <span>{` ${pet.contact.city.$t}, ${pet.contact.state.$t} ${pet.contact.zip.$t}`}</span> : ''}
+                            </span>
                         </Segment>
                     </div>
                     <Modal.Description style={{ width: 0, paddingLeft: 20 }}>
