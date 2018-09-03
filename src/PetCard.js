@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Image, Card, Label, Modal, Segment, Header, Icon } from 'semantic-ui-react';
 import _ from 'lodash';
+import ImageViewer from './ImageViewer';
 
 class PetCard extends Component {
     state = {
@@ -101,10 +102,8 @@ class PetCard extends Component {
                 </Modal.Header >
                 <Modal.Content image scrolling>
                     <div>
-                        <Segment>
-                            <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
-                        </Segment>
-                        <Segment>
+                        <ImageViewer images={pet.media.photos ? pet.media.photos.photo : null}></ImageViewer>
+                        <Segment style={{ width: 268 }}>
                             {pet.contact.address1.$t ? <span><Icon name="marker"></Icon> {pet.contact.address1.$t}<br /></span> : ''}
                             {pet.contact.address2.$t ? <span>{pet.contact.address2.$t}<br /></span> : ''}
                             {pet.contact.city.$t && pet.contact.state.$t && pet.contact.zip.$t && pet.contact.address1.$t ? <span>{`${pet.contact.city.$t}, ${pet.contact.state.$t} ${pet.contact.zip.$t}`}</span> : ''}
