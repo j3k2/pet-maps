@@ -74,7 +74,7 @@ class PetCard extends Component {
 
     renderPetCardModal = (pet) => {
         return (
-            <Modal open={this.state.modal}
+            <Modal style={{ minWidth: 332 }} open={this.state.modal}
                 onClose={() => {
                     this.setState({ modal: false })
                 }}>
@@ -95,7 +95,7 @@ class PetCard extends Component {
 
                         </Header.Subheader>
                         <div style={{ position: 'relative', left: '-.5rem', top: '.5rem' }}>
-                            {pet.contact.email.$t ? <Label as='a' color="green" href={`mailto:${pet.contact.email.$t}`} content={pet.contact.email.$t} icon='mail' /> : ''}
+                            {pet.contact.email.$t ? <Label as='a' color="green" href={`mailto:${pet.contact.email.$t}?subject=Adopting ${pet.name.$t}`} content={pet.contact.email.$t} icon='mail' /> : ''}
                             {pet.contact.phone.$t ? <Label as='a' color="green" href={`tel:${pet.contact.phone.$t}`} content={pet.contact.phone.$t} icon='phone' /> : ''}
                         </div>
                     </Header>
@@ -106,7 +106,7 @@ class PetCard extends Component {
                         <Segment style={{ width: 268 }}>
                             <span>
                                 <Icon name="marker"></Icon>
-                                {this.props.getShelterName(pet.shelterId.$t, true)}<br/>
+                                {this.props.getShelterName(pet.shelterId.$t, true)}<br />
                                 {pet.contact.address1.$t ? <span>{pet.contact.address1.$t}<br /></span> : ''}
                                 {pet.contact.address2.$t ? <span>{pet.contact.address2.$t}<br /></span> : ''}
                                 {pet.contact.city.$t && pet.contact.state.$t && pet.contact.zip.$t && pet.contact.address1.$t ? <span>{`${pet.contact.city.$t}, ${pet.contact.state.$t} ${pet.contact.zip.$t}`}</span> : ''}
@@ -139,7 +139,7 @@ class PetCard extends Component {
                             {_.map(pet.options.option, (option) => {
                                 if (option.$t) {
                                     return (
-                                        <Label icon="check" content={_.startCase(option.$t)} />
+                                        <Label icon="check" style={{ marginBottom: '.3em' }} content={_.startCase(option.$t)} />
                                     );
                                 } else {
                                     return null;

@@ -57,11 +57,11 @@ class PetsView extends Component {
             });
             return (
                 <Form.Field>
-                    <label style={{ color: 'white' }}>{fieldName.toUpperCase()}</label>
+                    <label style={{ color: 'white' }}>{_.startCase(fieldName)}</label>
                     <Dropdown
                         fluid
                         multiple selection
-                        placeholder={fieldName.toUpperCase()}
+                        placeholder={_.startCase(fieldName)}
                         key={fieldName}
                         options={options}
                         onChange={(e, d) => {
