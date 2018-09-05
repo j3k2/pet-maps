@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { fetchPets, setActiveFilters } from './actions';
+import { fetchPets, setActivePetFilters, setPetFilters } from './actions';
 import { Card, Label, Icon, Loader, Form, Segment, Dropdown } from 'semantic-ui-react'
 import PetCard from './PetCard';
 
 class PetsView extends Component {
-    renderPetCards(pets, activeFilters) {
+    renderPetCards(pets, activePetFilters) {
         return _.map(_.reject(pets, (pet) => {
             let rejectPet = false;
-            _.each(activeFilters, (activeFilter, fieldName) => {
-                if (activeFilter.length > 0 && activeFilters[fieldName].indexOf(pet[fieldName].$t) < 0) {
+            _.each(activePetFilters, (activeFilter, fieldName) => {
+                if (activeFilter.length > 0 && activePetFilters[fieldName].indexOf(pet[fieldName].$t) < 0) {
                     rejectPet = true;
                 }
             });
@@ -45,7 +45,8 @@ class PetsView extends Component {
         });
     }
 
-    renderFilters(filters) {
+    renderPetFilters(filters) {
+        console.log('RPF', filters);
         return _.map(filters, (fieldValues, fieldName) => {
             const options = _.map(fieldValues, (value) => {
 
@@ -65,7 +66,7 @@ class PetsView extends Component {
                         key={fieldName}
                         options={options}
                         onChange={(e, d) => {
-                            this.props.setActiveFilters(d.value, fieldName);
+                            this.props.setActivePetFilters(d.value, fieldName);
                         }} />
                 </Form.Field>
 
@@ -74,7 +75,7 @@ class PetsView extends Component {
 
     }
 
-    renderFiltersMenu(filters) {
+    renderPetFiltersMenu(petFilters) {
         return (
             <Segment style={{
                 minWidth: 441,
@@ -82,7 +83,7 @@ class PetsView extends Component {
             }}>
                 <Form>
                     <Form.Group widths="equal" style={{ padding: 20 }}>
-                        {this.renderFilters(filters)}
+                        {this.renderPetFilters(petFilters)}
                     </Form.Group>
                 </Form>
             </Segment>)
@@ -92,9 +93,9 @@ class PetsView extends Component {
         return (
             <div>
                 {!this.props.loading.pets && this.props.pets && <div style={{ padding: 20 }}>
-                    {this.renderFiltersMenu(this.props.filters)}
+                    {this.renderPetFiltersMenu(this.props.petFilters)}
                     <Card.Group centered>
-                        {this.renderPetCards(this.props.pets, this.props.activeFilters)}
+                        {this.renderPetCards(this.props.pets, this.props.activePetFilters)}
 
                     </Card.Group>
                 </div>}
@@ -103,16 +104,20 @@ class PetsView extends Component {
         )
     }
     componentDidUpdate(prevProps) {
-        console.log('cdu', this.props, prevProps);
+        console.log('cdu', this.props.pets, prevProps.pets);
         if (!_.isEqual(this.props.shelters, prevProps.shelters)) {
             console.log('fetching Pets...');
             if (this.props.shelters && this.props.shelters.length) {
                 this.props.fetchPets(this.props.shelters);
             }
         }
+        // if ((this.props.pets.length || prevProps.pets.length) && !_.isEqual(this.props.pets && prevProps.pets)) {
+        //     console.log('pets updated...');
+        //     this.props.setPetFilters(this.props.pets);
+        // }
     }
 }
 
 export default connect(state => {
-    return { shelters: state.shelters, pets: state.pets, loading: state.loading, filters: state.filters, activeFilters: state.activeFilters }
-}, { fetchPets, setActiveFilters })(PetsView);
+    return { shelters: state.shelters, pets: state.pets, loading: state.loading, petFilters: state.petFilters, activePetFilters: state.activePetFilters }
+}, { fetchPets, setActivePetFilters })(PetsView);

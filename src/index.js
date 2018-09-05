@@ -51,7 +51,7 @@ class App extends Component {
             </div>
           </div>
           <div style={{
-            display: 'inline-block', 
+            display: 'inline-block',
             marginTop: 70,
             width: '100%'
           }}>

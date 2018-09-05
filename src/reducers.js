@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export default (state = { loading: {}, activeFilters: {} }, action) => {
+export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] }, action) => {
   switch (action.type) {
     case 'RECEIVE_SHELTERS':
       if (action.payload.petfinder && action.payload.petfinder.shelters && action.payload.petfinder.shelters.shelter) {
@@ -47,29 +47,30 @@ export default (state = { loading: {}, activeFilters: {} }, action) => {
         }
       }, []);
 
-      function generateFilters(pet, fields) {
+      function generatePetFilters(pet, fields) {
         fields.forEach((field) => {
-          if (!filters[field]) {
-            filters[field] = [];
+          if (!petFilters[field]) {
+            petFilters[field] = [];
           }
-          filters[field].push(pet[field].$t);
-          filters[field] = _.uniq(filters[field]);
+          petFilters[field].push(pet[field].$t);
+          petFilters[field] = _.uniq(petFilters[field]);
         });
       }
-      const filters = {};
+      const petFilters = {};
       pets = _.map(pets, (pet) => {
         if (pet.media && pet.media.photos) {
           pet.media.photos.photo = _.filter(pet.media.photos.photo, (photo) => {
             return photo['@size'] === 'x'
           });
         }
-        generateFilters(pet, ['animal', 'size', 'age', 'sex']);
+        generatePetFilters(pet, ['animal', 'size', 'age', 'sex']);
         return pet;
       });
       return Object.assign({}, state, {
-        pets: pets,
-        filters: filters,
-        activeFilters: {},
+        pets: _.sortBy(pets, ['id.$t']),
+        petsByShelter: _.groupBy(pets, 'shelterId.$t'),
+        petFilters: petFilters,
+        activePetFilters: {},
         loading: Object.assign({}, state.loading, {
           pets: false
         })
@@ -96,13 +97,28 @@ export default (state = { loading: {}, activeFilters: {} }, action) => {
       return Object.assign({}, state, {
         update: action.payload
       });
-    case "SET_ACTIVE_FILTERS":
-      const activeFilters = {
+    case "SET_ACTIVE_PET_FILTERS":
+      const activePetFilters = {
         [action.payload.field]: action.payload.value
       };
       return Object.assign({}, state, {
-        activeFilters: Object.assign({}, state.activeFilters, activeFilters)
+        activePetFilters: Object.assign({}, state.activePetFilters, activePetFilters)
       });
+    case "ADD_SHELTER_FILTER": {
+      console.log('ADD SHELTER FILTER', state.shelterFilters, action.payload);
+      const shelterFilters = JSON.parse(JSON.stringify(state.shelterFilters));
+      shelterFilters.push(action.payload)
+      return Object.assign({}, state, {
+        shelterFilters
+      });
+    }
+    case "REMOVE_SHELTER_FILTER": {
+      const shelterFilters = JSON.parse(JSON.stringify(state.shelterFilters));
+      shelterFilters.splice(state.shelterFilters.indexOf(action.payload), 1);
+      return Object.assign({}, state, {
+        shelterFilters
+      });
+    }
     default:
       return state;
   }
