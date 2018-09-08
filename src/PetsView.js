@@ -92,7 +92,7 @@ class PetsView extends Component {
     render() {
         return (
             <div>
-                {!this.props.loading.pets && this.props.pets && <div style={{ padding: 20 }}>
+                {!this.props.loading.pets && !_.isEmpty(this.props.petFilters) && <div style={{ padding: 20 }}>
                     {this.renderPetFiltersMenu(this.props.petFilters)}
                     <Card.Group centered>
                         {this.renderPetCards(this.props.pets, this.props.activePetFilters)}
@@ -102,19 +102,6 @@ class PetsView extends Component {
                 {this.props.loading.pets && <Loader active inline='centered'>Loading Pets</Loader>}
             </div>
         )
-    }
-    componentDidUpdate(prevProps) {
-        console.log('cdu', this.props.pets, prevProps.pets);
-        if (!_.isEqual(this.props.shelters, prevProps.shelters)) {
-            console.log('fetching Pets...');
-            if (this.props.shelters && this.props.shelters.length) {
-                this.props.fetchPets(this.props.shelters);
-            }
-        }
-        // if ((this.props.pets.length || prevProps.pets.length) && !_.isEqual(this.props.pets && prevProps.pets)) {
-        //     console.log('pets updated...');
-        //     this.props.setPetFilters(this.props.pets);
-        // }
     }
 }
 

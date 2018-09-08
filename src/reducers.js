@@ -25,7 +25,8 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         });
 
         return Object.assign({}, state, {
-          shelters,
+          shelters: _.sortBy(shelters, ['zip.$t']),
+          activeShelters: shelters,
           markers: Object.values(markers),
           loading: Object.assign({}, state.loading, {
             shelters: false
@@ -85,7 +86,12 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
       return Object.assign({}, state, {
         loading: Object.assign({}, state.loading, {
           shelters: true
-        })
+        }),
+        pets: {},
+        shelters: {},
+        activeShelters: {},
+        petFilters: {},
+        activePetFilters: {}
       })
     case "SET_CENTER":
       console.log('set center', action);
@@ -104,19 +110,26 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
       return Object.assign({}, state, {
         activePetFilters: Object.assign({}, state.activePetFilters, activePetFilters)
       });
-    case "ADD_SHELTER_FILTER": {
-      console.log('ADD SHELTER FILTER', state.shelterFilters, action.payload);
-      const shelterFilters = JSON.parse(JSON.stringify(state.shelterFilters));
-      shelterFilters.push(action.payload)
+    case "ADD_SHELTER_TO_ACTIVE": {
+      let activeShelters = JSON.parse(JSON.stringify(state.activeShelters));
+      const shelter = _.find(JSON.parse(JSON.stringify(state.shelters)), (shelter) => { return shelter.id.$t === action.payload });
+      console.log('HELLO', shelter, activeShelters);
+      activeShelters.push(shelter)
       return Object.assign({}, state, {
-        shelterFilters
+        activeShelters
       });
     }
-    case "REMOVE_SHELTER_FILTER": {
-      const shelterFilters = JSON.parse(JSON.stringify(state.shelterFilters));
-      shelterFilters.splice(state.shelterFilters.indexOf(action.payload), 1);
+    case "REMOVE_SHELTER_FROM_ACTIVE": {
+      const activeShelters = _.reject(JSON.parse(JSON.stringify(state.activeShelters)), (shelter) => {
+        return shelter.id.$t === action.payload;
+      });
       return Object.assign({}, state, {
-        shelterFilters
+        activeShelters
+      });
+    }
+    case "RESET_ACTIVE_SHELTERS": {
+      return Object.assign({}, state, {
+        activeShelters: JSON.parse(JSON.stringify(state.shelters))
       });
     }
     default:

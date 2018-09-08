@@ -43,6 +43,22 @@ function setUpdateOption(val) {
   }
 }
 
+function setActiveShelter(shelterId, checked) {
+  return (dispatch) => {
+    if(checked) {
+      dispatch({
+        type:'ADD_SHELTER_TO_ACTIVE',
+        payload: shelterId
+      })
+    } else {
+      dispatch({
+        type:'REMOVE_SHELTER_FROM_ACTIVE',
+        payload: shelterId
+      })    
+    }
+  }
+}
+
 function fetchPets(shelters) {
   return (dispatch) => {
     dispatch({
@@ -79,28 +95,19 @@ function setActivePetFilters(value, field) {
   }
 };
 
-function setShelterFilter(shelterId, removeFilter) {
-  console.log('removeFilter', removeFilter);
+function resetActiveShelters(){
   return (dispatch) => {
-    if (removeFilter) {
-      dispatch({
-        type: 'REMOVE_SHELTER_FILTER',
-        payload: shelterId
-      });
-    } else {
-      dispatch({
-        type: 'ADD_SHELTER_FILTER',
-        payload: shelterId
-      });
-    }
+    dispatch({
+      type: 'RESET_ACTIVE_SHELTERS'
+    })
   }
 }
-
 export {
   fetchShelters,
   fetchPets,
   setCenterAndUpdateMap,
   setUpdateOption,
   setActivePetFilters,
-  setShelterFilter
+  setActiveShelter,
+  resetActiveShelters
 }
