@@ -92,7 +92,9 @@ const MapComponent = connect(state => {
           opacity={marker.highlight ? 1 : 0.6}
           icon={paw}
           position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
-          onClick={() => { props.onMarkerClick(idx) }}
+          onClick={()=>{
+            // scroll to shelter in ShelterList
+            props.updateMarkerHighlight(marker.markerId, true)}}
           onMouseOver={()=>{props.updateMarkerHighlight(marker.markerId, true)}}
           onMouseOut={()=>{props.updateMarkerHighlight(marker.markerId)}}
         >
