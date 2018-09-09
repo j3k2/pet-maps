@@ -113,22 +113,11 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
       });
     case "ADD_SHELTER_TO_ACTIVE": {
       let activeShelters = JSON.parse(JSON.stringify(state.activeShelters));
-
-      const alreadyActiveShelter = _.find(state.activeShelters, (shelter)=>{
-        return shelter.id.$t === action.payload
+      const shelter = _.find(JSON.parse(JSON.stringify(state.shelters)), (shelter) => { return shelter.id.$t === action.payload });
+      activeShelters.push(shelter)
+      return Object.assign({}, state, {
+        activeShelters: _.uniqBy(activeShelters, 'id.$t')
       });
-
-      if(!alreadyActiveShelter) {
-        const shelter = _.find(JSON.parse(JSON.stringify(state.shelters)), (shelter) => { return shelter.id.$t === action.payload });
-        activeShelters.push(shelter)
-        return Object.assign({}, state, {
-          activeShelters
-        });
-      } else {
-        return state;
-      }
-
-
     }
     case "REMOVE_SHELTER_FROM_ACTIVE": {
       const activeShelters = _.reject(JSON.parse(JSON.stringify(state.activeShelters)), (shelter) => {
