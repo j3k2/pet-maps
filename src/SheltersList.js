@@ -32,7 +32,7 @@ class SheltersList extends Component {
                         this.props.highlightButton();
                     }}
                 >
-                    <span>{shelter.markerId}{shelter.latitude.$t}{shelter.longitude.$t}</span>
+                    {/* <span>{shelter.markerId}:{shelter.latitude.$t}/{shelter.longitude.$t}</span> */}
                     <List.Content>
                         <List.Header>
                             {`${idx + 1}. ${shelter.name.$t}`}
@@ -44,7 +44,7 @@ class SheltersList extends Component {
                                 style={{ float: 'right', marginLeft: 10 }}></Checkbox>
                         </List.Header>
                         <List.Description>
-                            {shelter.address1.$t ? shelter.address1.$t : shelter.zip.$t}
+                            {shelter.address1.$t ? `${shelter.address1.$t} (${shelter.zip.$t})` : shelter.zip.$t} 
                             {/* {!this.props.loading.pets && pets && <div>
                                 {_.map(_.countBy(pets[shelter.id.$t], 'animal.$t'), (value, key) => {
                                     return (
@@ -88,9 +88,11 @@ class SheltersList extends Component {
                             float: 'right',
                             cursor: 'pointer',
                             color: '#198f35',
-                            opacity: this.props.shelters.length !== this.props.activeShelters.length ? 1 : 0.4
+                            opacity: this.props.shelters.length > this.props.activeShelters.length ? 1 : 0.4
                         }}>
-                        <span>Select all</span></a>
+                        <span>Select all
+                        {/* {this.props.shelters.length}/{this.props.activeShelters.length} */}
+                        </span></a>
                     <br />
 
                     {this.renderShelters(this.props.shelters)}

@@ -1,5 +1,6 @@
 import { getJSON } from 'jquery';
 import _ from 'lodash';
+import Geocode from 'react-geocode';
 
 
 function requestShelters(zip, zoom) {
@@ -14,15 +15,56 @@ function fetchShelters(zip, bounds, zoom) {
 
     requestShelters(zip, zoom)
       .then((res) => {
-        console.log('###shelters: ', res);
-        dispatch({
-          type: 'RECEIVE_SHELTERS',
-          payload: res,
-          meta: bounds
-        })
+        if (res.petfinder &&
+          res.petfinder.shelters &&
+          res.petfinder.shelters.shelter) {
+          const geocodeShelters = _.map(res.petfinder.shelters.shelter, shelter => {
+              return Geocode.fromAddress(`${shelter.address1.$t}, ${shelter.zip.$t}`)
+              .then((geocodeRes)=>{
+                if(geocodeRes.results[0].geometry.location.lat && geocodeRes.results[0].geometry.location.lng) {
+                  return {
+                    lat: geocodeRes.results[0].geometry.location.lat,
+                    lng: geocodeRes.results[0].geometry.location.lng
+                  }
+                }
+              })
+              .catch(() => {
+                return {
+                  lat: parseFloat(shelter.latitude.$t),
+                  lng: parseFloat(shelter.longitude.$t)
+                }
+              })
+          });
+
+          Promise.all(geocodeShelters).then(locations => {
+            const shelters = _.map(res.petfinder.shelters.shelter, (shelter, idx) => {
+              shelter.geocodeLat = locations[idx].lat;
+              shelter.geocodeLng = locations[idx].lng;
+              return shelter;
+            });
+            dispatch({
+              type: 'RECEIVE_SHELTERS',
+              payload: shelters,
+              meta: bounds
+            })
+          }).catch((err)=>{
+            console.log(err);
+            dispatch({
+              type: 'RECEIVE_SHELTERS',
+              payload: null,
+              meta: bounds
+            })
+          })
+        } else {
+          dispatch({
+            type: 'RECEIVE_SHELTERS',
+            payload: null,
+            meta: bounds
+          })
+        }
       })
+    }
   }
-}
 
 function setCenterAndUpdateMap(lat, lng) {
   return (dispatch) => {
@@ -45,16 +87,16 @@ function setUpdateOption(val) {
 
 function setActiveShelter(shelterId, checked) {
   return (dispatch) => {
-    if(checked) {
+    if (checked) {
       dispatch({
-        type:'ADD_SHELTER_TO_ACTIVE',
+        type: 'ADD_SHELTER_TO_ACTIVE',
         payload: shelterId
       })
     } else {
       dispatch({
-        type:'REMOVE_SHELTER_FROM_ACTIVE',
+        type: 'REMOVE_SHELTER_FROM_ACTIVE',
         payload: shelterId
-      })    
+      })
     }
   }
 }
@@ -95,7 +137,7 @@ function setActivePetFilters(value, field) {
   }
 };
 
-function resetActiveShelters(){
+function resetActiveShelters() {
   return (dispatch) => {
     dispatch({
       type: 'RESET_ACTIVE_SHELTERS'
@@ -103,9 +145,9 @@ function resetActiveShelters(){
   }
 }
 
-function updateMarkerHighlight(markerId, add){
+function updateMarkerHighlight(markerId, add) {
   return (dispatch) => {
-    if(add) {
+    if (add) {
       dispatch({
         type: 'ADD_MARKER_HIGHLIGHT',
         payload: markerId

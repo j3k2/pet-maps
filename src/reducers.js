@@ -3,33 +3,29 @@ import _ from 'lodash';
 export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] }, action) => {
   switch (action.type) {
     case 'RECEIVE_SHELTERS':
-      if (action.payload.petfinder && action.payload.petfinder.shelters && action.payload.petfinder.shelters.shelter) {
-        const shelters = _.filter(action.payload.petfinder.shelters.shelter, (shelter) => {
-          const lat = parseFloat(shelter.latitude.$t);
-          const lng = parseFloat(shelter.longitude.$t);
+      if (action.payload) {
+        const shelters = _.filter(action.payload, (shelter) => {
           const bounds = action.meta;
-          return lat >= bounds.f.b &&
-            lat <= bounds.f.f &&
-            lng >= bounds.b.b &&
-            lng <= bounds.b.f
+          return shelter.geocodeLat >= bounds.f.b &&
+            shelter.geocodeLat <= bounds.f.f &&
+            shelter.geocodeLng >= bounds.b.b &&
+            shelter.geocodeLng <= bounds.b.f
         });
         const markers = {};
         shelters.forEach((shelter) => {
-          shelter.markerId = 'lat' + shelter.latitude.$t + 'lng' + shelter.longitude.$t;
+          shelter.markerId = 'lat' + shelter.geocodeLat + 'lng' + shelter.geocodeLng;
           if (markers[shelter.markerId]) {
             markers[shelter.markerId].shelters.push(shelter);
           } else {
             markers[shelter.markerId] = {
-              lat: shelter.latitude.$t,
-              lng: shelter.longitude.$t,
+              lat: shelter.geocodeLat,
+              lng: shelter.geocodeLng,
               markerId: shelter.markerId
             };
             markers[shelter.markerId].shelters = [];
             markers[shelter.markerId].shelters.push(shelter);
           }
         });
-
-        console.log('MARKERS', markers);
 
         return Object.assign({}, state, {
           shelters: _.sortBy(shelters, ['markerId']),
@@ -117,11 +113,22 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
       });
     case "ADD_SHELTER_TO_ACTIVE": {
       let activeShelters = JSON.parse(JSON.stringify(state.activeShelters));
-      const shelter = _.find(JSON.parse(JSON.stringify(state.shelters)), (shelter) => { return shelter.id.$t === action.payload });
-      activeShelters.push(shelter)
-      return Object.assign({}, state, {
-        activeShelters
+
+      const alreadyActiveShelter = _.find(state.activeShelters, (shelter)=>{
+        return shelter.id.$t === action.payload
       });
+
+      if(!alreadyActiveShelter) {
+        const shelter = _.find(JSON.parse(JSON.stringify(state.shelters)), (shelter) => { return shelter.id.$t === action.payload });
+        activeShelters.push(shelter)
+        return Object.assign({}, state, {
+          activeShelters
+        });
+      } else {
+        return state;
+      }
+
+
     }
     case "REMOVE_SHELTER_FROM_ACTIVE": {
       const activeShelters = _.reject(JSON.parse(JSON.stringify(state.activeShelters)), (shelter) => {
