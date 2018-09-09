@@ -102,6 +102,22 @@ function resetActiveShelters(){
     })
   }
 }
+
+function updateMarkerHighlight(markerId, add){
+  return (dispatch) => {
+    if(add) {
+      dispatch({
+        type: 'ADD_MARKER_HIGHLIGHT',
+        payload: markerId
+      });
+    } else {
+      dispatch({
+        type: 'REMOVE_MARKER_HIGHLIGHT',
+        payload: markerId
+      })
+    }
+  }
+}
 export {
   fetchShelters,
   fetchPets,
@@ -109,5 +125,6 @@ export {
   setUpdateOption,
   setActivePetFilters,
   setActiveShelter,
-  resetActiveShelters
+  resetActiveShelters,
+  updateMarkerHighlight
 }

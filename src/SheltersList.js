@@ -1,28 +1,50 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { Icon, List, Loader, Checkbox, Label, Segment, Button} from 'semantic-ui-react';
-import { setActiveShelter, resetActiveShelters } from './actions';
+import { Icon, List, Loader, Checkbox, Label, Segment, Button } from 'semantic-ui-react';
+import { setActiveShelter, resetActiveShelters, updateMarkerHighlight } from './actions';
 
 class SheltersList extends Component {
-    renderShelters(shelters, pets) {
+    renderShelters(shelters) {
+        const isShelterActive = (shelterId) => {
+            return _.find(this.props.activeShelters, (activeShelter) => {
+                return activeShelter.id.$t === shelterId;
+            });
+        }
         return _.map(shelters, (shelter, idx) => {
             return (
-                <List.Item key={idx} style={{ textAlign: 'left', whiteSpace: 'pre-wrap' }}>
+                <List.Item
+                    key={idx}
+                    style={{
+                        textAlign: 'left',
+                        whiteSpace: 'pre-wrap',
+                        borderRadius: 0,
+                        borderLeft: shelter.highlight ? 'solid 4px #198f35' : 'none'
+                    }}
+                    onMouseEnter={() => {
+                        this.props.updateMarkerHighlight(shelter.markerId, true);
+                    }}
+                    onMouseLeave={() => {
+                        this.props.updateMarkerHighlight(shelter.markerId);
+                    }}
+                    onClick={(e, d) => {
+                        this.props.setActiveShelter(shelter.id.$t, !isShelterActive(shelter.id.$t));
+                        this.props.highlightButton();
+                    }}
+                >
+                    <span>{shelter.markerId}{shelter.latitude.$t}{shelter.longitude.$t}</span>
                     <List.Content>
                         <List.Header>
                             {`${idx + 1}. ${shelter.name.$t}`}
-                            <Checkbox checked={_.find(this.props.activeShelters, (activeShelter) => {
-                                return activeShelter.id.$t === shelter.id.$t;
-                            })}
-                            onChange={(e, d)=>{
-                                this.props.setActiveShelter(shelter.id.$t, d.checked);
-                                this.props.highlightButton();
-                            }}
-                            style={{ float: 'right', marginLeft: 10 }}></Checkbox>
+                            <Checkbox checked={isShelterActive(shelter.id.$t)}
+                                onChange={(e, d) => {
+                                    this.props.setActiveShelter(shelter.id.$t, d.checked);
+                                    this.props.highlightButton();
+                                }}
+                                style={{ float: 'right', marginLeft: 10 }}></Checkbox>
                         </List.Header>
                         <List.Description>
-                            {shelter.zip.$t}
+                            {shelter.address1.$t ? shelter.address1.$t : shelter.zip.$t}
                             {/* {!this.props.loading.pets && pets && <div>
                                 {_.map(_.countBy(pets[shelter.id.$t], 'animal.$t'), (value, key) => {
                                     return (
@@ -58,19 +80,20 @@ class SheltersList extends Component {
                     style={{ color: 'black' }}
                     selection
                     relaxed>
-                   <a onClick={()=>{
+                    <a onClick={() => {
                         this.props.resetActiveShelters();
                         this.props.highlightButton();
-                    }} 
-                    style={{ float: 'right', 
-                    cursor: 'pointer', 
-                    color: '#198f35',
-                    opacity: this.props.shelters.length !== this.props.activeShelters.length ? 1 : 0.4
-                }}>
-                    <span>Select all</span></a>
-                    <br/>
-                    
-                    {this.renderShelters(this.props.shelters, this.props.petsByShelter)}
+                    }}
+                        style={{
+                            float: 'right',
+                            cursor: 'pointer',
+                            color: '#198f35',
+                            opacity: this.props.shelters.length !== this.props.activeShelters.length ? 1 : 0.4
+                        }}>
+                        <span>Select all</span></a>
+                    <br />
+
+                    {this.renderShelters(this.props.shelters)}
                 </List>}
                 {this.props.loading.shelters && <Loader active inline='centered'>Loading Shelters</Loader>}
             </Segment>
@@ -79,5 +102,11 @@ class SheltersList extends Component {
 }
 
 export default connect(state => {
-    return { activeShelters: state.activeShelters, shelters: state.shelters, loading: state.loading, petsByShelter: state.petsByShelter, shelterFilters: state.shelterFilters }
-}, { setActiveShelter, resetActiveShelters })(SheltersList);
+    return {
+        activeShelters: state.activeShelters,
+        shelters: state.shelters,
+        loading: state.loading,
+        petsByShelter: state.petsByShelter,
+        shelterFilters: state.shelterFilters
+    }
+}, { setActiveShelter, resetActiveShelters, updateMarkerHighlight })(SheltersList);

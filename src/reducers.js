@@ -15,17 +15,24 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         });
         const markers = {};
         shelters.forEach((shelter) => {
-          if (markers[('lat' + shelter.latitude.$t + 'lng' + shelter.longitude.$t)]) {
-            markers[('lat' + shelter.latitude.$t + 'lng' + shelter.longitude.$t)].shelters.push(shelter);
+          shelter.markerId = 'lat' + shelter.latitude.$t + 'lng' + shelter.longitude.$t;
+          if (markers[shelter.markerId]) {
+            markers[shelter.markerId].shelters.push(shelter);
           } else {
-            markers[('lat' + shelter.latitude.$t + 'lng' + shelter.longitude.$t)] = { lat: shelter.latitude.$t, lng: shelter.longitude.$t };
-            markers[('lat' + shelter.latitude.$t + 'lng' + shelter.longitude.$t)].shelters = [];
-            markers[('lat' + shelter.latitude.$t + 'lng' + shelter.longitude.$t)].shelters.push(shelter);
+            markers[shelter.markerId] = {
+              lat: shelter.latitude.$t,
+              lng: shelter.longitude.$t,
+              markerId: shelter.markerId
+            };
+            markers[shelter.markerId].shelters = [];
+            markers[shelter.markerId].shelters.push(shelter);
           }
         });
 
+        console.log('MARKERS', markers);
+
         return Object.assign({}, state, {
-          shelters: _.sortBy(shelters, ['zip.$t']),
+          shelters: _.sortBy(shelters, ['markerId']),
           activeShelters: shelters,
           markers: Object.values(markers),
           loading: Object.assign({}, state.loading, {
@@ -94,12 +101,10 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         activePetFilters: {}
       })
     case "SET_CENTER":
-      console.log('set center', action);
       return Object.assign({}, state, {
         center: action.payload
       });
     case "SET_UPDATE_OPTION":
-      console.log('set update option', action);
       return Object.assign({}, state, {
         update: action.payload
       });
@@ -113,7 +118,6 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
     case "ADD_SHELTER_TO_ACTIVE": {
       let activeShelters = JSON.parse(JSON.stringify(state.activeShelters));
       const shelter = _.find(JSON.parse(JSON.stringify(state.shelters)), (shelter) => { return shelter.id.$t === action.payload });
-      console.log('HELLO', shelter, activeShelters);
       activeShelters.push(shelter)
       return Object.assign({}, state, {
         activeShelters
@@ -130,6 +134,42 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
     case "RESET_ACTIVE_SHELTERS": {
       return Object.assign({}, state, {
         activeShelters: JSON.parse(JSON.stringify(state.shelters))
+      });
+    }
+    case "REMOVE_MARKER_HIGHLIGHT": {
+      const markers = _.map(state.markers, (marker) => {
+        if (marker.markerId === action.payload) {
+          marker.highlight = false;
+        }
+        return marker;
+      });
+      const shelters = _.map(state.shelters, (shelter) => {
+        if (shelter.markerId === action.payload) {
+          shelter.highlight = false;
+        }
+        return shelter;
+      })
+      return Object.assign({}, state, {
+        markers,
+        shelters
+      });
+    }
+    case "ADD_MARKER_HIGHLIGHT": {
+      const markers = _.map(state.markers, (marker) => {
+        if (marker.markerId === action.payload) {
+          marker.highlight = true;
+        }
+        return marker;
+      });
+      const shelters = _.map(state.shelters, (shelter) => {
+        if (shelter.markerId === action.payload) {
+          shelter.highlight = true;
+        }
+        return shelter;
+      })
+      return Object.assign({}, state, {
+        markers,
+        shelters
       });
     }
     default:

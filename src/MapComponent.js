@@ -3,9 +3,9 @@ import { compose, withProps, withHandlers, withState } from 'recompose'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { fetchShelters } from './actions';
+import { fetchShelters, updateMarkerHighlight } from './actions';
 import Geocode from 'react-geocode';
-import paw from './animal-paw-print.png';
+import paw from './pawprint_green.png';
 
 const MapComponent = connect(state => {
   return {
@@ -14,7 +14,7 @@ const MapComponent = connect(state => {
     update: state.update,
     center: state.center
   }
-}, { fetchShelters })(compose(
+}, { fetchShelters, updateMarkerHighlight })(compose(
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
@@ -69,10 +69,18 @@ const MapComponent = connect(state => {
 )((props) =>
   <div style={{display: 'inline'}}>
     <GoogleMap
-      defaultZoom={12}
+      defaultZoom={13}
       defaultCenter={{ lat: 37.7432421, lng: -122.497668 }}
       center={props.center}
       ref={props.onMapMounted}
+      options={{
+        zoomControl: false,
+        mapTypeControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        rotateControl: false,
+        fullscreenControl: false
+      }}
       onTilesLoaded={() => { props.onTilesLoaded(props.update) }}
       onBoundsChanged={() => { props.onBoundsChanged(props.update) }}
       onCenterChanged={() => { props.onCenterChanged(props.update) }}
@@ -81,10 +89,12 @@ const MapComponent = connect(state => {
       {props.markers && props.markers.length && props.markers.map((marker, idx) => {
         return (<Marker
           key={idx}
-          opacity={0.5}
+          opacity={marker.highlight ? 1 : 0.6}
           icon={paw}
           position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
           onClick={() => { props.onMarkerClick(idx) }}
+          onMouseOver={()=>{props.updateMarkerHighlight(marker.markerId, true)}}
+          onMouseOut={()=>{props.updateMarkerHighlight(marker.markerId)}}
         >
           {/* <InfoBox>
             <div style={{ background: 'yellow', width: 100}}>
