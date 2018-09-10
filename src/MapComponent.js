@@ -3,7 +3,7 @@ import { compose, withProps, withHandlers, withState } from 'recompose'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { fetchShelters, updateMarkerHighlight } from './actions';
+import { fetchShelters, updateMarkerHighlight, setMarkerScroll } from './actions';
 import Geocode from 'react-geocode';
 import paw from './pawprint_green.png';
 
@@ -15,7 +15,7 @@ const MapComponent = connect(state => {
     center: state.center,
     highlightedMarker: state.highlightedMarker
   }
-}, { fetchShelters, updateMarkerHighlight })(compose(
+}, { fetchShelters, updateMarkerHighlight, setMarkerScroll })(compose(
   withProps({
     googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c&v=3.exp&libraries=geometry,drawing,places",
     loadingElement: <div style={{ height: `100%` }} />,
@@ -94,10 +94,13 @@ const MapComponent = connect(state => {
           icon={paw}
           position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
           onClick={()=>{
-            // scroll to shelter in ShelterList
             props.updateMarkerHighlight(marker.markerId, true)}}
-          onMouseOver={()=>{props.updateMarkerHighlight(marker.markerId, true)}}
-          onMouseOut={()=>{props.updateMarkerHighlight(marker.markerId)}}
+          onMouseOver={()=>{
+            props.setMarkerScroll(marker.markerId);
+            props.updateMarkerHighlight(marker.markerId, true)}}
+          onMouseOut={()=>{
+            props.setMarkerScroll(null);
+            props.updateMarkerHighlight(marker.markerId)}}
         >
           {/* <InfoBox>
             <div style={{ background: 'yellow', width: 100}}>

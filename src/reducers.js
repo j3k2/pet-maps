@@ -160,6 +160,12 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         highlightedMarker: action.payload
       };
     }
+    case "SET_MARKER_SCROLL": {
+      return {
+        ...state,
+        scrolledMarker: action.payload
+      };
+    }
     default:
       return state;
   }

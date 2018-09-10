@@ -160,6 +160,16 @@ function updateMarkerHighlight(markerId, add) {
     }
   }
 }
+
+function setMarkerScroll(markerId) {
+  return (dispatch) => {
+      dispatch({
+        type: 'SET_MARKER_SCROLL',
+        payload: markerId
+      });
+    }
+}
+
 export {
   fetchShelters,
   fetchPets,
@@ -168,5 +178,6 @@ export {
   setActivePetFilters,
   setActiveShelter,
   resetActiveShelters,
-  updateMarkerHighlight
+  updateMarkerHighlight,
+  setMarkerScroll
 }
