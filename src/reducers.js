@@ -27,20 +27,20 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
           }
         });
 console.log('markers', Object.values(markers));
-        return Object.assign({}, state, {
+        return {...state, 
           shelters: _.sortBy(shelters, ['markerId']),
           activeShelters: shelters,
           markers: Object.values(markers),
-          loading: Object.assign({}, state.loading, {
+          loading: {...state.loading, 
             shelters: false
-          })
-        })
+          }
+        }
       } else {
-        return Object.assign({}, state, {
-          loading: Object.assign({}, state.loading, {
+        return {...state, 
+          loading: {...state.loading, 
             shelters: false
-          })
-        })
+          }
+        }
       }
     case "RECEIVE_PETS":
       let pets = _.reduce(action.payload, (result, value, third) => {
@@ -70,77 +70,77 @@ console.log('markers', Object.values(markers));
         generatePetFilters(pet, ['animal', 'size', 'age', 'sex']);
         return pet;
       });
-      return Object.assign({}, state, {
+      return {...state, 
         pets: _.sortBy(pets, ['id.$t']),
         petsByShelter: _.groupBy(pets, 'shelterId.$t'),
         petFilters: petFilters,
         activePetFilters: {},
-        loading: Object.assign({}, state.loading, {
+        loading: {...state.loading, 
           pets: false
-        })
-      });
+        }
+      };
     case "FETCH_PETS":
-      return Object.assign({}, state, {
-        loading: Object.assign({}, state.loading, {
+      return {...state, 
+        loading: {...state.loading, 
           pets: true
-        })
-      });
+        }
+      };
     case "FETCH_SHELTERS":
-      return Object.assign({}, state, {
-        loading: Object.assign({}, state.loading, {
+      return {...state, 
+        loading: {...state.loading, 
           shelters: true
-        }),
+        },
         pets: {},
         shelters: {},
         activeShelters: {},
         petFilters: {},
         activePetFilters: {}
-      })
+      }
     case "SET_CENTER":
-      return Object.assign({}, state, {
+      return {...state, 
         center: action.payload
-      });
+      };
     case "SET_UPDATE_OPTION":
-      return Object.assign({}, state, {
+      return {...state, 
         update: action.payload
-      });
+      };
     case "SET_ACTIVE_PET_FILTERS":
       const activePetFilters = {
         [action.payload.field]: action.payload.value
       };
-      return Object.assign({}, state, {
-        activePetFilters: Object.assign({}, state.activePetFilters, activePetFilters)
-      });
+      return {...state, 
+        activePetFilters: activePetFilters
+      };
     case "ADD_SHELTER_TO_ACTIVE": {
       let activeShelters = state.activeShelters;
       const shelter = _.find(state.shelters, (shelter) => { return shelter.id.$t === action.payload });
       activeShelters.push(shelter)
-      return Object.assign({}, state, {
+      return {...state, 
         activeShelters: _.uniqBy(activeShelters, 'id.$t')
-      });
+      };
     }
     case "REMOVE_SHELTER_FROM_ACTIVE": {
       const activeShelters = _.reject(state.activeShelters, (shelter) => {
         return shelter.id.$t === action.payload;
       });
-      return Object.assign({}, state, {
+      return {...state, 
         activeShelters
-      });
+      };
     }
     case "RESET_ACTIVE_SHELTERS": {
-      return Object.assign({}, state, {
+      return {...state, 
         activeShelters: JSON.parse(JSON.stringify(state.shelters))
-      });
+      };
     }
     case "REMOVE_MARKER_HIGHLIGHT": {
-      return Object.assign({}, state, {
+      return {...state, 
         highlightedMarker: null
-      });
+      };
     }
     case "ADD_MARKER_HIGHLIGHT": {
-      return Object.assign({}, state, {
+      return {...state, 
         highlightedMarker: action.payload
-      });
+      };
     }
     default:
       return state;
