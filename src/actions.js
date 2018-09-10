@@ -19,9 +19,9 @@ function fetchShelters(zip, bounds, zoom) {
           res.petfinder.shelters &&
           res.petfinder.shelters.shelter) {
           const geocodeShelters = _.map(res.petfinder.shelters.shelter, shelter => {
-              return Geocode.fromAddress(`${shelter.address1.$t}, ${shelter.zip.$t}`)
-              .then((geocodeRes)=>{
-                if(geocodeRes.results[0].geometry.location.lat && geocodeRes.results[0].geometry.location.lng) {
+            return Geocode.fromAddress(`${shelter.address1.$t}, ${shelter.zip.$t}`)
+              .then((geocodeRes) => {
+                if (geocodeRes.results[0].geometry.location.lat && geocodeRes.results[0].geometry.location.lng) {
                   return {
                     lat: geocodeRes.results[0].geometry.location.lat,
                     lng: geocodeRes.results[0].geometry.location.lng
@@ -47,7 +47,7 @@ function fetchShelters(zip, bounds, zoom) {
               payload: shelters,
               meta: bounds
             })
-          }).catch((err)=>{
+          }).catch((err) => {
             console.log(err);
             dispatch({
               type: 'RECEIVE_SHELTERS',
@@ -63,8 +63,8 @@ function fetchShelters(zip, bounds, zoom) {
           })
         }
       })
-    }
   }
+}
 
 function setCenterAndUpdateMap(lat, lng) {
   return (dispatch) => {
@@ -145,29 +145,31 @@ function resetActiveShelters() {
   }
 }
 
-function updateMarkerHighlight(markerId, add) {
+function setMarkerHighlight(markerId) {
   return (dispatch) => {
-    if (add) {
-      dispatch({
-        type: 'ADD_MARKER_HIGHLIGHT',
-        payload: markerId
-      });
-    } else {
-      dispatch({
-        type: 'REMOVE_MARKER_HIGHLIGHT',
-        payload: markerId
-      })
-    }
+    dispatch({
+      type: 'SET_MARKER_HIGHLIGHT',
+      payload: markerId
+    });
   }
 }
 
 function setMarkerScroll(markerId) {
   return (dispatch) => {
-      dispatch({
-        type: 'SET_MARKER_SCROLL',
-        payload: markerId
-      });
-    }
+    dispatch({
+      type: 'SET_MARKER_SCROLL',
+      payload: markerId
+    });
+  }
+}
+
+function toggleSheltersActive(shelterIds) {
+  return (dispatch) => {
+    dispatch({
+      type: 'TOGGLE_SHELTERS_ACTIVE',
+      payload: shelterIds
+    });
+  }
 }
 
 export {
@@ -178,6 +180,7 @@ export {
   setActivePetFilters,
   setActiveShelter,
   resetActiveShelters,
-  updateMarkerHighlight,
-  setMarkerScroll
+  setMarkerHighlight,
+  setMarkerScroll,
+  toggleSheltersActive
 }

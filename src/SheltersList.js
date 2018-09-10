@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Ref, Icon, List, Loader, Checkbox, Label, Segment, Button } from 'semantic-ui-react';
-import { setActiveShelter, resetActiveShelters, updateMarkerHighlight } from './actions';
+import { setActiveShelter, resetActiveShelters, setMarkerHighlight } from './actions';
 
 class SheltersList extends Component {
     constructor(props) {
@@ -32,10 +32,10 @@ class SheltersList extends Component {
                             borderLeft: this.props.highlightedMarker === shelter.markerId ? 'solid 4px #198f35' : 'none'
                         }}
                         onMouseEnter={() => {
-                            this.props.updateMarkerHighlight(shelter.markerId, true);
+                            this.props.setMarkerHighlight(shelter.markerId);
                         }}
                         onMouseLeave={() => {
-                            this.props.updateMarkerHighlight(shelter.markerId);
+                            this.props.setMarkerHighlight(null);
                         }}
                         onClick={(e, d) => {
                             this.props.setActiveShelter(shelter.id.$t, !isShelterActive(shelter.id.$t, shelter.markerId));
@@ -136,4 +136,4 @@ export default connect(state => {
         highlightedMarker: state.highlightedMarker,
         scrolledMarker: state.scrolledMarker
     }
-}, { setActiveShelter, resetActiveShelters, updateMarkerHighlight })(SheltersList);
+}, { setActiveShelter, resetActiveShelters, setMarkerHighlight })(SheltersList);

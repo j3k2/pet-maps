@@ -148,13 +148,7 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         activeShelters: JSON.parse(JSON.stringify(state.shelters))
       };
     }
-    case "REMOVE_MARKER_HIGHLIGHT": {
-      return {
-        ...state,
-        highlightedMarker: null
-      };
-    }
-    case "ADD_MARKER_HIGHLIGHT": {
+    case "SET_MARKER_HIGHLIGHT": {
       return {
         ...state,
         highlightedMarker: action.payload
@@ -165,6 +159,36 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         ...state,
         scrolledMarker: action.payload
       };
+    }
+    case "TOGGLE_SHELTERS_ACTIVE" : {
+      const sheltersActive = [];
+      const shelterIdsInactive = [];
+      const shelterIds = action.payload;
+      let activeShelters = state.activeShelters;
+
+      _.each(shelterIds, shelterId => {
+        const activeShelter = _.find(activeShelters, activeShelter => {
+          return activeShelter.id.$t === shelterId;
+        });
+        if(activeShelter) {
+          shelterIdsInactive.push(shelterId);
+        } else {
+          sheltersActive.push(_.find(state.shelters, shelter => {
+            return shelter.id.$t === shelterId;
+          }));
+        }
+      })
+
+      if(shelterIdsInactive.length) {
+        activeShelters = _.reject(activeShelters, activeShelter => {
+          return shelterIdsInactive.indexOf(activeShelter.id.$t) > -1;
+        });  
+      }
+
+      return {
+        ...state, 
+        activeShelters: [].concat(activeShelters, sheltersActive)
+      }
     }
     default:
       return state;
