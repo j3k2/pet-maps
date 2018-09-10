@@ -68,7 +68,7 @@ class SheltersList extends Component {
             const offsets = _.map(refs, ref=>{
                 return ref.offsetTop;
             });
-            this.containerRef.scrollTop = _.min(offsets) - this.containerRef.offsetTop - 8;
+            this.containerRef.scrollTop = _.min(offsets) - this.containerRef.offsetTop - 40;
         } 
         if (!this.props.shelters.length) {
             // reset listRefs when shelters are refetched
@@ -94,6 +94,9 @@ class SheltersList extends Component {
                     style={{ color: 'black' }}
                     selection
                     relaxed>
+                    <span style={{float: 'left'}}>
+                        {`${this.props.shelters.length} results`}
+                    </span>
                     <a onClick={() => {
                         this.props.resetActiveShelters();
                         this.props.highlightButton();
