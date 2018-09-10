@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { Ref, Icon, List, Loader, Checkbox, Label, Segment, Button } from 'semantic-ui-react';
+import { Ref, List, Loader, Checkbox } from 'semantic-ui-react';
 import { setActiveShelter, resetActiveShelters, setMarkerHighlight } from './actions';
 
 class SheltersList extends Component {
@@ -11,7 +11,7 @@ class SheltersList extends Component {
     }
 
     renderShelters(shelters) {
-        const isShelterActive = (shelterId, markerId) => {
+        const isShelterActive = (shelterId) => {
             return _.find(this.props.activeShelters, (activeShelter) => {
                 return activeShelter.id.$t === shelterId;
             }) ? true : false;
@@ -37,7 +37,7 @@ class SheltersList extends Component {
                         onMouseLeave={() => {
                             this.props.setMarkerHighlight(null);
                         }}
-                        onClick={(e, d) => {
+                        onClick={() => {
                             this.props.setActiveShelter(shelter.id.$t, !isShelterActive(shelter.id.$t, shelter.markerId));
                             this.props.highlightButton();
                         }}
@@ -55,21 +55,8 @@ class SheltersList extends Component {
                             </List.Header>
                             <List.Description>
                                 {shelter.address1.$t ? `${shelter.address1.$t} (${shelter.zip.$t})` : shelter.zip.$t}
-                                {/* {!this.props.loading.pets && pets && <div>
-                                {_.map(_.countBy(pets[shelter.id.$t], 'animal.$t'), (value, key) => {
-                                    return (
-                                        <Label size="mini">
-                                            {key}
-                                            <Label.Detail>{value}</Label.Detail>
-                                        </Label>
-                                    )
-                                })}
-                            </div>}
-                            {this.props.loading.pets && <Loader active size="mini" inline="left"></Loader>} */}
-
                             </List.Description>
                         </List.Content>
-                        {/* <Icon style={{ float: 'right', marginLeft: 10 }} name={shelter.active ? "remove circle" : "add circle"}></Icon> */}
                     </List.Item>
                 </Ref>);
         });
@@ -78,9 +65,14 @@ class SheltersList extends Component {
     componentDidUpdate() {
         if (this.props.scrolledMarker && this.listRefs[this.props.scrolledMarker]) {
             const refs = this.listRefs[this.props.scrolledMarker];
-            this.containerRef.scrollTop = _.min(_.map(refs, ref=>{
+            const offsets = _.map(refs, ref=>{
                 return ref.offsetTop;
-            })) - this.containerRef.offsetTop - 8;
+            });
+            this.containerRef.scrollTop = _.min(offsets) - this.containerRef.offsetTop - 8;
+        } 
+        if (!this.props.shelters.length) {
+            // reset listRefs when shelters are refetched
+            this.listRefs = {};
         }
     }
 
@@ -95,7 +87,6 @@ class SheltersList extends Component {
                     padding: 20,
                     marginLeft: 0,
                     height: '400px',
-                    // width: 454, 
                     width: 400,
                     background: 'white'
                 }}>
