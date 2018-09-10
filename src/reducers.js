@@ -29,7 +29,7 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         console.log('markers', Object.values(markers));
         return {
           ...state,
-          shelters: _.sortBy(shelters, ['markerId']),
+          shelters: _.sortBy(shelters, ['markerId']).reverse(),
           activeShelters: shelters,
           markers: Object.values(markers),
           loading: {
