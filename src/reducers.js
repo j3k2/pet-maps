@@ -26,18 +26,22 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
             markers[shelter.markerId].shelterIds.push(shelter.id.$t);
           }
         });
-console.log('markers', Object.values(markers));
-        return {...state, 
+        console.log('markers', Object.values(markers));
+        return {
+          ...state,
           shelters: _.sortBy(shelters, ['markerId']),
           activeShelters: shelters,
           markers: Object.values(markers),
-          loading: {...state.loading, 
+          loading: {
+            ...state.loading,
             shelters: false
           }
         }
       } else {
-        return {...state, 
-          loading: {...state.loading, 
+        return {
+          ...state,
+          loading: {
+            ...state.loading,
             shelters: false
           }
         }
@@ -70,24 +74,30 @@ console.log('markers', Object.values(markers));
         generatePetFilters(pet, ['animal', 'size', 'age', 'sex']);
         return pet;
       });
-      return {...state, 
+      return {
+        ...state,
         pets: _.sortBy(pets, ['id.$t']),
         petsByShelter: _.groupBy(pets, 'shelterId.$t'),
         petFilters: petFilters,
         activePetFilters: {},
-        loading: {...state.loading, 
+        loading: {
+          ...state.loading,
           pets: false
         }
       };
     case "FETCH_PETS":
-      return {...state, 
-        loading: {...state.loading, 
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
           pets: true
         }
       };
     case "FETCH_SHELTERS":
-      return {...state, 
-        loading: {...state.loading, 
+      return {
+        ...state,
+        loading: {
+          ...state.loading,
           shelters: true
         },
         pets: {},
@@ -97,25 +107,29 @@ console.log('markers', Object.values(markers));
         activePetFilters: {}
       }
     case "SET_CENTER":
-      return {...state, 
+      return {
+        ...state,
         center: action.payload
       };
     case "SET_UPDATE_OPTION":
-      return {...state, 
+      return {
+        ...state,
         update: action.payload
       };
     case "SET_ACTIVE_PET_FILTERS":
       const activePetFilters = {
         [action.payload.field]: action.payload.value
       };
-      return {...state, 
+      return {
+        ...state,
         activePetFilters: activePetFilters
       };
     case "ADD_SHELTER_TO_ACTIVE": {
       let activeShelters = state.activeShelters;
       const shelter = _.find(state.shelters, (shelter) => { return shelter.id.$t === action.payload });
       activeShelters.push(shelter)
-      return {...state, 
+      return {
+        ...state,
         activeShelters: _.uniqBy(activeShelters, 'id.$t')
       };
     }
@@ -123,22 +137,26 @@ console.log('markers', Object.values(markers));
       const activeShelters = _.reject(state.activeShelters, (shelter) => {
         return shelter.id.$t === action.payload;
       });
-      return {...state, 
+      return {
+        ...state,
         activeShelters
       };
     }
     case "RESET_ACTIVE_SHELTERS": {
-      return {...state, 
+      return {
+        ...state,
         activeShelters: JSON.parse(JSON.stringify(state.shelters))
       };
     }
     case "REMOVE_MARKER_HIGHLIGHT": {
-      return {...state, 
+      return {
+        ...state,
         highlightedMarker: null
       };
     }
     case "ADD_MARKER_HIGHLIGHT": {
-      return {...state, 
+      return {
+        ...state,
         highlightedMarker: action.payload
       };
     }
