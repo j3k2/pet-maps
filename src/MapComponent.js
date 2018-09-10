@@ -12,7 +12,8 @@ const MapComponent = connect(state => {
     shelters: state.shelters,
     markers: state.markers,
     update: state.update,
-    center: state.center
+    center: state.center,
+    highlightedMarker: state.highlightedMarker
   }
 }, { fetchShelters, updateMarkerHighlight })(compose(
   withProps({
@@ -89,7 +90,7 @@ const MapComponent = connect(state => {
       {props.markers && props.markers.length && props.markers.map((marker, idx) => {
         return (<Marker
           key={idx}
-          opacity={marker.highlight ? 1 : 0.6}
+          opacity={props.highlightedMarker === marker.markerId ? 1 : 0.4}
           icon={paw}
           position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
           onClick={()=>{

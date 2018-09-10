@@ -15,18 +15,18 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         shelters.forEach((shelter) => {
           shelter.markerId = 'lat' + shelter.geocodeLat + 'lng' + shelter.geocodeLng;
           if (markers[shelter.markerId]) {
-            markers[shelter.markerId].shelters.push(shelter);
+            markers[shelter.markerId].shelterIds.push(shelter.id.$t);
           } else {
             markers[shelter.markerId] = {
               lat: shelter.geocodeLat,
               lng: shelter.geocodeLng,
               markerId: shelter.markerId
             };
-            markers[shelter.markerId].shelters = [];
-            markers[shelter.markerId].shelters.push(shelter);
+            markers[shelter.markerId].shelterIds = [];
+            markers[shelter.markerId].shelterIds.push(shelter.id.$t);
           }
         });
-
+console.log('markers', Object.values(markers));
         return Object.assign({}, state, {
           shelters: _.sortBy(shelters, ['markerId']),
           activeShelters: shelters,
@@ -112,15 +112,15 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         activePetFilters: Object.assign({}, state.activePetFilters, activePetFilters)
       });
     case "ADD_SHELTER_TO_ACTIVE": {
-      let activeShelters = JSON.parse(JSON.stringify(state.activeShelters));
-      const shelter = _.find(JSON.parse(JSON.stringify(state.shelters)), (shelter) => { return shelter.id.$t === action.payload });
+      let activeShelters = state.activeShelters;
+      const shelter = _.find(state.shelters, (shelter) => { return shelter.id.$t === action.payload });
       activeShelters.push(shelter)
       return Object.assign({}, state, {
         activeShelters: _.uniqBy(activeShelters, 'id.$t')
       });
     }
     case "REMOVE_SHELTER_FROM_ACTIVE": {
-      const activeShelters = _.reject(JSON.parse(JSON.stringify(state.activeShelters)), (shelter) => {
+      const activeShelters = _.reject(state.activeShelters, (shelter) => {
         return shelter.id.$t === action.payload;
       });
       return Object.assign({}, state, {
@@ -133,39 +133,13 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
       });
     }
     case "REMOVE_MARKER_HIGHLIGHT": {
-      const markers = _.map(state.markers, (marker) => {
-        if (marker.markerId === action.payload) {
-          marker.highlight = false;
-        }
-        return marker;
-      });
-      const shelters = _.map(state.shelters, (shelter) => {
-        if (shelter.markerId === action.payload) {
-          shelter.highlight = false;
-        }
-        return shelter;
-      })
       return Object.assign({}, state, {
-        markers,
-        shelters
+        highlightedMarker: null
       });
     }
     case "ADD_MARKER_HIGHLIGHT": {
-      const markers = _.map(state.markers, (marker) => {
-        if (marker.markerId === action.payload) {
-          marker.highlight = true;
-        }
-        return marker;
-      });
-      const shelters = _.map(state.shelters, (shelter) => {
-        if (shelter.markerId === action.payload) {
-          shelter.highlight = true;
-        }
-        return shelter;
-      })
       return Object.assign({}, state, {
-        markers,
-        shelters
+        highlightedMarker: action.payload
       });
     }
     default:

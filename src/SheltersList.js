@@ -19,7 +19,7 @@ class SheltersList extends Component {
                         textAlign: 'left',
                         whiteSpace: 'pre-wrap',
                         borderRadius: 0,
-                        borderLeft: shelter.highlight ? 'solid 4px #198f35' : 'none'
+                        borderLeft: this.props.highlightedMarker === shelter.markerId ? 'solid 4px #198f35' : 'none'
                     }}
                     onMouseEnter={() => {
                         this.props.updateMarkerHighlight(shelter.markerId, true);
@@ -109,6 +109,7 @@ export default connect(state => {
         shelters: state.shelters,
         loading: state.loading,
         petsByShelter: state.petsByShelter,
-        shelterFilters: state.shelterFilters
+        shelterFilters: state.shelterFilters,
+        highlightedMarker: state.highlightedMarker
     }
 }, { setActiveShelter, resetActiveShelters, updateMarkerHighlight })(SheltersList);
