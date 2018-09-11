@@ -99,7 +99,7 @@ const MapComponent = connect(state => {
         onCenterChanged={() => { props.onCenterChanged(props.update) }}
         onZoomChanged={() => { props.onZoomChanged(props.update) }}
       >
-        {props.markers && props.markers.length && props.markers.map((marker, idx) => {
+        {props.markers && props.markers.length > 0 && props.markers.map((marker, idx) => {
           return (<Marker
             key={idx}
             opacity={props.highlightedMarker === marker.markerId ? 1 : 0.4}
