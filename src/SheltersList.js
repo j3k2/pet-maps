@@ -47,10 +47,10 @@ class SheltersList extends Component {
                             <List.Header>
                                 {`${idx + 1}. ${shelter.name.$t}`}
                                 <Checkbox checked={isShelterActive(shelter.id.$t, shelter.markerId)}
-                                    onChange={(e, d) => {
-                                        this.props.setActiveShelter(shelter.id.$t, d.checked);
-                                        this.props.highlightButton();
-                                    }}
+                                    // onClick={(e, d) => {
+                                    //     this.props.setActiveShelter(shelter.id.$t, d.checked);
+                                    //     this.props.highlightButton();
+                                    // }}
                                     style={{ float: 'right', marginLeft: 10 }}></Checkbox>
                             </List.Header>
                             <List.Description>
@@ -102,18 +102,18 @@ class SheltersList extends Component {
                         {`${this.props.shelters.length} results`}
                     </span>
                     <a onClick={() => {
-                        this.props.resetActiveShelters();
+                        this.props.resetActiveShelters(this.props.shelters.length > this.props.activeShelters.length);
                         this.props.highlightButton();
                     }}
                         style={{
                             float: 'right',
                             cursor: 'pointer',
-                            color: '#198f35',
-                            opacity: this.props.shelters.length > this.props.activeShelters.length ? 1 : 0.4
+                            color: '#198f35'
                         }}>
-                        <span>Select all
-                        {/* {this.props.shelters.length}/{this.props.activeShelters.length} */}
-                        </span></a>
+                        <span>
+                            {this.props.shelters.length > this.props.activeShelters.length ? 'Select all' : 'Clear All'}
+                        </span>
+                    </a>
                     <br />
 
                     {this.renderShelters(this.props.shelters)}

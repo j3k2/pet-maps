@@ -12,7 +12,7 @@ function fetchSheltersAndMarkers({zip, bounds, zoom, disableFetch}) {
       dispatch({
         type: 'FETCH_SHELTERS'
       });
-      
+
       requestShelters(zip, zoom)
         .then((res) => {
           if (res.petfinder &&
@@ -139,10 +139,11 @@ function setActivePetFilters(value, field) {
   }
 };
 
-function resetActiveShelters() {
+function resetActiveShelters(selected) {
   return (dispatch) => {
     dispatch({
-      type: 'RESET_ACTIVE_SHELTERS'
+      type: 'RESET_ACTIVE_SHELTERS',
+      payload: selected
     })
   }
 }

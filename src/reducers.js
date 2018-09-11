@@ -136,10 +136,17 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
       };
     }
     case "RESET_ACTIVE_SHELTERS": {
-      return {
-        ...state,
-        activeShelters: JSON.parse(JSON.stringify(state.shelters))
-      };
+      if(action.payload) {
+        return {
+          ...state,
+          activeShelters: JSON.parse(JSON.stringify(state.shelters))
+        };
+      } else {
+        return {
+          ...state,
+          activeShelters: []
+        };
+      }
     }
     case "SET_MARKER_HIGHLIGHT": {
       return {
