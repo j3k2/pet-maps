@@ -2,50 +2,43 @@ import _ from 'lodash';
 
 export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] }, action) => {
   switch (action.type) {
-    case 'RECEIVE_SHELTERS':
-      if (action.payload) {
-        const shelters = _.filter(action.payload, (shelter) => {
-          const bounds = action.meta;
-          return shelter.geocodeLat >= bounds.f.b &&
-            shelter.geocodeLat <= bounds.f.f &&
-            shelter.geocodeLng >= bounds.b.b &&
-            shelter.geocodeLng <= bounds.b.f
-        });
-        const markers = {};
-        shelters.forEach((shelter) => {
-          shelter.markerId = 'lat' + shelter.geocodeLat + 'lng' + shelter.geocodeLng;
-          if (markers[shelter.markerId]) {
-            markers[shelter.markerId].shelterIds.push(shelter.id.$t);
-          } else {
-            markers[shelter.markerId] = {
-              lat: shelter.geocodeLat,
-              lng: shelter.geocodeLng,
-              markerId: shelter.markerId
-            };
-            markers[shelter.markerId].shelterIds = [];
-            markers[shelter.markerId].shelterIds.push(shelter.id.$t);
-          }
-        });
-        console.log('markers', Object.values(markers));
-        return {
-          ...state,
-          shelters: _.sortBy(shelters, ['markerId']).reverse(),
-          activeShelters: shelters,
-          markers: Object.values(markers),
-          loading: {
-            ...state.loading,
-            shelters: false
-          }
+    case 'RECEIVE_SHELTERS': {
+      const shelters = _.filter(action.payload || state.shelters, (shelter, idx) => {
+        shelter.geocodeLat = action.meta.locations[idx].lat;
+        shelter.geocodeLng = action.meta.locations[idx].lng;
+
+        return shelter.geocodeLat > (action.meta.bounds.f.b + .001) && //bottom buffer
+          shelter.geocodeLat < (action.meta.bounds.f.f - .002) && //top buffer
+          shelter.geocodeLng > (action.meta.bounds.b.b + 0) && //left buffer
+          shelter.geocodeLng < (action.meta.bounds.b.f - 0); //right buffer
+      });
+      const markers = {};
+      shelters.forEach((shelter) => {
+        shelter.markerId = 'lat' + shelter.geocodeLat + 'lng' + shelter.geocodeLng;
+        if (markers[shelter.markerId]) {
+          markers[shelter.markerId].shelterIds.push(shelter.id.$t);
+        } else {
+          markers[shelter.markerId] = {
+            lat: shelter.geocodeLat,
+            lng: shelter.geocodeLng,
+            markerId: shelter.markerId
+          };
+          markers[shelter.markerId].shelterIds = [];
+          markers[shelter.markerId].shelterIds.push(shelter.id.$t);
         }
-      } else {
-        return {
-          ...state,
-          loading: {
-            ...state.loading,
-            shelters: false
-          }
+      });
+      console.log('markers', Object.values(markers));
+      return {
+        ...state,
+        shelters: _.sortBy(shelters, ['markerId']).reverse(),
+        activeShelters: shelters,
+        markers: Object.values(markers),
+        loading: {
+          ...state.loading,
+          shelters: false
         }
       }
+    }
     case "RECEIVE_PETS":
       let pets = _.reduce(action.payload, (result, value, third) => {
         if (!_.isEmpty(value.petfinder.pets)) {
@@ -160,7 +153,7 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         scrolledMarker: action.payload
       };
     }
-    case "TOGGLE_SHELTERS_ACTIVE" : {
+    case "TOGGLE_SHELTERS_ACTIVE": {
       const sheltersActive = [];
       const shelterIdsInactive = [];
       const shelterIds = action.payload;
@@ -170,7 +163,7 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         const activeShelter = _.find(activeShelters, activeShelter => {
           return activeShelter.id.$t === shelterId;
         });
-        if(activeShelter) {
+        if (activeShelter) {
           shelterIdsInactive.push(shelterId);
         } else {
           sheltersActive.push(_.find(state.shelters, shelter => {
@@ -179,14 +172,14 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         }
       })
 
-      if(shelterIdsInactive.length) {
+      if (shelterIdsInactive.length) {
         activeShelters = _.reject(activeShelters, activeShelter => {
           return shelterIdsInactive.indexOf(activeShelter.id.$t) > -1;
-        });  
+        });
       }
 
       return {
-        ...state, 
+        ...state,
         activeShelters: [].concat(activeShelters, sheltersActive)
       }
     }

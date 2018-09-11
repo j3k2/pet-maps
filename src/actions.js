@@ -7,62 +7,64 @@ function requestShelters(zip, zoom) {
   return getJSON(`https://api.petfinder.com/shelter.find?location=${zip}&count=${Math.round(1000 / (zoom))}&key=90d01a3ac254f887ffd89ccb11322d58&format=json&callback=?`);
 }
 
-function fetchShelters(zip, bounds, zoom) {
+function fetchSheltersAndMarkers({zip, bounds, zoom, disableFetch}) {
   return (dispatch) => {
-    dispatch({
-      type: 'FETCH_SHELTERS'
-    });
-
-    requestShelters(zip, zoom)
-      .then((res) => {
-        if (res.petfinder &&
-          res.petfinder.shelters &&
-          res.petfinder.shelters.shelter) {
-          const geocodeShelters = _.map(res.petfinder.shelters.shelter, shelter => {
-            return Geocode.fromAddress(`${shelter.address1.$t}, ${shelter.zip.$t}`)
-              .then((geocodeRes) => {
-                if (geocodeRes.results[0].geometry.location.lat && geocodeRes.results[0].geometry.location.lng) {
-                  return {
-                    lat: geocodeRes.results[0].geometry.location.lat,
-                    lng: geocodeRes.results[0].geometry.location.lng
+      dispatch({
+        type: 'FETCH_SHELTERS'
+      });
+      
+      requestShelters(zip, zoom)
+        .then((res) => {
+          if (res.petfinder &&
+            res.petfinder.shelters &&
+            res.petfinder.shelters.shelter) {
+            const geocodeShelters = _.map(res.petfinder.shelters.shelter, shelter => {
+              return Geocode.fromAddress(`${shelter.address1.$t}, ${shelter.zip.$t}`)
+                .then((geocodeRes) => {
+                  if (geocodeRes.results[0].geometry.location.lat && geocodeRes.results[0].geometry.location.lng) {
+                    return {
+                      lat: geocodeRes.results[0].geometry.location.lat,
+                      lng: geocodeRes.results[0].geometry.location.lng
+                    }
                   }
-                }
-              })
-              .catch(() => {
-                return {
-                  lat: parseFloat(shelter.latitude.$t),
-                  lng: parseFloat(shelter.longitude.$t)
-                }
-              })
-          });
-
-          Promise.all(geocodeShelters).then(locations => {
-            const shelters = _.map(res.petfinder.shelters.shelter, (shelter, idx) => {
-              shelter.geocodeLat = locations[idx].lat;
-              shelter.geocodeLng = locations[idx].lng;
-              return shelter;
+                })
+                .catch(() => {
+                  return {
+                    lat: parseFloat(shelter.latitude.$t),
+                    lng: parseFloat(shelter.longitude.$t)
+                  }
+                })
             });
+
+            Promise.all(geocodeShelters).then(locations => {
+              dispatch({
+                type: 'RECEIVE_SHELTERS',
+                payload: res.petfinder.shelters.shelter,
+                meta: {
+                  locations,
+                  bounds
+                }
+              })
+            }).catch((err) => {
+              console.log(err);
+              dispatch({
+                type: 'RECEIVE_SHELTERS',
+                meta: bounds
+              })
+            })
+          } else {
             dispatch({
               type: 'RECEIVE_SHELTERS',
-              payload: shelters,
               meta: bounds
             })
-          }).catch((err) => {
-            console.log(err);
-            dispatch({
-              type: 'RECEIVE_SHELTERS',
-              payload: null,
-              meta: bounds
-            })
-          })
-        } else {
+          }
+        }).catch((err) => {
+          console.log(err);
           dispatch({
             type: 'RECEIVE_SHELTERS',
-            payload: null,
             meta: bounds
-          })
-        }
-      })
+          });
+        });
   }
 }
 
@@ -173,7 +175,7 @@ function toggleSheltersActive(shelterIds) {
 }
 
 export {
-  fetchShelters,
+  fetchSheltersAndMarkers,
   fetchPets,
   setCenterAndUpdateMap,
   setUpdateOption,

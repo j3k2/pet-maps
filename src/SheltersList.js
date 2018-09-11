@@ -65,11 +65,15 @@ class SheltersList extends Component {
     componentDidUpdate() {
         if (this.props.scrolledMarker && this.listRefs[this.props.scrolledMarker]) {
             const refs = this.listRefs[this.props.scrolledMarker];
-            const offsets = _.map(refs, ref=>{
+            const offsets = _.map(refs, ref => {
                 return ref.offsetTop;
             });
-            this.containerRef.scrollTop = _.min(offsets) - this.containerRef.offsetTop - 40;
-        } 
+            this.containerRef.scrollTop =
+                _.min(offsets) -
+                this.containerRef.offsetTop -
+                parseInt(this.containerRef.style.paddingTop, 10) -
+                parseInt(this.containerRef.style.paddingBottom, 10);
+        }
         if (!this.props.shelters.length) {
             // reset listRefs when shelters are refetched
             this.listRefs = {};
@@ -94,7 +98,7 @@ class SheltersList extends Component {
                     style={{ color: 'black' }}
                     selection
                     relaxed>
-                    <span style={{float: 'left'}}>
+                    <span style={{ float: 'left' }}>
                         {`${this.props.shelters.length} results`}
                     </span>
                     <a onClick={() => {
