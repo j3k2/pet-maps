@@ -11,8 +11,8 @@ export default (state = {
         shelter.geocodeLat = action.meta.locations[idx].lat;
         shelter.geocodeLng = action.meta.locations[idx].lng;
 
-        return shelter.geocodeLat > (action.meta.bounds.f.b + .001) && //bottom buffer
-          shelter.geocodeLat < (action.meta.bounds.f.f - .002) && //top buffer
+        return shelter.geocodeLat > (action.meta.bounds.f.b + 0.0) && //bottom buffer
+          shelter.geocodeLat < (action.meta.bounds.f.f - 0) && //top buffer
           shelter.geocodeLng > (action.meta.bounds.b.b + 0) && //left buffer
           shelter.geocodeLng < (action.meta.bounds.b.f - 0); //right buffer
       });
@@ -101,7 +101,6 @@ export default (state = {
         },
         pets: {},
         shelters: {},
-        // activeShelterIds: {},
         petFilters: {},
         activePetFilters: {}
       }
