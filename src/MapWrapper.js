@@ -15,7 +15,7 @@ class MapWrapper extends Component {
         {<div>
           Update results as map is updated: <Checkbox checked={this.props.update} onChange={this.handleCheckbox} />
         </div>}
-        {<MyMapComponent />}
+        {<MyMapComponent {...this.props} />}
       </div>
     )
   }

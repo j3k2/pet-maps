@@ -91,25 +91,25 @@ function setActiveShelter(shelterId, checked) {
   return (dispatch) => {
     if (checked) {
       dispatch({
-        type: 'ADD_SHELTER_TO_ACTIVE',
+        type: 'REMOVE_SHELTER_FROM_ACTIVE',
         payload: shelterId
       })
     } else {
       dispatch({
-        type: 'REMOVE_SHELTER_FROM_ACTIVE',
+        type: 'ADD_SHELTER_TO_ACTIVE',
         payload: shelterId
       })
     }
   }
 }
 
-function fetchPets(shelters) {
+function fetchPets(shelterIds) {
   return (dispatch) => {
     dispatch({
       type: 'FETCH_PETS'
     });
-    const requests = _.map(shelters, (shelter) => {
-      return getJSON(`https://api.petfinder.com/shelter.getPets?id=${shelter.id.$t}&key=90d01a3ac254f887ffd89ccb11322d58&format=json&callback=?`);
+    const requests = _.map(shelterIds, (shelterId) => {
+      return getJSON(`https://api.petfinder.com/shelter.getPets?id=${shelterId}&key=90d01a3ac254f887ffd89ccb11322d58&format=json&callback=?`);
     });
 
     Promise.all(requests)

@@ -30,7 +30,11 @@ class MapView extends Component {
                     <div style={{
                         display: 'inline-block',
                     }}>
-                        <MapWrapper />
+                        <MapWrapper highlightButton={()=>{
+                            if(!this.state.init) {
+                                this.setState({highlight: true});
+                            }
+                        }}/>
                     </div>
                     <div style={{
                         display: 'inline-block',
@@ -43,7 +47,7 @@ class MapView extends Component {
                     </div>
                     <br />
                     <Button onClick={()=>{
-                        this.props.fetchPets(this.props.activeShelters);
+                        this.props.fetchPets(this.props.activeShelterIds);
                         this.setState({init: false});
                         this.setState({highlight: false});
                     }}>{this.state.highlight ? 'Update Pets' : 'Find Pets'}</Button>
@@ -56,5 +60,5 @@ class MapView extends Component {
 
 
 export default connect(state => {
-    return { activeShelters: state.activeShelters}
+    return { activeShelterIds: state.activeShelterIds}
 }, { fetchPets })(MapView);

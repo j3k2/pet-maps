@@ -11,12 +11,6 @@ class SheltersList extends Component {
     }
 
     renderShelters(shelters) {
-        const isShelterActive = (shelterId) => {
-            return _.find(this.props.activeShelters, (activeShelter) => {
-                return activeShelter.id.$t === shelterId;
-            }) ? true : false;
-        }
-
         return _.map(shelters, (shelter, idx) => {
             return (
                 <Ref innerRef={(el) => {
@@ -38,7 +32,7 @@ class SheltersList extends Component {
                             this.props.setMarkerHighlight(null);
                         }}
                         onClick={() => {
-                            this.props.setActiveShelter(shelter.id.$t, !isShelterActive(shelter.id.$t, shelter.markerId));
+                            this.props.setActiveShelter(shelter.id.$t, this.props.activeShelterIds.indexOf(shelter.id.$t) > -1);
                             this.props.highlightButton();
                         }}
                     >
@@ -46,7 +40,7 @@ class SheltersList extends Component {
                         <List.Content>
                             <List.Header>
                                 {`${idx + 1}. ${shelter.name.$t}`}
-                                <Checkbox checked={isShelterActive(shelter.id.$t, shelter.markerId)}
+                                <Checkbox checked={this.props.activeShelterIds.indexOf(shelter.id.$t) > -1}
                                     // onClick={(e, d) => {
                                     //     this.props.setActiveShelter(shelter.id.$t, d.checked);
                                     //     this.props.highlightButton();
@@ -102,7 +96,7 @@ class SheltersList extends Component {
                         {`${this.props.shelters.length} results`}
                     </span>
                     <a onClick={() => {
-                        this.props.resetActiveShelters(this.props.shelters.length > this.props.activeShelters.length);
+                        this.props.resetActiveShelters(this.props.shelters.length > this.props.activeShelterIds.length);
                         this.props.highlightButton();
                     }}
                         style={{
@@ -111,7 +105,7 @@ class SheltersList extends Component {
                             color: '#198f35'
                         }}>
                         <span>
-                            {this.props.shelters.length > this.props.activeShelters.length ? 'Select all' : 'Clear All'}
+                            {this.props.shelters.length > this.props.activeShelterIds.length ? 'Select all' : 'Clear All'}
                         </span>
                     </a>
                     <br />
@@ -126,7 +120,7 @@ class SheltersList extends Component {
 
 export default connect(state => {
     return {
-        activeShelters: state.activeShelters,
+        activeShelterIds: state.activeShelterIds,
         shelters: state.shelters,
         loading: state.loading,
         petsByShelter: state.petsByShelter,

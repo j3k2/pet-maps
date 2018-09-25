@@ -107,6 +107,7 @@ const MapComponent = connect(state => {
             position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
             onClick={() => {
               props.toggleSheltersActive(marker.shelterIds);
+              props.highlightButton();
             }}
             onMouseOver={() => {
               props.setMarkerScroll(marker.markerId);

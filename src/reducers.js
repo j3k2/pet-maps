@@ -1,6 +1,10 @@
 import _ from 'lodash';
 
-export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] }, action) => {
+export default (state = { 
+  loading: {}, 
+  activePetFilters: {}, 
+  shelterFilters: [] 
+}, action) => {
   switch (action.type) {
     case 'RECEIVE_SHELTERS': {
       const shelters = _.filter(action.payload || state.shelters, (shelter, idx) => {
@@ -28,10 +32,12 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         }
       });
       console.log('markers', Object.values(markers));
+      const incomingShelterIds = _.map(shelters, 'id.$t');
+      const existingShelterIds = _.map(state.shelters, 'id.$t');
       return {
         ...state,
         shelters: _.sortBy(shelters, ['markerId']).reverse(),
-        activeShelters: shelters,
+        activeShelterIds: _.difference(incomingShelterIds, existingShelterIds).length ? _.map(shelters, 'id.$t') : state.activeShelterIds,
         markers: Object.values(markers),
         loading: {
           ...state.loading,
@@ -95,7 +101,7 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         },
         pets: {},
         shelters: {},
-        activeShelters: {},
+        // activeShelterIds: {},
         petFilters: {},
         activePetFilters: {}
       }
@@ -118,33 +124,30 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
         activePetFilters: activePetFilters
       };
     case "ADD_SHELTER_TO_ACTIVE": {
-      let activeShelters = state.activeShelters;
-      const shelter = _.find(state.shelters, (shelter) => { return shelter.id.$t === action.payload });
-      activeShelters.push(shelter)
       return {
         ...state,
-        activeShelters: _.uniqBy(activeShelters, 'id.$t')
+        activeShelterIds: _.uniq([...state.activeShelterIds, action.payload])
       };
     }
     case "REMOVE_SHELTER_FROM_ACTIVE": {
-      const activeShelters = _.reject(state.activeShelters, (shelter) => {
-        return shelter.id.$t === action.payload;
+      const activeShelterIds = _.reject(state.activeShelterIds, (shelterId) => {
+        return shelterId === action.payload;
       });
       return {
         ...state,
-        activeShelters
+        activeShelterIds
       };
     }
     case "RESET_ACTIVE_SHELTERS": {
       if(action.payload) {
         return {
           ...state,
-          activeShelters: JSON.parse(JSON.stringify(state.shelters))
+          activeShelterIds: _.map(state.shelters, 'id.$t')
         };
       } else {
         return {
           ...state,
-          activeShelters: []
+          activeShelterIds: []
         };
       }
     }
@@ -164,30 +167,28 @@ export default (state = { loading: {}, activePetFilters: {}, shelterFilters: [] 
       const sheltersActive = [];
       const shelterIdsInactive = [];
       const shelterIds = action.payload;
-      let activeShelters = state.activeShelters;
+      let activeShelterIds = state.activeShelterIds;
 
       _.each(shelterIds, shelterId => {
-        const activeShelter = _.find(activeShelters, activeShelter => {
-          return activeShelter.id.$t === shelterId;
+        const activeShelter = _.find(activeShelterIds, activeShelter => {
+          return activeShelter === shelterId;
         });
         if (activeShelter) {
           shelterIdsInactive.push(shelterId);
         } else {
-          sheltersActive.push(_.find(state.shelters, shelter => {
-            return shelter.id.$t === shelterId;
-          }));
+          sheltersActive.push(shelterId);
         }
       })
 
       if (shelterIdsInactive.length) {
-        activeShelters = _.reject(activeShelters, activeShelter => {
-          return shelterIdsInactive.indexOf(activeShelter.id.$t) > -1;
+        activeShelterIds = _.reject(activeShelterIds, activeShelter => {
+          return shelterIdsInactive.indexOf(activeShelter) > -1;
         });
       }
 
       return {
         ...state,
-        activeShelters: [].concat(activeShelters, sheltersActive)
+        activeShelterIds: [].concat(activeShelterIds, sheltersActive)
       }
     }
     default:
