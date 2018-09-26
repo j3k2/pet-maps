@@ -14,17 +14,16 @@ import paw from '../../assets/pawprint_green.png';
 
 const MapComponent = connect(state => {
   return {
-    shelters: state.shelters,
-    markers: state.markers,
-    update: state.update,
-    center: state.center,
-    highlightedMarker: state.highlightedMarker
+    shelters: state.shelters.items,
+    markers: state.markers.items,
+    update: state.map.update,
+    center: state.map.center,
+    highlightedMarker: state.markers.highlightedMarker
   }
 }, {
     fetchSheltersAndMarkers,
     setMarkerHighlight,
     setMarkerScroll,
-
     toggleSheltersActive
   })(compose(
     withProps({

@@ -43,5 +43,5 @@ class SearchInput extends Component {
 }
 
 export default connect(state => {
-    return { center: state.center }
+    return { center: state.map.center }
 }, { setCenterAndUpdateMap })(SearchInput);

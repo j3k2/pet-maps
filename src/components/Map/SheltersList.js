@@ -121,12 +121,12 @@ class SheltersList extends Component {
 
 export default connect(state => {
     return {
-        activeShelterIds: state.activeShelterIds,
-        shelters: state.shelters,
-        loading: state.loading,
-        petsByShelter: state.petsByShelter,
-        shelterFilters: state.shelterFilters,
-        highlightedMarker: state.highlightedMarker,
-        scrolledMarker: state.scrolledMarker
+        activeShelterIds: state.shelters.activeShelterIds,
+        shelters: state.shelters.items,
+        loading: state.shelters.loading,
+        petsByShelter: state.shelters.petsByShelter,
+        shelterFilters: state.shelters.shelterFilters,
+        highlightedMarker: state.markers.highlightedMarker,
+        scrolledMarker: state.markers.scrolledMarker
     }
 }, { setActiveShelter, resetActiveShelters, setMarkerHighlight })(SheltersList);

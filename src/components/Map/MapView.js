@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import SheltersList from './SheltersList';
 import MapWrapper from './MapWrapper';
 import { Segment, Button } from 'semantic-ui-react';
@@ -60,5 +59,5 @@ class MapView extends Component {
 
 
 export default connect(state => {
-    return { activeShelterIds: state.activeShelterIds}
+    return { activeShelterIds: state.shelters.activeShelterIds}
 }, { fetchPets })(MapView);

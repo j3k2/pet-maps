@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { fetchPets, setActivePetFilters } from '../../actions/actions';
+import { setActivePetFilters } from '../../actions/actions';
 import { Card, Label, Icon, Loader, Form, Segment, Dropdown } from 'semantic-ui-react'
 import PetCard from './PetCard';
 
@@ -47,8 +47,7 @@ class PetsView extends Component {
     }
 
     renderPetFilters(filters) {
-        console.log('RPF', filters);
-        return _.map(filters, (fieldValues, fieldName) => {
+            return _.map(filters, (fieldValues, fieldName) => {
             const options = _.map(fieldValues, (value) => {
 
                 return {
@@ -106,5 +105,9 @@ class PetsView extends Component {
 }
 
 export default connect(state => {
-    return { shelters: state.shelters, pets: state.pets, loading: state.loading, petFilters: state.petFilters, activePetFilters: state.activePetFilters }
-}, { fetchPets, setActivePetFilters })(PetsView);
+    return { shelters: state.shelters.items, 
+        pets: state.pets.items, 
+        loading: state.pets.loading, 
+        petFilters: state.pets.petFilters, 
+        activePetFilters: state.pets.activePetFilters }
+}, { setActivePetFilters })(PetsView);

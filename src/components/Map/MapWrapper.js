@@ -22,5 +22,5 @@ class MapWrapper extends Component {
 }
 
 export default connect(state => {
-  return { update: state.update}
+  return { update: state.map.update}
 }, { setUpdateOption })(MapWrapper);
