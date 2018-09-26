@@ -9,6 +9,7 @@ export const REMOVE_SHELTER_FROM_ACTIVE = 'REMOVE_SHELTER_FROM_ACTIVE';
 export const ADD_SHELTER_TO_ACTIVE = 'ADD_SHELTER_TO_ACTIVE';
 export const TOGGLE_SHELTERS_ACTIVE = 'TOGGLE_SHELTERS_ACTIVE';
 export const RESET_ACTIVE_SHELTERS = 'RESET_ACTIVE_SHELTERS';
+export const CLEAR_PETS = 'CLEAR_PETS';
 
 export function requestShelters(zip, zoom) {
     return getJSON(`https://api.petfinder.com/shelter.find?location=${zip}&count=${Math.round(1000 / (zoom))}&key=90d01a3ac254f887ffd89ccb11322d58&format=json&callback=?`);
@@ -16,7 +17,9 @@ export function requestShelters(zip, zoom) {
 
 export function fetchShelters({ zip, bounds, zoom, disableFetch }) {
     return (dispatch, getState) => {
-
+        dispatch({
+            type: CLEAR_PETS
+        })
         dispatch({
             type: FETCH_SHELTERS
         });

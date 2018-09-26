@@ -99,6 +99,9 @@ class PetsView extends Component {
                     </Card.Group>
                 </div>}
                 {this.props.loading && <Loader active inline='centered'>Loading Pets</Loader>}
+                {!this.props.loading && this.props.pets && this.props.pets.length === 0 && 
+                <Segment>No pets found for the selected shelters.</Segment>
+                }
             </div>
         )
     }
