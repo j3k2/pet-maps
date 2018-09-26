@@ -1,10 +1,17 @@
 import _ from 'lodash';
+
+import {
+  RECEIVE_PETS,
+  FETCH_PETS,
+  SET_ACTIVE_PET_FILTERS
+} from '../actions/petActions';
+
 export default (state = {
     loading: false,
     items: []
 }, action) => {
     switch (action.type) {
-        case "RECEIVE_PETS":
+        case RECEIVE_PETS:
         let pets = _.reduce(action.payload, (result, value, third) => {
           if (!_.isEmpty(value.petfinder.pets)) {
             return result.concat(value.petfinder.pets.pet);
@@ -40,12 +47,12 @@ export default (state = {
           activePetFilters: {},
           loading: false
         };
-      case "FETCH_PETS":
+      case FETCH_PETS:
         return {
           ...state,
           loading: true
         };
-      case "SET_ACTIVE_PET_FILTERS":
+      case SET_ACTIVE_PET_FILTERS:
         const activePetFilters = {
           [action.payload.field]: action.payload.value
         };

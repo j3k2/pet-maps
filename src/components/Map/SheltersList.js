@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import { Ref, List, Loader, Checkbox } from 'semantic-ui-react';
-import { setActiveShelter, resetActiveShelters, setMarkerHighlight } from '../../actions/actions';
+import { setActiveShelter, resetActiveShelters } from '../../actions/shelterActions';
+import { setMarkerHighlight } from '../../actions/mapActions';
 
 class SheltersList extends Component {
     constructor(props) {

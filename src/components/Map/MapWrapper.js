@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MyMapComponent from './MapComponent';
 import { connect } from 'react-redux';
-import { setUpdateOption } from '../../actions/actions';
+import { setUpdateOption } from '../../actions/mapActions';
 import { Checkbox } from 'semantic-ui-react';
 
 class MapWrapper extends Component {

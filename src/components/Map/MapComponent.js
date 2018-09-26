@@ -4,11 +4,13 @@ import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-map
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import {
-  fetchSheltersAndMarkers,
+  fetchShelters,
+  toggleSheltersActive
+} from '../../actions/shelterActions';
+import {
   setMarkerHighlight,
   setMarkerScroll,
-  toggleSheltersActive
-} from '../../actions/actions';
+} from '../../actions/mapActions';
 import Geocode from 'react-geocode';
 import paw from '../../assets/pawprint_green.png';
 
@@ -21,7 +23,7 @@ const MapComponent = connect(state => {
     highlightedMarker: state.markers.highlightedMarker
   }
 }, {
-    fetchSheltersAndMarkers,
+    fetchShelters,
     setMarkerHighlight,
     setMarkerScroll,
     toggleSheltersActive
@@ -63,7 +65,7 @@ const MapComponent = connect(state => {
                 const newZip = _.find(response.results[0].address_components, (component) => {
                   return component.types[0] === "postal_code"
                 });
-                  props.fetchSheltersAndMarkers({
+                  props.fetchShelters({
                     zip: newZip ? newZip.long_name : zip.long_name,
                     bounds: refs.map.getBounds(),
                     zoom: refs.map.getZoom()

@@ -1,15 +1,17 @@
+import {SET_CENTER, SET_UPDATE_OPTION} from '../actions/mapActions';
+
 export default (state = {
     loading: {},
     center: null,
     update: true
 }, action) => {
     switch (action.type) {
-        case "SET_CENTER":
+        case SET_CENTER:
             return {
                 ...state,
                 center: action.payload
             };
-        case "SET_UPDATE_OPTION":
+        case SET_UPDATE_OPTION:
             return {
                 ...state,
                 update: action.payload

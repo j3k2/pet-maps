@@ -1,4 +1,12 @@
 import _ from 'lodash';
+import {
+    FETCH_SHELTERS,
+    ADD_SHELTER_TO_ACTIVE,
+    REMOVE_SHELTER_FROM_ACTIVE,
+    RESET_ACTIVE_SHELTERS,
+    TOGGLE_SHELTERS_ACTIVE,
+    RECEIVE_SHELTERS
+} from '../actions/shelterActions';
 
 export default (state = {
     loading: false,
@@ -6,18 +14,18 @@ export default (state = {
     activeShelterIds: []
 }, action) => {
     switch (action.type) {
-        case "FETCH_SHELTERS":
+        case FETCH_SHELTERS:
             return {
                 ...state,
                 loading: true
             }
-        case "ADD_SHELTER_TO_ACTIVE": {
+        case ADD_SHELTER_TO_ACTIVE: {
             return {
                 ...state,
                 activeShelterIds: _.uniq([...state.activeShelterIds, action.payload])
             };
         }
-        case "REMOVE_SHELTER_FROM_ACTIVE": {
+        case REMOVE_SHELTER_FROM_ACTIVE: {
             const activeShelterIds = _.reject(state.activeShelterIds, (shelterId) => {
                 return shelterId === action.payload;
             });
@@ -26,7 +34,7 @@ export default (state = {
                 activeShelterIds
             };
         }
-        case "RESET_ACTIVE_SHELTERS": {
+        case RESET_ACTIVE_SHELTERS: {
             if (action.payload) {
                 return {
                     ...state,
@@ -39,7 +47,7 @@ export default (state = {
                 };
             }
         }
-        case "TOGGLE_SHELTERS_ACTIVE": {
+        case TOGGLE_SHELTERS_ACTIVE: {
             const sheltersActive = [];
             const shelterIdsInactive = [];
             const shelterIds = action.payload;
@@ -67,7 +75,7 @@ export default (state = {
                 activeShelterIds: [].concat(activeShelterIds, sheltersActive)
             }
         }
-        case 'RECEIVE_SHELTERS': {
+        case RECEIVE_SHELTERS: {
             const shelters = _.filter(action.payload || state.items, (shelter, idx) => {
                 shelter.geocodeLat = action.meta.locations[idx].lat;
                 shelter.geocodeLng = action.meta.locations[idx].lng;
