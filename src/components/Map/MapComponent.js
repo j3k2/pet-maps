@@ -8,9 +8,9 @@ import {
   setMarkerHighlight,
   setMarkerScroll,
   toggleSheltersActive
-} from './actions';
+} from '../../actions/actions';
 import Geocode from 'react-geocode';
-import paw from './pawprint_green.png';
+import paw from '../../assets/pawprint_green.png';
 
 const MapComponent = connect(state => {
   return {

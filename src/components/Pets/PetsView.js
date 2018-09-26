@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { fetchPets, setActivePetFilters, setPetFilters } from './actions';
+import { fetchPets, setActivePetFilters, setPetFilters } from '../../actions/actions';
 import { Card, Label, Icon, Loader, Form, Segment, Dropdown } from 'semantic-ui-react'
 import PetCard from './PetCard';
 

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Input } from 'semantic-ui-react';
 import Geocode from 'react-geocode';
 import { connect } from 'react-redux';
-import { setCenterAndUpdateMap } from './actions';
+import { setCenterAndUpdateMap } from '../../actions/actions';
 
 class SearchInput extends Component {
     state = {

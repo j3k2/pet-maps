@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import reducers from './reducers';
-import PetsView from './PetsView';
+import reducers from './reducers/reducers';
+import PetsView from './components/Pets/PetsView';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import Geocode from "react-geocode";
-import SearchInput from './SearchInput';
-import MapView from './MapView';
+import SearchInput from './components/Header/SearchInput';
+import MapView from './components/Map/MapView';
 import { Icon, Segment, Button } from 'semantic-ui-react';
 import WebFont from 'webfontloader';
-import './main.css';
+import './assets/main.css';
 
 import 'semantic-ui-css/semantic.min.css';
 Geocode.setApiKey("AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c");
