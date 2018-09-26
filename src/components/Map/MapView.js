@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import SheltersList from './SheltersList';
 import MapWrapper from './MapWrapper';
-import { Icon, Segment, Button } from 'semantic-ui-react';
+import { Segment, Button } from 'semantic-ui-react';
 import { fetchPets } from '../../actions/actions';
 
 class MapView extends Component {

@@ -13,12 +13,13 @@ class SheltersList extends Component {
     renderShelters(shelters) {
         return _.map(shelters, (shelter, idx) => {
             return (
-                <Ref innerRef={(el) => {
-                    this.listRefs[shelter.markerId] = this.listRefs[shelter.markerId] || [];
-                    this.listRefs[shelter.markerId].push(el);
-                }}>
+                <Ref
+                    key={idx}
+                    innerRef={(el) => {
+                        this.listRefs[shelter.markerId] = this.listRefs[shelter.markerId] || [];
+                        this.listRefs[shelter.markerId].push(el);
+                    }}>
                     <List.Item
-                        key={idx}
                         style={{
                             textAlign: 'left',
                             whiteSpace: 'pre-wrap',

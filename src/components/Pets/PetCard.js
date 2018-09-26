@@ -115,7 +115,7 @@ class PetCard extends Component {
                         </Segment>
                     </div>
                     <Modal.Description style={{ width: 0, paddingLeft: 20 }}>
-                        <p>
+                        <div style={{ marginBottom: '1em' }}>
                             <Label>
                                 Size
                                 <Label.Detail>
@@ -134,18 +134,18 @@ class PetCard extends Component {
                                     {pet.sex.$t}
                                 </Label.Detail>
                             </Label>
-                        </p>
-                        {pet.options.option && pet.options.option.length && <p>
-                            {_.map(pet.options.option, (option) => {
+                        </div>
+                        {pet.options.option && pet.options.option.length && <div style={{ marginBottom: '1em' }}>
+                            {_.map(pet.options.option, (option, idx) => {
                                 if (option.$t) {
                                     return (
-                                        <Label icon="check" style={{ marginBottom: '.3em' }} content={_.startCase(option.$t)} />
+                                        <Label key={idx} icon="check" style={{ marginBottom: '.3em' }} content={_.startCase(option.$t)} />
                                     );
                                 } else {
                                     return null;
                                 }
                             })}
-                        </p>}
+                        </div>}
                         <p>
                             {pet.description.$t}
                         </p>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import { fetchPets, setActivePetFilters, setPetFilters } from '../../actions/actions';
+import { fetchPets, setActivePetFilters } from '../../actions/actions';
 import { Card, Label, Icon, Loader, Form, Segment, Dropdown } from 'semantic-ui-react'
 import PetCard from './PetCard';
 
@@ -38,7 +38,8 @@ class PetsView extends Component {
 
     renderShelterLabels(shelters) {
         return _.map(shelters, (shelter, idx) => {
-            return (<Label active={shelter.active} as="a" style={{ margin: 4 }} key={idx}>
+            return (<Label
+                active={shelter.active} as="a" style={{ margin: 4 }} key={idx}>
                 <Icon name={shelter.active ? "remove circle" : "add circle"}></Icon>
                 {shelter.name.$t}
             </Label>);
@@ -57,13 +58,12 @@ class PetsView extends Component {
                 }
             });
             return (
-                <Form.Field>
+                <Form.Field key={fieldName}>
                     <label style={{ color: 'white' }}>{_.startCase(fieldName)}</label>
                     <Dropdown
                         fluid
                         multiple selection
                         placeholder={_.startCase(fieldName)}
-                        key={fieldName}
                         options={options}
                         onChange={(e, d) => {
                             this.props.setActivePetFilters(d.value, fieldName);

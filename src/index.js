@@ -8,7 +8,7 @@ import thunk from 'redux-thunk';
 import Geocode from "react-geocode";
 import SearchInput from './components/Header/SearchInput';
 import MapView from './components/Map/MapView';
-import { Icon, Segment, Button } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 import WebFont from 'webfontloader';
 import './assets/main.css';
 
