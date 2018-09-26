@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 export default (state = {
     loading: false,
-    items: [],
+    items: null,
     activeShelterIds: []
 }, action) => {
     switch (action.type) {
@@ -84,7 +84,7 @@ export default (state = {
                 ...state,
                 items: _.sortBy(shelters, ['markerId']).reverse(),
                 activeShelterIds: _.difference(incomingShelterIds, existingShelterIds).length ? _.map(shelters, 'id.$t') : state.activeShelterIds,
-                loading: true
+                loading: false
             }
         }
         default:

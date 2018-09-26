@@ -91,14 +91,14 @@ class PetsView extends Component {
     render() {
         return (
             <div>
-                {!this.props.loading.pets && !_.isEmpty(this.props.petFilters) && <div style={{ padding: 20 }}>
+                {!this.props.loading && !_.isEmpty(this.props.petFilters) && <div style={{ padding: 20 }}>
                     {this.renderPetFiltersMenu(this.props.petFilters)}
                     <Card.Group centered>
                         {this.renderPetCards(this.props.pets, this.props.activePetFilters)}
 
                     </Card.Group>
                 </div>}
-                {this.props.loading.pets && <Loader active inline='centered'>Loading Pets</Loader>}
+                {this.props.loading && <Loader active inline='centered'>Loading Pets</Loader>}
             </div>
         )
     }

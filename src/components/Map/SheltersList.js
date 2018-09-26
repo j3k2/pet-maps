@@ -69,7 +69,7 @@ class SheltersList extends Component {
                 parseInt(this.containerRef.style.paddingTop, 10) -
                 parseInt(this.containerRef.style.paddingBottom, 10);
         }
-        if (!this.props.shelters.length) {
+        if (!this.props.shelters || !this.props.shelters.length) {
             // reset listRefs when shelters are refetched
             this.listRefs = {};
         }
@@ -89,7 +89,7 @@ class SheltersList extends Component {
                     width: 400,
                     background: 'white'
                 }}>
-                {!this.props.loading.shelters && this.props.shelters && <List
+                {!this.props.loading && this.props.shelters && <List
                     style={{ color: 'black' }}
                     selection
                     relaxed>
@@ -113,7 +113,7 @@ class SheltersList extends Component {
 
                     {this.renderShelters(this.props.shelters)}
                 </List>}
-                {this.props.loading.shelters && <Loader active inline='centered'>Loading Shelters</Loader>}
+                {this.props.loading && <Loader active inline='centered'>Loading Shelters</Loader>}
             </div>
         )
     }
