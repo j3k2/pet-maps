@@ -20,16 +20,6 @@ class PetsView extends Component {
                 return;
             }
             return <PetCard
-                getShelterName={(shelterId, full) => {
-                    const shelter = _.find(this.props.shelters, (shelter) => {
-                        return shelterId === shelter.id.$t;
-                    });
-                    if (shelter && !full) {
-                        return shelter.name.$t.substring(0, 24) + (shelter.name.$t.length > 24 ? '...' : '');
-                    } else if (shelter && full) {
-                        return shelter.name.$t;
-                    }
-                }}
                 key={pet.id.$t}
                 pet={pet}></PetCard>
 

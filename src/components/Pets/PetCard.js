@@ -24,7 +24,7 @@ class PetCard extends Component {
             <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
             <Card.Content>
                 <Label style={{ fontFamily: 'Oxygen Mono', fontSize: 11, position: 'absolute', top: '210px', left: '241px' }} color='green' ribbon="right">
-                    {this.props.getShelterName(pet.shelterId.$t)}
+                    {pet.shelterName}
                 </Label>
                 <Card.Header style={{ height: 24, overflow: 'hidden' }}>
                     {pet.name.$t}
@@ -106,7 +106,7 @@ class PetCard extends Component {
                         <Segment style={{ width: 268 }}>
                             <span>
                                 <Icon name="marker"></Icon>
-                                {this.props.getShelterName(pet.shelterId.$t, true)}<br />
+                                {pet.shelterName.substring(0, 24) + (pet.shelterName.length > 24 ? '...' : '')}<br />
                                 {pet.contact.address1.$t ? <span>{pet.contact.address1.$t}<br /></span> : ''}
                                 {pet.contact.address2.$t ? <span>{pet.contact.address2.$t}<br /></span> : ''}
                                 {pet.contact.city.$t && pet.contact.state.$t && pet.contact.zip.$t && pet.contact.address1.$t ? <span>{`${pet.contact.city.$t}, ${pet.contact.state.$t} ${pet.contact.zip.$t}`}</span> : ''}

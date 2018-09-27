@@ -15,7 +15,7 @@ export default (state = {
 }, action) => {
   switch (action.type) {
     case RECEIVE_PETS:
-      let pets = _.reduce(action.payload, (result, value, third) => {
+      let pets = _.reduce(action.payload.res, (result, value, third) => {
         if (!_.isEmpty(value.petfinder.pets)) {
           return result.concat(value.petfinder.pets.pet);
         } else {
@@ -32,6 +32,14 @@ export default (state = {
           petFilters[field] = _.uniq(petFilters[field]);
         });
       }
+
+      function setShelterName(pet, shelters) {
+        const shelter = _.find(shelters, (shelter) => {
+          return pet.shelterId.$t === shelter.id.$t;
+        });
+        pet.shelterName = shelter.name.$t || null;
+      }
+
       const petFilters = {};
       pets = _.map(pets, (pet) => {
         if (pet.media && pet.media.photos) {
@@ -39,6 +47,7 @@ export default (state = {
             return photo['@size'] === 'x'
           });
         }
+        setShelterName(pet, action.payload.shelters.items);
         generatePetFilters(pet, ['animal', 'size', 'age', 'sex']);
         return pet;
       });
