@@ -5,7 +5,7 @@ export const RECEIVE_PETS = 'RECEIVE_PETS';
 export const SET_ACTIVE_PET_FILTERS = 'SET_ACTIVE_PET_FILTERS';
 
 export function fetchPets(shelterIds) {
-    return (dispatch, getState) => {
+    return (dispatch) => {
         dispatch({
             type: FETCH_PETS
         });
@@ -16,13 +16,9 @@ export function fetchPets(shelterIds) {
 
         Promise.all(requests)
             .then((res) => {
-                const { shelters } = getState();
                 dispatch({
                     type: RECEIVE_PETS,
-                    payload: {
-                        res,
-                        shelters
-                    }
+                    payload: res
                 });
             });
     }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, Card, Label, Modal, Segment, Header, Icon } from 'semantic-ui-react';
-import _ from 'lodash';
+import { map, startCase } from 'lodash';
 import ImageViewer from './ImageViewer';
 
 class PetCard extends Component {
@@ -61,7 +61,7 @@ class PetCard extends Component {
             </Card.Content>
             {pet.breeds.breed.length &&
                 <Card.Content style={{ overflow: 'hidden', height: 32, marginBottom: 10 }} extra>
-                    {pet.breeds.breed.length && _.map(pet.breeds.breed, (breed, idx) => {
+                    {pet.breeds.breed.length && map(pet.breeds.breed, (breed, idx) => {
                         if (idx === pet.breeds.breed.length - 1) {
                             return breed.$t || '';
                         } else {
@@ -84,7 +84,7 @@ class PetCard extends Component {
                         <Header.Subheader>
                             {pet.animal.$t}
                             {pet.breeds.breed.length && (<span>{' ('}
-                                {_.map(pet.breeds.breed, (breed, idx) => {
+                                {map(pet.breeds.breed, (breed, idx) => {
                                     if (idx === pet.breeds.breed.length - 1) {
                                         return `${breed.$t}` || '';
                                     } else {
@@ -136,10 +136,10 @@ class PetCard extends Component {
                             </Label>
                         </div>
                         {pet.options.option && pet.options.option.length && <div style={{ marginBottom: '1em' }}>
-                            {_.map(pet.options.option, (option, idx) => {
+                            {map(pet.options.option, (option, idx) => {
                                 if (option.$t) {
                                     return (
-                                        <Label key={idx} icon="check" style={{ marginBottom: '.3em' }} content={_.startCase(option.$t)} />
+                                        <Label key={idx} icon="check" style={{ marginBottom: '.3em' }} content={startCase(option.$t)} />
                                     );
                                 } else {
                                     return null;

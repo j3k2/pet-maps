@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { uniq, reject, find, filter, sortBy, difference } from 'lodash';
 import {
     FETCH_SHELTERS,
     ADD_SHELTER_TO_ACTIVE,
@@ -10,7 +10,8 @@ import {
 
 export default (state = {
     loading: false,
-    items: null,
+    items: [],
+    fetched: false,
     activeShelterIds: []
 }, action) => {
     switch (action.type) {
@@ -22,11 +23,11 @@ export default (state = {
         case ADD_SHELTER_TO_ACTIVE: {
             return {
                 ...state,
-                activeShelterIds: _.uniq([...state.activeShelterIds, action.payload])
+                activeShelterIds: uniq([...state.activeShelterIds, action.payload])
             };
         }
         case REMOVE_SHELTER_FROM_ACTIVE: {
-            const activeShelterIds = _.reject(state.activeShelterIds, (shelterId) => {
+            const activeShelterIds = reject(state.activeShelterIds, (shelterId) => {
                 return shelterId === action.payload;
             });
             return {
@@ -38,7 +39,9 @@ export default (state = {
             if (action.payload) {
                 return {
                     ...state,
-                    activeShelterIds: _.map(state.items, 'id.$t')
+                    activeShelterIds: state.items.map((shelter) => {
+                        return shelter.id.$t;
+                    })
                 };
             } else {
                 return {
@@ -53,8 +56,8 @@ export default (state = {
             const shelterIds = action.payload;
             let activeShelterIds = state.activeShelterIds;
 
-            _.each(shelterIds, shelterId => {
-                const activeShelter = _.find(activeShelterIds, activeShelter => {
+            shelterIds.forEach(shelterId => {
+                const activeShelter = find(activeShelterIds, activeShelter => {
                     return activeShelter === shelterId;
                 });
                 if (activeShelter) {
@@ -65,7 +68,7 @@ export default (state = {
             })
 
             if (shelterIdsInactive.length) {
-                activeShelterIds = _.reject(activeShelterIds, activeShelter => {
+                activeShelterIds = reject(activeShelterIds, activeShelter => {
                     return shelterIdsInactive.indexOf(activeShelter) > -1;
                 });
             }
@@ -76,7 +79,7 @@ export default (state = {
             }
         }
         case RECEIVE_SHELTERS: {
-            const shelters = _.filter(action.payload || state.items, (shelter, idx) => {
+            const shelters = filter(action.payload || state.items, (shelter, idx) => {
                 shelter.geocodeLat = action.meta.locations[idx].lat;
                 shelter.geocodeLng = action.meta.locations[idx].lng;
                 shelter.markerId = 'lat' + shelter.geocodeLat + 'lng' + shelter.geocodeLng;
@@ -86,12 +89,19 @@ export default (state = {
                     shelter.geocodeLng > (action.meta.bounds.b.b + 0) && //left buffer
                     shelter.geocodeLng < (action.meta.bounds.b.f - 0); //right buffer
             });
-            const incomingShelterIds = _.map(shelters, 'id.$t');
-            const existingShelterIds = _.map(state.items, 'id.$t');
+            const incomingShelterIds = shelters.map((shelter) => {
+                return shelter.id.$t;
+            });
+            const existingShelterIds = state.items.map((shelter) => {
+                return shelter.id.$t;
+            });
             return {
                 ...state,
-                items: _.sortBy(shelters, ['markerId']).reverse(),
-                activeShelterIds: _.difference(incomingShelterIds, existingShelterIds).length ? _.map(shelters, 'id.$t') : state.activeShelterIds,
+                items: sortBy(shelters, ['markerId']).reverse(),
+                fetched: true,
+                activeShelterIds: difference(incomingShelterIds, existingShelterIds).length ? shelters.map((shelter) => {
+                    return shelter.id.$t;
+                }) : state.activeShelterIds,
                 loading: false
             }
         }

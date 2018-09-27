@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
+import { min } from 'lodash';
 import { connect } from 'react-redux';
 import { Ref, List, Loader, Checkbox } from 'semantic-ui-react';
 import { setActiveShelter, resetActiveShelters } from '../../actions/shelterActions';
@@ -12,7 +12,7 @@ class SheltersList extends Component {
     }
 
     renderShelters(shelters) {
-        return _.map(shelters, (shelter, idx) => {
+        return shelters.map((shelter, idx) => {
             return (
                 <Ref
                     key={idx}
@@ -61,11 +61,11 @@ class SheltersList extends Component {
     componentDidUpdate() {
         if (this.props.scrolledMarker && this.listRefs[this.props.scrolledMarker]) {
             const refs = this.listRefs[this.props.scrolledMarker];
-            const offsets = _.map(refs, ref => {
+            const offsets = refs.map(ref => {
                 return ref.offsetTop;
             });
             this.containerRef.scrollTop =
-                _.min(offsets) -
+                min(offsets) -
                 this.containerRef.offsetTop -
                 parseInt(this.containerRef.style.paddingTop, 10) -
                 parseInt(this.containerRef.style.paddingBottom, 10);
@@ -90,7 +90,7 @@ class SheltersList extends Component {
                     width: 400,
                     background: 'white'
                 }}>
-                {!this.props.loading && this.props.shelters && <List
+                {!this.props.loading && this.props.fetched && <List
                     style={{ color: 'black' }}
                     selection
                     relaxed>
@@ -125,6 +125,7 @@ export default connect(state => {
         activeShelterIds: state.shelters.activeShelterIds,
         shelters: state.shelters.items,
         loading: state.shelters.loading,
+        fetched: state.shelters.fetched,
         petsByShelter: state.shelters.petsByShelter,
         shelterFilters: state.shelters.shelterFilters,
         highlightedMarker: state.markers.highlightedMarker,

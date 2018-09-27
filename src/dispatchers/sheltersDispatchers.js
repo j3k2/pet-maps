@@ -14,11 +14,8 @@ export function requestShelters(zip, zoom) {
     return getJSON(`https://api.petfinder.com/shelter.find?location=${zip}&count=${Math.round(1000 / (zoom))}&key=90d01a3ac254f887ffd89ccb11322d58&format=json&callback=?`);
 }
 
-export function fetchShelters({ zip, bounds, zoom }) {
+export function fetchShelters({ zip, bounds, zoom, disableFetch }) {
     return (dispatch, getState) => {
-        if (!bounds) {
-            return;
-        }
         dispatch({
             type: CLEAR_PETS
         })
@@ -85,8 +82,6 @@ export function fetchShelters({ zip, bounds, zoom }) {
     }
 }
 
-
-
 export function setActiveShelter(shelterId, checked) {
     return (dispatch) => {
         if (checked) {
@@ -103,7 +98,6 @@ export function setActiveShelter(shelterId, checked) {
     }
 }
 
-
 export function toggleSheltersActive(shelterIds) {
     return (dispatch) => {
         dispatch({
@@ -112,7 +106,6 @@ export function toggleSheltersActive(shelterIds) {
         });
     }
 }
-
 
 export function resetActiveShelters(selected) {
     return (dispatch) => {

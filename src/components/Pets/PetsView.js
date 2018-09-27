@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
+import { map, reject, each, isEmpty, startCase } from 'lodash';
 import { connect } from 'react-redux';
 import { setActivePetFilters } from '../../actions/petActions';
 import { Card, Label, Icon, Loader, Form, Segment, Dropdown } from 'semantic-ui-react'
@@ -7,9 +7,9 @@ import PetCard from './PetCard';
 
 class PetsView extends Component {
     renderPetCards(pets, activePetFilters) {
-        return _.map(_.reject(pets, (pet) => {
+        return map(reject(pets, (pet) => {
             let rejectPet = false;
-            _.each(activePetFilters, (activeFilter, fieldName) => {
+            each(activePetFilters, (activeFilter, fieldName) => {
                 if (activeFilter.length > 0 && activePetFilters[fieldName].indexOf(pet[fieldName].$t) < 0) {
                     rejectPet = true;
                 }
@@ -27,7 +27,7 @@ class PetsView extends Component {
     }
 
     renderShelterLabels(shelters) {
-        return _.map(shelters, (shelter, idx) => {
+        return map(shelters, (shelter, idx) => {
             return (<Label
                 active={shelter.active} as="a" style={{ margin: 4 }} key={idx}>
                 <Icon name={shelter.active ? "remove circle" : "add circle"}></Icon>
@@ -37,8 +37,8 @@ class PetsView extends Component {
     }
 
     renderPetFilters(filters) {
-            return _.map(filters, (fieldValues, fieldName) => {
-            const options = _.map(fieldValues, (value) => {
+        return map(filters, (fieldValues, fieldName) => {
+            const options = map(fieldValues, (value) => {
 
                 return {
                     key: value,
@@ -48,11 +48,11 @@ class PetsView extends Component {
             });
             return (
                 <Form.Field key={fieldName}>
-                    <label style={{ color: 'white' }}>{_.startCase(fieldName)}</label>
+                    <label style={{ color: 'white' }}>{startCase(fieldName)}</label>
                     <Dropdown
                         fluid
                         multiple selection
-                        placeholder={_.startCase(fieldName)}
+                        placeholder={startCase(fieldName)}
                         options={options}
                         onChange={(e, d) => {
                             this.props.setActivePetFilters(d.value, fieldName);
@@ -81,7 +81,7 @@ class PetsView extends Component {
     render() {
         return (
             <div>
-                {!this.props.loading && !_.isEmpty(this.props.petFilters) && <div style={{ padding: 20 }}>
+                {!this.props.loading && !isEmpty(this.props.petFilters) && <div style={{ padding: 20 }}>
                     {this.renderPetFiltersMenu(this.props.petFilters)}
                     <Card.Group centered>
                         {this.renderPetCards(this.props.pets, this.props.activePetFilters)}
@@ -89,8 +89,8 @@ class PetsView extends Component {
                     </Card.Group>
                 </div>}
                 {this.props.loading && <Loader active inline='centered'>Loading Pets</Loader>}
-                {!this.props.loading && this.props.pets && this.props.pets.length === 0 && 
-                <Segment>No pets found for the selected shelters.</Segment>
+                {!this.props.loading && this.props.pets && this.props.pets.length === 0 &&
+                    <Segment>No pets found for the selected shelters.</Segment>
                 }
             </div>
         )
@@ -98,9 +98,11 @@ class PetsView extends Component {
 }
 
 export default connect(state => {
-    return { shelters: state.shelters.items, 
-        pets: state.pets.items, 
-        loading: state.pets.loading, 
-        petFilters: state.pets.petFilters, 
-        activePetFilters: state.pets.activePetFilters }
+    return {
+        shelters: state.shelters.items,
+        pets: state.pets.items,
+        loading: state.pets.loading,
+        petFilters: state.pets.petFilters,
+        activePetFilters: state.pets.activePetFilters
+    }
 }, { setActivePetFilters })(PetsView);

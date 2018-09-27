@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { reduce, isEmpty, uniq, find, filter, sortBy, groupBy } from 'lodash';
 
 import {
   RECEIVE_PETS,
@@ -15,8 +15,8 @@ export default (state = {
 }, action) => {
   switch (action.type) {
     case RECEIVE_PETS:
-      let pets = _.reduce(action.payload.res, (result, value, third) => {
-        if (!_.isEmpty(value.petfinder.pets)) {
+      let pets = reduce(action.payload.res, (result, value, third) => {
+        if (!isEmpty(value.petfinder.pets)) {
           return result.concat(value.petfinder.pets.pet);
         } else {
           return result;
@@ -29,21 +29,21 @@ export default (state = {
             petFilters[field] = [];
           }
           petFilters[field].push(pet[field].$t);
-          petFilters[field] = _.uniq(petFilters[field]);
+          petFilters[field] = uniq(petFilters[field]);
         });
       }
 
       function setShelterName(pet, shelters) {
-        const shelter = _.find(shelters, (shelter) => {
+        const shelter = find(shelters, (shelter) => {
           return pet.shelterId.$t === shelter.id.$t;
         });
         pet.shelterName = shelter.name.$t || null;
       }
 
       const petFilters = {};
-      pets = _.map(pets, (pet) => {
+      pets = pets.map((pet) => {
         if (pet.media && pet.media.photos) {
-          pet.media.photos.photo = _.filter(pet.media.photos.photo, (photo) => {
+          pet.media.photos.photo = filter(pet.media.photos.photo, (photo) => {
             return photo['@size'] === 'x'
           });
         }
@@ -53,8 +53,8 @@ export default (state = {
       });
       return {
         ...state,
-        items: _.sortBy(pets, ['id.$t']),
-        petsByShelter: _.groupBy(pets, 'shelterId.$t'),
+        items: sortBy(pets, ['id.$t']),
+        petsByShelter: groupBy(pets, 'shelterId.$t'),
         petFilters: petFilters,
         activePetFilters: {},
         loading: false

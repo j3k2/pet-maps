@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose, withProps, withHandlers, withState } from 'recompose'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
-import _ from 'lodash';
+import { debounce, find } from 'lodash';
 import { connect } from 'react-redux';
 import {
   fetchShelters,
@@ -59,20 +59,20 @@ const MapComponent = connect(state => {
           if (!update || !refs.map.getCenter()) {
             return;
           }
-          _.debounce(() => {
+          debounce(() => {
             Geocode.fromLatLng(refs.map.getCenter().lat(), refs.map.getCenter().lng()).then(
               response => {
-                const newZip = _.find(response.results[0].address_components, (component) => {
+                const newZip = find(response.results[0].address_components, (component) => {
                   return component.types[0] === "postal_code"
                 });
-                  props.fetchShelters({
-                    zip: newZip ? newZip.long_name : zip.long_name,
-                    bounds: refs.map.getBounds(),
-                    zoom: refs.map.getZoom()
-                  });
-                  if(newZip) {
-                    setZip(newZip);
-                  }
+                props.fetchShelters({
+                  zip: newZip ? newZip.long_name : zip.long_name,
+                  bounds: refs.map.getBounds(),
+                  zoom: refs.map.getZoom()
+                });
+                if (newZip) {
+                  setZip(newZip);
+                }
               });
           }, 500)();
         }
