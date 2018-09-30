@@ -5,7 +5,6 @@ import reducers from './reducers/reducers';
 import PetsView from './components/Pets/PetsView';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import Geocode from "react-geocode";
 import SearchInput from './components/Header/SearchInput';
 import MapView from './components/Map/MapView';
 import { Icon } from 'semantic-ui-react';
@@ -13,7 +12,6 @@ import WebFont from 'webfontloader';
 import './assets/main.css';
 
 import 'semantic-ui-css/semantic.min.css';
-Geocode.setApiKey("AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c");
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 

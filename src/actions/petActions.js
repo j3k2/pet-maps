@@ -1,5 +1,5 @@
-import { getJSON } from 'jquery';
-
+import { get } from 'axios';
+import {reduce} from 'lodash'
 export const FETCH_PETS = 'FETCH_PETS';
 export const RECEIVE_PETS = 'RECEIVE_PETS';
 export const SET_ACTIVE_PET_FILTERS = 'SET_ACTIVE_PET_FILTERS';
@@ -11,7 +11,7 @@ export function fetchPets(shelterIds) {
         });
 
         const requests = shelterIds.map((shelterId) => {
-            return getJSON(`https://api.petfinder.com/shelter.getPets?id=${shelterId}&key=90d01a3ac254f887ffd89ccb11322d58&format=json&callback=?`);
+            return get(`/api/pets?shelterId=${shelterId}`);
         });
 
         Promise.all(requests)
@@ -20,7 +20,9 @@ export function fetchPets(shelterIds) {
                 dispatch({
                     type: RECEIVE_PETS,
                     payload: {
-                        res,
+                        pets: reduce(res, (pets, currentRes) => {
+                            return pets.concat(currentRes.data);
+                        }, []),
                         shelters
                     }
                 });

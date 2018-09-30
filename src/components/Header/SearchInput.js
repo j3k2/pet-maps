@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Input } from 'semantic-ui-react';
-import Geocode from 'react-geocode';
 import { connect } from 'react-redux';
 import { setCenterAndUpdateMap } from '../../actions/mapActions';
 
@@ -9,15 +8,7 @@ class SearchInput extends Component {
         inputValue: ''
     }
     handleButton = () => {
-        Geocode.fromAddress(this.state.inputValue).then(
-            response => {
-                const { lat, lng } = response.results[0].geometry.location;
-                this.props.setCenterAndUpdateMap(lat, lng);
-            },
-            error => {
-                console.error(error);
-            }
-        );
+        this.props.setCenterAndUpdateMap(this.state.inputValue)
     }
 
     handleChange = (e) => {
