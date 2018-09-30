@@ -10,8 +10,8 @@ import {
 import {
   setMarkerHighlight,
   setMarkerScroll,
+  getZip
 } from '../../actions/mapActions';
-import Geocode from 'react-geocode';
 import paw from '../../assets/pawprint_green.png';
 
 const MapComponent = connect(state => {
@@ -24,12 +24,13 @@ const MapComponent = connect(state => {
   }
 }, {
     fetchShelters,
+    getZip,
     setMarkerHighlight,
     setMarkerScroll,
     toggleSheltersActive
   })(compose(
     withProps({
-      googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c&v=3.exp&libraries=geometry,drawing,places",
+      googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_MAPS_KEY}&v=3.exp&libraries=geometry,drawing,places`,
       loadingElement: <div style={{ height: `100%` }} />,
       containerElement: <div style={{ height: `400px`, width: '400px', display: 'inline-block' }} />,
       mapElement: <div style={{ height: `100%` }} />,
@@ -60,20 +61,12 @@ const MapComponent = connect(state => {
             return;
           }
           debounce(() => {
-            Geocode.fromLatLng(refs.map.getCenter().lat(), refs.map.getCenter().lng()).then(
-              response => {
-                const newZip = find(response.results[0].address_components, (component) => {
-                  return component.types[0] === "postal_code"
-                });
-                props.fetchShelters({
-                  zip: newZip ? newZip.long_name : zip.long_name,
-                  bounds: refs.map.getBounds(),
-                  zoom: refs.map.getZoom()
-                });
-                if (newZip) {
-                  setZip(newZip);
-                }
-              });
+            props.getZip({
+              lat: refs.map.getCenter().lat(),
+              lng: refs.map.getCenter().lng(),
+              bounds: refs.map.getBounds(),
+              zoom: refs.map.getZoom()
+            })
           }, 500)();
         }
       }
