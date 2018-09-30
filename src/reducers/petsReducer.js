@@ -1,4 +1,4 @@
-import { reduce, isEmpty, uniq, find, filter, sortBy, groupBy } from 'lodash';
+import { uniq, find, filter, sortBy, groupBy } from 'lodash';
 
 import {
   RECEIVE_PETS,
@@ -15,13 +15,7 @@ export default (state = {
 }, action) => {
   switch (action.type) {
     case RECEIVE_PETS:
-      let pets = reduce(action.payload.res, (result, value, third) => {
-        if (!isEmpty(value.petfinder.pets)) {
-          return result.concat(value.petfinder.pets.pet);
-        } else {
-          return result;
-        }
-      }, []);
+      let pets = action.payload.pets;
 
       function generatePetFilters(pet, fields) {
         fields.forEach((field) => {

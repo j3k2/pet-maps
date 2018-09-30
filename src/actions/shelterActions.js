@@ -1,5 +1,5 @@
-import { getJSON } from 'jquery';
-import Geocode from 'react-geocode';
+import { get } from 'axios';
+import { baseUrl } from '../util';
 
 export const FETCH_SHELTERS = 'FETCH_SHELTERS';
 export const RECEIVE_SHELTERS = 'RECEIVE_SHELTERS';
@@ -11,7 +11,7 @@ export const RESET_ACTIVE_SHELTERS = 'RESET_ACTIVE_SHELTERS';
 export const CLEAR_PETS = 'CLEAR_PETS';
 
 export function requestShelters(zip, zoom) {
-    return getJSON(`https://api.petfinder.com/shelter.find?location=${zip}&count=${Math.round(1000 / (zoom))}&key=90d01a3ac254f887ffd89ccb11322d58&format=json&callback=?`);
+    return get(`${baseUrl}/api/shelters?zip=${zip}&count=${Math.round(1000 / zoom)}`);
 }
 
 export function fetchShelters({ zip, bounds, zoom }) {
@@ -27,65 +27,29 @@ export function fetchShelters({ zip, bounds, zoom }) {
         });
         requestShelters(zip, zoom)
             .then((res) => {
-                if (res.petfinder &&
-                    res.petfinder.shelters &&
-                    res.petfinder.shelters.shelter) {
-                    const geocodeShelters = res.petfinder.shelters.shelter.map(shelter => {
-                        return Geocode.fromAddress(`${shelter.address1.$t}, ${shelter.zip.$t}`)
-                            .then((geocodeRes) => {
-                                if (geocodeRes.results[0].geometry.location.lat && geocodeRes.results[0].geometry.location.lng) {
-                                    return {
-                                        lat: geocodeRes.results[0].geometry.location.lat,
-                                        lng: geocodeRes.results[0].geometry.location.lng
-                                    }
-                                }
-                            })
-                            .catch(() => {
-                                return {
-                                    lat: parseFloat(shelter.latitude.$t),
-                                    lng: parseFloat(shelter.longitude.$t)
-                                }
-                            })
-                    });
-
-                    Promise.all(geocodeShelters).then(locations => {
-                        dispatch({
-                            type: RECEIVE_SHELTERS,
-                            payload: res.petfinder.shelters.shelter,
-                            meta: {
-                                locations,
-                                bounds
-                            }
-                        })
-                        const { shelters } = getState();
-                        dispatch({
-                            type: RECEIVE_MARKERS,
-                            payload: shelters.items
-                        })
-                    }).catch((err) => {
-                        console.log(err);
-                        dispatch({
-                            type: RECEIVE_SHELTERS,
-                            meta: bounds
-                        })
-                    })
-                } else {
-                    dispatch({
-                        type: RECEIVE_SHELTERS,
-                        meta: bounds
-                    })
-                }
+                console.log('ey', res);
+                dispatch({
+                    type: RECEIVE_SHELTERS,
+                    payload: res.data.shelters,
+                    meta: {
+                        locations: res.data.locations,
+                        bounds
+                    }
+                })
+                const { shelters } = getState();
+                dispatch({
+                    type: RECEIVE_MARKERS,
+                    payload: shelters.items
+                })
             }).catch((err) => {
                 console.log(err);
                 dispatch({
                     type: RECEIVE_SHELTERS,
                     meta: bounds
-                });
-            })
+                })
+            });
     }
 }
-
-
 
 export function setActiveShelter(shelterId, checked) {
     return (dispatch) => {
