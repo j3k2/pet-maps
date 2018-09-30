@@ -30,7 +30,7 @@ const MapComponent = connect(state => {
     toggleSheltersActive
   })(compose(
     withProps({
-      googleMapURL: "https://maps.googleapis.com/maps/api/js?key=AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c&v=3.exp&libraries=geometry,drawing,places",
+      googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_MAPS_KEY}&v=3.exp&libraries=geometry,drawing,places`,
       loadingElement: <div style={{ height: `100%` }} />,
       containerElement: <div style={{ height: `400px`, width: '400px', display: 'inline-block' }} />,
       mapElement: <div style={{ height: `100%` }} />,
@@ -62,7 +62,7 @@ const MapComponent = connect(state => {
           }
           debounce(() => {
             props.getZip({
-              lat: refs.map.getCenter().lat(), 
+              lat: refs.map.getCenter().lat(),
               lng: refs.map.getCenter().lng(),
               bounds: refs.map.getBounds(),
               zoom: refs.map.getZoom()

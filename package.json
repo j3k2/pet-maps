@@ -34,5 +34,6 @@
   "devDependencies": {
     "redux-thunk": "^2.3.0",
     "webfontloader": "^1.6.28"
-  }
+  },
+  "proxy": "http://localhost:5000"
 }

@@ -1,6 +1,5 @@
 import { get } from 'axios';
 import { find } from 'lodash';
-import { baseUrl } from '../util';
 
 export const SET_CENTER = 'SET_CENTER';
 export const SET_UPDATE_OPTION = 'SET_UPDATE_OPTION';
@@ -10,7 +9,7 @@ export const GET_ZIP = 'GET_ZIP';
 
 export function setCenterAndUpdateMap(query) {
     return (dispatch) => {
-        return get(`${baseUrl}/api/location?query=${query}`)
+        return get(`/api/location?query=${query}`)
             .then(response => {
                 dispatch({
                     type: SET_CENTER,
@@ -52,7 +51,7 @@ export function setMarkerScroll(markerId) {
 
 export function getZip({ lat, lng, bounds, zoom }) {
     return (dispatch) => {
-        return get(`${baseUrl}/api/zip?lat=${lat}&lng=${lng}`)
+        return get(`/api/zip?lat=${lat}&lng=${lng}`)
             .then(response => {
                 const zip = find(response.data, (component) => {
                     return component.types[0] === "postal_code"

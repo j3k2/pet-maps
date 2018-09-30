@@ -1,5 +1,4 @@
 import { get } from 'axios';
-import { baseUrl } from '../util';
 import {reduce} from 'lodash'
 export const FETCH_PETS = 'FETCH_PETS';
 export const RECEIVE_PETS = 'RECEIVE_PETS';
@@ -12,7 +11,7 @@ export function fetchPets(shelterIds) {
         });
 
         const requests = shelterIds.map((shelterId) => {
-            return get(`${baseUrl}/api/pets?shelterId=${shelterId}`);
+            return get(`/api/pets?shelterId=${shelterId}`);
         });
 
         Promise.all(requests)

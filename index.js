@@ -1,8 +1,12 @@
+require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const app = express();
 const axios = require('axios');
 const bodyParser = require('body-parser')
+
+const PETFINDER_KEY = process.env.PETFINDER_KEY;
+const GEOCODE_KEY = process.env.GEOCODE_KEY;
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -14,7 +18,7 @@ app.use(function (req, res, next) {
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('/api/pets', (req, res) => {
-    axios.get(`https://api.petfinder.com/shelter.getPets?id=${req.query.shelterId}&key=90d01a3ac254f887ffd89ccb11322d58&format=json`)
+    axios.get(`https://api.petfinder.com/shelter.getPets?id=${req.query.shelterId}&key=${PETFINDER_KEY}&format=json`)
         .then(response=>{
             res.send(response.data.petfinder.pets.pet || []);
         })
@@ -24,11 +28,11 @@ app.get('/api/pets', (req, res) => {
 });
 
 app.get('/api/shelters', (req, res) => {
-    axios.get(`https://api.petfinder.com/shelter.find?location=${req.query.zip}&count=${req.query.count}&key=90d01a3ac254f887ffd89ccb11322d58&format=json`)
+    axios.get(`https://api.petfinder.com/shelter.find?location=${req.query.zip}&count=${req.query.count}&key=${PETFINDER_KEY}&format=json`)
         .then(response => {
             const shelters = response.data.petfinder.shelters.shelter;
             const geocodeShelters = shelters.map(shelter => {
-                return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c&address=${shelter.address1.$t}, ${shelter.zip.$t}`)
+                return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GEOCODE_KEY}&address=${shelter.address1.$t}, ${shelter.zip.$t}`)
                     .then((geocodeRes) => {
                         if (geocodeRes.data.results[0].geometry.location.lat && geocodeRes.data.results[0].geometry.location.lng) {
                             return {
@@ -56,8 +60,8 @@ app.get('/api/shelters', (req, res) => {
 });
 
 app.get('/api/location', (req, res) => {
-    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c&address=${req.query.query}`)
-        .then(response => {
+    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GEOCODE_KEY}&address=${req.query.query}`)
+        .then(response => { 
             res.send(response.data.results[0].geometry.location);
         })
         .catch(err => {
@@ -66,7 +70,7 @@ app.get('/api/location', (req, res) => {
 });
 
 app.get('/api/zip', (req, res) => {
-    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC_B0i6MVuX3EntXhXhT4YbLxghaFixQ8c&latlng=${req.query.lat},${req.query.lng}`)
+    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GEOCODE_KEY}&latlng=${req.query.lat},${req.query.lng}`)
         .then(response => {
             res.send(response.data.results[0].address_components);
         })

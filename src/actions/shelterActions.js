@@ -1,5 +1,4 @@
 import { get } from 'axios';
-import { baseUrl } from '../util';
 
 export const FETCH_SHELTERS = 'FETCH_SHELTERS';
 export const RECEIVE_SHELTERS = 'RECEIVE_SHELTERS';
@@ -11,7 +10,7 @@ export const RESET_ACTIVE_SHELTERS = 'RESET_ACTIVE_SHELTERS';
 export const CLEAR_PETS = 'CLEAR_PETS';
 
 export function requestShelters(zip, zoom) {
-    return get(`${baseUrl}/api/shelters?zip=${zip}&count=${Math.round(1000 / zoom)}`);
+    return get(`/api/shelters?zip=${zip}&count=${Math.round(1000 / zoom)}`);
 }
 
 export function fetchShelters({ zip, bounds, zoom }) {
@@ -27,7 +26,6 @@ export function fetchShelters({ zip, bounds, zoom }) {
         });
         requestShelters(zip, zoom)
             .then((res) => {
-                console.log('ey', res);
                 dispatch({
                     type: RECEIVE_SHELTERS,
                     payload: res.data.shelters,
