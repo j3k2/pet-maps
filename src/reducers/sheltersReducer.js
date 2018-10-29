@@ -84,10 +84,10 @@ export default (state = {
                 shelter.geocodeLng = action.meta.locations[idx].lng;
                 shelter.markerId = 'lat' + shelter.geocodeLat + 'lng' + shelter.geocodeLng;
 
-                return shelter.geocodeLat > (action.meta.bounds.f.b + 0.0) && //bottom buffer
-                    shelter.geocodeLat < (action.meta.bounds.f.f - 0) && //top buffer
-                    shelter.geocodeLng > (action.meta.bounds.b.b + 0) && //left buffer
-                    shelter.geocodeLng < (action.meta.bounds.b.f - 0); //right buffer
+                return shelter.geocodeLat > (action.meta.bounds.l.j + 0.0) && //bottom buffer
+                    shelter.geocodeLat < (action.meta.bounds.l.l - 0) && //top buffer
+                    shelter.geocodeLng > (action.meta.bounds.j.j + 0) && //left buffer
+                    shelter.geocodeLng < (action.meta.bounds.j.l - 0); //right buffer
             });
             const incomingShelterIds = shelters.map((shelter) => {
                 return shelter.id.$t;
