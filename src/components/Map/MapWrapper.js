@@ -1,24 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import MyMapComponent from './MapComponent';
 import { connect } from 'react-redux';
 import { setUpdateOption } from '../../actions/mapActions';
 import { Checkbox } from 'semantic-ui-react';
 
-class MapWrapper extends Component {
-  handleCheckbox = (e, data) => {
-    this.props.setUpdateOption(data.checked);
+function MapWrapper(props){
+  function handleCheckbox(e, data) {
+    props.setUpdateOption(data.checked);
   }
 
-  render() {
     return (
       <div style={{}}>
         {<div>
-          Update results as map is updated: <Checkbox checked={this.props.update} onChange={this.handleCheckbox} />
+          Update results as map is updated: <Checkbox checked={props.update} onChange={handleCheckbox} />
         </div>}
-        {<MyMapComponent {...this.props} />}
+        {<MyMapComponent {...props} />}
       </div>
     )
-  }
 }
 
 export default connect(state => {

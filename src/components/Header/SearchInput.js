@@ -4,9 +4,13 @@ import { connect } from 'react-redux';
 import { setCenterAndUpdateMap } from '../../actions/mapActions';
 
 class SearchInput extends Component {
-    state = {
-        inputValue: ''
+    constructor(props){
+        super(props);
+        this.state = {
+            inputValue: ''
+        }
     }
+    
     handleButton = () => {
         this.props.setCenterAndUpdateMap(this.state.inputValue)
     }
@@ -22,6 +26,7 @@ class SearchInput extends Component {
             this.handleButton();
         }
     }
+    
     render() {
         return (
             <Input type="text" style={{ margin: 'auto', width: 300 }}

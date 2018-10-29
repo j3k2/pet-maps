@@ -4,10 +4,13 @@ import { map, startCase } from 'lodash';
 import ImageViewer from './ImageViewer';
 
 class PetCard extends Component {
-    state = {
-        modal: false
-    };
-
+    constructor(props){
+        super(props);
+        this.state = {
+            modal: false
+        }
+    }
+    
     renderPetCardBody = (pet) => {
         return (<Card
             style={{
