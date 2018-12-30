@@ -24,7 +24,7 @@ class PetCard extends Component {
             <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
             <Card.Content>
                 <Label style={{ fontFamily: 'Oxygen Mono', fontSize: 11, position: 'absolute', top: '210px', left: '241px' }} color='green' ribbon="right">
-                    {pet.shelterName}
+                    {pet.shelterName.substring(0, 24) + (pet.shelterName.length > 24 ? '...' : '')}
                 </Label>
                 <Card.Header style={{ height: 24, overflow: 'hidden' }}>
                     {pet.name.$t}
