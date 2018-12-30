@@ -83,11 +83,11 @@ export default (state = {
                 shelter.geocodeLat = action.meta.locations[idx].lat;
                 shelter.geocodeLng = action.meta.locations[idx].lng;
                 shelter.markerId = 'lat' + shelter.geocodeLat + 'lng' + shelter.geocodeLng;
-
-                return shelter.geocodeLat > (action.meta.bounds.l.j + 0.0) && //bottom buffer
-                    shelter.geocodeLat < (action.meta.bounds.l.l - 0) && //top buffer
-                    shelter.geocodeLng > (action.meta.bounds.j.j + 0) && //left buffer
-                    shelter.geocodeLng < (action.meta.bounds.j.l - 0); //right buffer
+                // TODO: make this property name-agnostic?:
+                return shelter.geocodeLat > (action.meta.bounds.ma.j + 0.0) && //bottom buffer
+                    shelter.geocodeLat < (action.meta.bounds.ma.l - 0) && //top buffer
+                    shelter.geocodeLng > (action.meta.bounds.fa.j + 0) && //left buffer
+                    shelter.geocodeLng < (action.meta.bounds.fa.l - 0); //right buffer
             });
             const incomingShelterIds = shelters.map((shelter) => {
                 return shelter.id.$t;

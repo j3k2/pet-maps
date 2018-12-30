@@ -1,7 +1,7 @@
 import React from 'react';
 import { compose, withProps, withHandlers, withState } from 'recompose'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
-import { debounce, find } from 'lodash';
+import { debounce } from 'lodash';
 import { connect } from 'react-redux';
 import {
   fetchShelters,

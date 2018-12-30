@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import { Image, Card, Icon, Modal } from 'semantic-ui-react';
 
 class ImageViewer extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            imageIndex: 0,
-            modalOpen: false
-        };
+    state = {
+        imageIndex: 0,
+        modalOpen: false
     };
+
     render() {
         return (
             <Card style={{ minWidth: 268, width: 268 }}>
@@ -18,14 +16,14 @@ class ImageViewer extends Component {
                         cursor: 'pointer'
                     }}
                     onClick={() => {
-                        if(this.props.images && this.props.images.length) {
+                        if (this.props.images && this.props.images.length) {
                             this.setState({ modalOpen: true });
                         }
                     }}
                     width={228}
                     height={228}
                     src={this.props.images ? this.props.images[this.state.imageIndex].$t : ''}></Image>
-                {(!this.props.images || this.props.images.length === 0) && <span style={{  position: 'relative', bottom: 10, textAlign: 'center' }}>No photos</span>}
+                {(!this.props.images || this.props.images.length === 0) && <span style={{ position: 'relative', bottom: 10, textAlign: 'center' }}>No photos</span>}
                 {this.props.images && this.props.images.length === 1 && <span style={{ position: 'relative', bottom: 10, textAlign: 'center' }}>{this.state.imageIndex + 1}/{this.props.images.length}</span>}
                 {this.props.images && this.props.images.length > 1 && <span style={{ textAlign: 'center' }}><Icon
                     onClick={() => {
