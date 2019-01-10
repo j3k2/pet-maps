@@ -27,8 +27,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "node ./index.js",
-    "dev": "react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",

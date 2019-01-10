@@ -74,7 +74,7 @@ class PetCard extends Component {
 
     renderPetCardModal = (pet) => {
         return (
-            <Modal style={{ minWidth: 332 }} open={this.state.modal}
+            <Modal closeIcon style={{ minWidth: 332 }} open={this.state.modal}
                 onClose={() => {
                     this.setState({ modal: false })
                 }}>
