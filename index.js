@@ -8,18 +8,8 @@ const bodyParser = require('body-parser')
 const PETFINDER_KEY = process.env.PETFINDER_KEY;
 const GEOCODE_KEY = process.env.GEOCODE_KEY;
 
-<<<<<<< HEAD
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
-=======
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
->>>>>>> master
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('/api/pets', (req, res) => {
