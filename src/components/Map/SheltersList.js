@@ -6,10 +6,7 @@ import { setActiveShelter, resetActiveShelters } from '../../actions/shelterActi
 import { setMarkerHighlight } from '../../actions/mapActions';
 
 class SheltersList extends Component {
-    constructor(props) {
-        super(props);
-        this.listRefs = {};
-    }
+    listRefs = {};
 
     renderShelters(shelters) {
         return shelters.map((shelter, idx) => {

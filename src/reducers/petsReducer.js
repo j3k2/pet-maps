@@ -59,9 +59,9 @@ export default (state = {
         loading: true
       };
     case SET_ACTIVE_PET_FILTERS:
-      const activePetFilters = {
+      const activePetFilters = Object.assign({}, state.activePetFilters, {
         [action.payload.field]: action.payload.value
-      };
+      });
       return {
         ...state,
         activePetFilters: activePetFilters

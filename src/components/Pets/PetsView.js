@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { map, reject, each, isEmpty, startCase } from 'lodash';
 import { connect } from 'react-redux';
 import { setActivePetFilters } from '../../actions/petActions';
-import { Card, Label, Icon, Loader, Form, Segment, Dropdown } from 'semantic-ui-react'
+import { Card, Loader, Form, Segment, Dropdown } from 'semantic-ui-react'
 import PetCard from './PetCard';
 
-class PetsView extends Component {
-    renderPetCards(pets, activePetFilters) {
+function PetsView(props) {
+    function renderPetCards(pets, activePetFilters) {
         return map(reject(pets, (pet) => {
             let rejectPet = false;
             each(activePetFilters, (activeFilter, fieldName) => {
@@ -26,17 +26,7 @@ class PetsView extends Component {
         });
     }
 
-    renderShelterLabels(shelters) {
-        return map(shelters, (shelter, idx) => {
-            return (<Label
-                active={shelter.active} as="a" style={{ margin: 4 }} key={idx}>
-                <Icon name={shelter.active ? "remove circle" : "add circle"}></Icon>
-                {shelter.name.$t}
-            </Label>);
-        });
-    }
-
-    renderPetFilters(filters) {
+    function renderPetFilters(filters) {
         return map(filters, (fieldValues, fieldName) => {
             const options = map(fieldValues, (value) => {
 
@@ -55,7 +45,7 @@ class PetsView extends Component {
                         placeholder={startCase(fieldName)}
                         options={options}
                         onChange={(e, d) => {
-                            this.props.setActivePetFilters(d.value, fieldName);
+                            props.setActivePetFilters(d.value, fieldName);
                         }} />
                 </Form.Field>
 
@@ -64,7 +54,7 @@ class PetsView extends Component {
 
     }
 
-    renderPetFiltersMenu(petFilters) {
+    function renderPetFiltersMenu(petFilters) {
         return (
             <Segment style={{
                 minWidth: 441,
@@ -72,29 +62,27 @@ class PetsView extends Component {
             }}>
                 <Form>
                     <Form.Group widths="equal" style={{ padding: 20 }}>
-                        {this.renderPetFilters(petFilters)}
+                        {renderPetFilters(petFilters)}
                     </Form.Group>
                 </Form>
             </Segment>)
     }
 
-    render() {
-        return (
-            <div>
-                {!this.props.loading && !isEmpty(this.props.petFilters) && <div style={{ padding: 20 }}>
-                    {this.renderPetFiltersMenu(this.props.petFilters)}
-                    <Card.Group centered>
-                        {this.renderPetCards(this.props.pets, this.props.activePetFilters)}
+    return (
+        <div>
+            {!props.loading && !isEmpty(props.petFilters) && <div style={{ padding: 20 }}>
+                {renderPetFiltersMenu(props.petFilters)}
+                <Card.Group centered>
+                    {renderPetCards(props.pets, props.activePetFilters)}
 
-                    </Card.Group>
-                </div>}
-                {this.props.loading && <Loader active inline='centered'>Loading Pets</Loader>}
-                {!this.props.loading && this.props.pets && this.props.pets.length === 0 &&
-                    <Segment>No pets found for the selected shelters.</Segment>
-                }
-            </div>
-        )
-    }
+                </Card.Group>
+            </div>}
+            {props.loading && <Loader active inline='centered'>Loading Pets</Loader>}
+            {!props.loading && props.pets && props.pets.length === 0 &&
+                <Segment>No pets found for the selected shelters.</Segment>
+            }
+        </div>
+    )
 }
 
 export default connect(state => {

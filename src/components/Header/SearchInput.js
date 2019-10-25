@@ -7,6 +7,7 @@ class SearchInput extends Component {
     state = {
         inputValue: ''
     }
+
     handleButton = () => {
         this.props.setCenterAndUpdateMap(this.state.inputValue)
     }
@@ -22,6 +23,7 @@ class SearchInput extends Component {
             this.handleButton();
         }
     }
+
     render() {
         return (
             <Input type="text" style={{ margin: 'auto', width: 300 }}

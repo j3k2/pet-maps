@@ -83,7 +83,6 @@ export default (state = {
                 shelter.geocodeLat = action.meta.locations[idx].lat;
                 shelter.geocodeLng = action.meta.locations[idx].lng;
                 shelter.markerId = 'lat' + shelter.geocodeLat + 'lng' + shelter.geocodeLng;
-
                 return shelter.geocodeLat > action.meta.bounds.sw.lat &&
                     shelter.geocodeLat < action.meta.bounds.ne.lat &&
                     shelter.geocodeLng > action.meta.bounds.sw.lng &&

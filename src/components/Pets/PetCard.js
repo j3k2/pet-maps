@@ -6,7 +6,7 @@ import ImageViewer from './ImageViewer';
 class PetCard extends Component {
     state = {
         modal: false
-    };
+    }
 
     renderPetCardBody = (pet) => {
         return (<Card
@@ -24,7 +24,7 @@ class PetCard extends Component {
             <Image width={228} height={228} src={pet.media.photos ? pet.media.photos.photo[0].$t : ''}></Image>
             <Card.Content>
                 <Label style={{ fontFamily: 'Oxygen Mono', fontSize: 11, position: 'absolute', top: '210px', left: '241px' }} color='green' ribbon="right">
-                    {pet.shelterName}
+                    {pet.shelterName.substring(0, 24) + (pet.shelterName.length > 24 ? '...' : '')}
                 </Label>
                 <Card.Header style={{ height: 24, overflow: 'hidden' }}>
                     {pet.name.$t}
@@ -74,7 +74,7 @@ class PetCard extends Component {
 
     renderPetCardModal = (pet) => {
         return (
-            <Modal style={{ minWidth: 332 }} open={this.state.modal}
+            <Modal closeIcon style={{ minWidth: 332 }} open={this.state.modal}
                 onClose={() => {
                     this.setState({ modal: false })
                 }}>

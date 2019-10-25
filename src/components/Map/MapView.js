@@ -7,14 +7,11 @@ import { fetchPets } from '../../actions/petActions';
 import { fetchShelters } from '../../actions/shelterActions';
 
 class MapView extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            init: true,
-            highlight: false
-        }
+    state = {
+        init: true,
+        highlight: false
     }
-
+    
     componentDidUpdate(prevProps) {
         if (this.props.zip && this.props.zip !== prevProps.zip) {
             this.props.fetchShelters({
