@@ -64,7 +64,7 @@ const MapComponent = connect(state => {
             props.getZip({
               lat: refs.map.getCenter().lat(),
               lng: refs.map.getCenter().lng(),
-              bounds: refs.map.getBounds(),
+              bounds: {sw: refs.map.getBounds().getSouthWest().toJSON(), ne: refs.map.getBounds().getNorthEast().toJSON()},
               zoom: refs.map.getZoom()
             })
           }, 500)();
