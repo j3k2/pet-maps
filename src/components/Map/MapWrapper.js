@@ -1,5 +1,5 @@
 import React from 'react';
-import MyMapComponent from './MapComponent';
+import MapComponent from './MapComponent';
 import { connect } from 'react-redux';
 import { setUpdateOption } from '../../actions/mapActions';
 import { Checkbox } from 'semantic-ui-react';
@@ -14,7 +14,7 @@ function MapWrapper(props){
         {<div>
           Update results as map is updated: <Checkbox checked={props.update} onChange={handleCheckbox} />
         </div>}
-        {<MyMapComponent {...props} />}
+        {<MapComponent {...props} />}
       </div>
     )
 }
