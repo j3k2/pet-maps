@@ -4,7 +4,7 @@ export const RECEIVE_PETS = 'RECEIVE_PETS';
 export const SET_ACTIVE_PET_FILTERS = 'SET_ACTIVE_PET_FILTERS';
 
 export function fetchPets(shelterIds) {
-    return (dispatch, getState) => {
+    return async (dispatch, getState) => {
         dispatch({
             type: FETCH_PETS
         });
@@ -13,30 +13,29 @@ export function fetchPets(shelterIds) {
             return get(`/api/pets?shelterId=${shelterId}`);
         });
 
-        Promise.all(requests)
-            .then((res) => {
-                const { shelters } = getState();
-                dispatch({
-                    type: RECEIVE_PETS,
-                    payload: {
-                        pets: res.reduce((pets, currentRes) => {
-                            return pets.concat(currentRes.data);
-                        }, []),
-                        shelters
-                    }
-                });
-            });
+        const response = await Promise.all(requests).catch((error)=>{
+            console.log('Error in fetchPets: ' + error);
+        });
+
+        const { shelters } = getState();
+        dispatch({
+            type: RECEIVE_PETS,
+            payload: {
+                pets: response.reduce((pets, currentRes) => {
+                    return pets.concat(currentRes.data);
+                }, []),
+                shelters
+            }
+        });
     }
 }
 
 export function setActivePetFilters(value, field) {
-    return (dispatch) => {
-        dispatch({
-            type: SET_ACTIVE_PET_FILTERS,
-            payload: {
-                value,
-                field
-            }
-        });
-    }
+    return {
+        type: SET_ACTIVE_PET_FILTERS,
+        payload: {
+            value,
+            field
+        }
+    };
 };

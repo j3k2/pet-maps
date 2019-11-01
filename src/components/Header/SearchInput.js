@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { setCenterAndUpdateMap } from '../../actions/mapActions';
+import { setCenterAndUpdateOption } from '../../actions/mapActions';
 
 class SearchInput extends Component {
     state = {
@@ -9,7 +9,7 @@ class SearchInput extends Component {
     }
 
     handleButton = () => {
-        this.props.setCenterAndUpdateMap(this.state.inputValue)
+        this.props.setCenterAndUpdateOption(this.state.inputValue)
     }
 
     handleChange = (e) => {
@@ -37,4 +37,4 @@ class SearchInput extends Component {
 
 export default connect(state => {
     return { center: state.map.center }
-}, { setCenterAndUpdateMap })(SearchInput);
+}, { setCenterAndUpdateOption })(SearchInput);

@@ -29,21 +29,17 @@ export function setActiveShelter(shelterId, checked) {
 }
 
 export function toggleSheltersActive(shelterIds) {
-    return (dispatch) => {
-        dispatch({
-            type: TOGGLE_SHELTERS_ACTIVE,
-            payload: shelterIds
-        });
-    }
+    return {
+        type: TOGGLE_SHELTERS_ACTIVE,
+        payload: shelterIds
+    };
 }
 
 export function resetActiveShelters(selected) {
-    return (dispatch) => {
-        dispatch({
-            type: RESET_ACTIVE_SHELTERS,
-            payload: selected
-        })
-    }
+    return {
+        type: RESET_ACTIVE_SHELTERS,
+        payload: selected
+    };
 }
 
 export function updateShelters({ lat, lng, bounds, zoom }) {
