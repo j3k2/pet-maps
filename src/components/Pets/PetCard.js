@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Image, Card, Label, Modal, Segment, Header, Icon } from 'semantic-ui-react';
-import { map, startCase } from 'lodash';
+import { startCase } from 'lodash';
 import ImageViewer from './ImageViewer';
 
 class PetCard extends Component {
@@ -61,7 +61,7 @@ class PetCard extends Component {
             </Card.Content>
             {pet.breeds.breed.length &&
                 <Card.Content style={{ overflow: 'hidden', height: 32, marginBottom: 10 }} extra>
-                    {pet.breeds.breed.length && map(pet.breeds.breed, (breed, idx) => {
+                    {pet.breeds.breed.length && pet.breeds.breed.map((breed, idx) => {
                         if (idx === pet.breeds.breed.length - 1) {
                             return breed.$t || '';
                         } else {
@@ -84,7 +84,7 @@ class PetCard extends Component {
                         <Header.Subheader>
                             {pet.animal.$t}
                             {pet.breeds.breed.length && (<span>{' ('}
-                                {map(pet.breeds.breed, (breed, idx) => {
+                                {pet.breeds.breed.map((breed, idx) => {
                                     if (idx === pet.breeds.breed.length - 1) {
                                         return `${breed.$t}` || '';
                                     } else {
@@ -136,7 +136,7 @@ class PetCard extends Component {
                             </Label>
                         </div>
                         {pet.options.option && pet.options.option.length && <div style={{ marginBottom: '1em' }}>
-                            {map(pet.options.option, (option, idx) => {
+                            {pet.options.option.map((option, idx) => {
                                 if (option.$t) {
                                     return (
                                         <Label key={idx} icon="check" style={{ marginBottom: '.3em' }} content={startCase(option.$t)} />

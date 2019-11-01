@@ -1,5 +1,4 @@
 import { get } from 'axios';
-import {reduce} from 'lodash'
 export const FETCH_PETS = 'FETCH_PETS';
 export const RECEIVE_PETS = 'RECEIVE_PETS';
 export const SET_ACTIVE_PET_FILTERS = 'SET_ACTIVE_PET_FILTERS';
@@ -20,7 +19,7 @@ export function fetchPets(shelterIds) {
                 dispatch({
                     type: RECEIVE_PETS,
                     payload: {
-                        pets: reduce(res, (pets, currentRes) => {
+                        pets: res.reduce((pets, currentRes) => {
                             return pets.concat(currentRes.data);
                         }, []),
                         shelters

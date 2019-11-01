@@ -1,4 +1,4 @@
-import { uniq, find, filter, sortBy, groupBy } from 'lodash';
+import { uniq, sortBy, groupBy } from 'lodash';
 
 import {
   RECEIVE_PETS,
@@ -28,7 +28,7 @@ export default (state = {
       }
 
       function setShelterName(pet, shelters) {
-        const shelter = find(shelters, (shelter) => {
+        const shelter = shelters.find((shelter) => {
           return pet.shelterId.$t === shelter.id.$t;
         });
         pet.shelterName = shelter.name.$t || null;
@@ -37,7 +37,7 @@ export default (state = {
       const petFilters = {};
       pets = pets.map((pet) => {
         if (pet.media && pet.media.photos) {
-          pet.media.photos.photo = filter(pet.media.photos.photo, (photo) => {
+          pet.media.photos.photo = pet.media.photos.photo.filter((photo) => {
             return photo['@size'] === 'x'
           });
         }

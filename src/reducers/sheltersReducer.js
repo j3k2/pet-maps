@@ -1,4 +1,4 @@
-import { uniq, reject, find, sortBy } from 'lodash';
+import { uniq, sortBy } from 'lodash';
 import {
     FETCH_SHELTERS,
     ADD_SHELTER_TO_ACTIVE,
@@ -26,8 +26,8 @@ export default (state = {
             };
         }
         case REMOVE_SHELTER_FROM_ACTIVE: {
-            const activeShelterIds = reject(state.activeShelterIds, (shelterId) => {
-                return shelterId === action.payload;
+            const activeShelterIds = state.activeShelterIds.filter((shelterId) => {
+                return shelterId !== action.payload;
             });
             return {
                 ...state,
@@ -56,7 +56,7 @@ export default (state = {
             let activeShelterIds = state.activeShelterIds;
 
             shelterIds.forEach(shelterId => {
-                const activeShelter = find(activeShelterIds, activeShelter => {
+                const activeShelter = activeShelterIds.find(activeShelter => {
                     return activeShelter === shelterId;
                 });
                 if (activeShelter) {
@@ -67,8 +67,8 @@ export default (state = {
             })
 
             if (shelterIdsInactive.length) {
-                activeShelterIds = reject(activeShelterIds, activeShelter => {
-                    return shelterIdsInactive.indexOf(activeShelter) > -1;
+                activeShelterIds = activeShelterIds.filter(activeShelter => {
+                    return shelterIdsInactive.indexOf(activeShelter) === -1;
                 });
             }
 
