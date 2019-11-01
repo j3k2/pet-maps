@@ -87,7 +87,7 @@ class SheltersList extends Component {
                     width: 400,
                     background: 'white'
                 }}>
-                {!this.props.loading && this.props.fetched && <List
+                {!this.props.loading && this.props.shelters.length && <List
                     style={{ color: 'black' }}
                     selection
                     relaxed>
@@ -122,7 +122,6 @@ export default connect(state => {
         activeShelterIds: state.shelters.activeShelterIds,
         shelters: state.shelters.items,
         loading: state.shelters.loading,
-        fetched: state.shelters.fetched,
         petsByShelter: state.shelters.petsByShelter,
         shelterFilters: state.shelters.shelterFilters,
         highlightedMarker: state.markers.highlightedMarker,

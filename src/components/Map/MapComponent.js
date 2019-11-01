@@ -4,13 +4,12 @@ import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-map
 import { debounce } from 'lodash';
 import { connect } from 'react-redux';
 import {
-  fetchShelters,
-  toggleSheltersActive
+  toggleSheltersActive,
+  updateShelters
 } from '../../actions/shelterActions';
 import {
   setMarkerHighlight,
-  setMarkerScroll,
-  getZip
+  setMarkerScroll
 } from '../../actions/mapActions';
 import paw from '../../assets/pawprint_green.png';
 
@@ -23,8 +22,7 @@ const MapComponent = connect(state => {
     highlightedMarker: state.markers.highlightedMarker
   }
 }, {
-    fetchShelters,
-    getZip,
+    updateShelters,
     setMarkerHighlight,
     setMarkerScroll,
     toggleSheltersActive
@@ -56,12 +54,12 @@ const MapComponent = connect(state => {
         onZoomChanged: () => () => {
           console.log('ozc');
         },
-        onBoundsChanged: ({ zip, setZip, zoom, setZoom }) => (update) => {
+        onBoundsChanged: () => (update) => {
           if (!update || !refs.map.getCenter()) {
             return;
           }
           debounce(() => {
-            props.getZip({
+            props.updateShelters({
               lat: refs.map.getCenter().lat(),
               lng: refs.map.getCenter().lng(),
               bounds: {sw: refs.map.getBounds().getSouthWest().toJSON(), ne: refs.map.getBounds().getNorthEast().toJSON()},

@@ -4,22 +4,11 @@ import SheltersList from './SheltersList';
 import MapWrapper from './MapWrapper';
 import { Segment, Button } from 'semantic-ui-react';
 import { fetchPets } from '../../actions/petActions';
-import { fetchShelters } from '../../actions/shelterActions';
 
 class MapView extends Component {
     state = {
         init: true,
         highlight: false
-    }
-    
-    componentDidUpdate(prevProps) {
-        if (this.props.zip && this.props.zip !== prevProps.zip) {
-            this.props.fetchShelters({
-                zip: this.props.zip,
-                bounds: this.props.bounds,
-                zoom: this.props.zoom
-            })
-        }
     }
 
     render() {
@@ -70,9 +59,6 @@ class MapView extends Component {
 
 export default connect(state => {
     return {
-        activeShelterIds: state.shelters.activeShelterIds,
-        zip: state.map.zip,
-        bounds: state.map.bounds,
-        zoom: state.map.zoom
+        activeShelterIds: state.shelters.activeShelterIds
     }
-}, { fetchPets, fetchShelters })(MapView);
+}, { fetchPets })(MapView);

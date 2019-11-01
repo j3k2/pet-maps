@@ -1,11 +1,9 @@
 import { get } from 'axios';
-import { find } from 'lodash';
 
 export const SET_CENTER = 'SET_CENTER';
 export const SET_UPDATE_OPTION = 'SET_UPDATE_OPTION';
 export const SET_MARKER_HIGHLIGHT = 'SET_MARKER_HIGHLIGHT';
 export const SET_MARKER_SCROLL = 'SET_MARKER_SCROLL';
-export const GET_ZIP = 'GET_ZIP';
 
 export function setCenterAndUpdateMap(query) {
     return (dispatch) => {
@@ -46,27 +44,5 @@ export function setMarkerScroll(markerId) {
             type: SET_MARKER_SCROLL,
             payload: markerId
         });
-    }
-}
-
-export function getZip({ lat, lng, bounds, zoom }) {
-    return (dispatch) => {
-        return get(`/api/zip?lat=${lat}&lng=${lng}`)
-            .then(response => {
-                const zip = find(response.data, (component) => {
-                    return component.types[0] === "postal_code"
-                });
-                dispatch({
-                    type: GET_ZIP,
-                    payload: zip,
-                    meta: {
-                        bounds,
-                        zoom
-                    }
-                })
-            })
-            .catch(err => {
-                console.log(err);
-            })
     }
 }

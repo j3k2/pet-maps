@@ -4,7 +4,7 @@ import {
 } from '../actions/mapActions';
 
 import {
-    RECEIVE_MARKERS
+    SET_MARKERS
 } from '../actions/shelterActions';
 
 export default (state = {
@@ -13,7 +13,7 @@ export default (state = {
     scrolledMarker: null
 }, action) => {
     switch (action.type) {
-        case RECEIVE_MARKERS: {
+        case SET_MARKERS: {
             const shelters = action.payload;
             const markers = {};
             shelters.forEach((shelter) => {

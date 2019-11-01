@@ -1,12 +1,9 @@
-import { SET_CENTER, SET_UPDATE_OPTION, GET_ZIP } from '../actions/mapActions';
+import { SET_CENTER, SET_UPDATE_OPTION } from '../actions/mapActions';
 
 export default (state = {
     loading: {},
     center: null,
-    update: true,
-    zip: null,
-    bounds: null,
-    zoom: null
+    update: true
 }, action) => {
     switch (action.type) {
         case SET_CENTER:
@@ -19,13 +16,6 @@ export default (state = {
                 ...state,
                 update: action.payload
             };
-        case GET_ZIP:
-            return {
-                ...state,
-                zip: action.payload.long_name,
-                bounds: action.meta.bounds,
-                zoom: action.meta.zoom
-            }
         default:
             return state;
     }
