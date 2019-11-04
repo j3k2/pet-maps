@@ -87,7 +87,7 @@ class SheltersList extends Component {
                     width: 400,
                     background: 'white'
                 }}>
-                {!this.props.loading && this.props.shelters.length && <List
+                {!this.props.loading && this.props.shelters && <List
                     style={{ color: 'black' }}
                     selection
                     relaxed>

@@ -10,7 +10,7 @@ import {
 
 export default (state = {
     loading: false,
-    items: [],
+    items: null,
     activeShelterIds: []
 }, action) => {
     switch (action.type) {
