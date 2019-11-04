@@ -10,12 +10,16 @@ export function setCenterAndUpdateOption(query) {
         const response = await get(`/api/location?query=${query}`).catch((error) => {
             console.log('Error in setCenterAndUpdateOption: ' + error);
         });
-        dispatch({
-            type: SET_CENTER,
-            payload: response.data
-        });
+        dispatch(setCenter(response.data));
         dispatch(setUpdateOption(true));
     }
+}
+
+export function setCenter(center) {
+    return {
+        type: SET_CENTER,
+        payload: center
+    };
 }
 
 export function setUpdateOption(val) {
