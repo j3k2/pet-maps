@@ -14,10 +14,10 @@ app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('/api/pets', (req, res) => {
     axios.get(`https://api.petfinder.com/shelter.getPets?id=${req.query.shelterId}&key=${PETFINDER_KEY}&format=json`)
-        .then(response=>{
+        .then(response => {
             res.send(response.data.petfinder.pets.pet || []);
         })
-        .catch(err=>{
+        .catch(err => {
             console.log(err);
         });
 });
@@ -25,14 +25,14 @@ app.get('/api/pets', (req, res) => {
 app.get('/api/shelters', (req, res) => {
     axios.get(`https://api.petfinder.com/shelter.find?location=${req.query.zip}&count=${req.query.count}&key=${PETFINDER_KEY}&format=json`)
         .then(response => {
-            const shelters = response.data.petfinder.shelters.shelter;
+            const shelters = response.data.petfinder.shelters ? response.data.petfinder.shelters.shelter : [];
             const geocodeShelters = shelters.map(shelter => {
                 return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GEOCODE_KEY}&address=${shelter.address1.$t}, ${shelter.zip.$t}`)
-                    .then((geocodeRes) => {
-                        if (geocodeRes.data.results[0].geometry.location.lat && geocodeRes.data.results[0].geometry.location.lng) {
+                    .then((response) => {
+                        if (response.data.results[0].geometry.location.lat && response.data.results[0].geometry.location.lng) {
                             return {
-                                lat: geocodeRes.data.results[0].geometry.location.lat,
-                                lng: geocodeRes.data.results[0].geometry.location.lng
+                                lat: response.data.results[0].geometry.location.lat,
+                                lng: response.data.results[0].geometry.location.lng
                             }
                         }
                     })
@@ -50,14 +50,20 @@ app.get('/api/shelters', (req, res) => {
                         shelters,
                         locations
                     })
+                })
+                .catch((err) => {
+                    console.log(err);
                 });
-        });
+        })
+        .catch((err) => {
+            console.log(err);
+        })
 });
 
 app.get('/api/location', (req, res) => {
     axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GEOCODE_KEY}&address=${req.query.query}`)
-        .then(response => { 
-            res.send(response.data.results[0].geometry.location);
+        .then(response => {
+            res.send(response.data.results[0] ? response.data.results[0].geometry.location : null);
         })
         .catch(err => {
             console.log(err);

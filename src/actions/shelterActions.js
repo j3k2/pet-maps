@@ -94,9 +94,12 @@ const fetchZip = memoize(async (lat, lng) => {
     const response = await get(`/api/zip?lat=${lat}&lng=${lng}`).catch((error) => {
         console.log('Error in fetchZip: ' + error);
     });
-    const zip = response.data.find((component) => {
+
+    const zipObject = response.data.find((component) => {
         return component.types[0] === "postal_code"
-    }).long_name;
+    });
+    
+    const zip = zipObject ? zipObject.long_name : null;
 
     return zip;
 })
