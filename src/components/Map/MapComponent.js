@@ -2,30 +2,9 @@ import React from 'react';
 import { compose, withProps, withHandlers } from 'recompose'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { debounce } from 'lodash';
-import { connect } from 'react-redux';
-import {
-  toggleSheltersActive,
-  updateShelters
-} from '../../actions/shelterActions';
-import {
-  setMarkerHighlight,
-  setMarkerScroll
-} from '../../actions/mapActions';
 import paw from '../../assets/pawprint_green.png';
 
-const MapComponent = connect(state => {
-  return {
-    markers: state.markers.items,
-    update: state.map.update,
-    center: state.map.center,
-    highlightedMarker: state.markers.highlightedMarker
-  }
-}, {
-  updateShelters,
-  setMarkerHighlight,
-  setMarkerScroll,
-  toggleSheltersActive
-})(compose(
+const MapComponent = compose(
   withProps({
     googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_MAPS_KEY}&v=3.exp&libraries=geometry,drawing,places`,
     loadingElement: <div style={{ height: `100%` }} />,
@@ -46,12 +25,7 @@ const MapComponent = connect(state => {
           return;
         }
         debounce(() => {
-          props.updateShelters({
-            lat: refs.map.getCenter().lat(),
-            lng: refs.map.getCenter().lng(),
-            bounds: { sw: refs.map.getBounds().getSouthWest().toJSON(), ne: refs.map.getBounds().getNorthEast().toJSON() },
-            zoom: refs.map.getZoom()
-          })
+          props.onMapUpdate(refs.map)
         }, 500)();
       }
     }
@@ -76,28 +50,30 @@ const MapComponent = connect(state => {
       onBoundsChanged={() => { props.onBoundsChanged(props.update) }}
     >
       {props.markers && props.markers.length > 0 && props.markers.map((marker, idx) => {
-        return (<Marker
-          key={idx}
-          opacity={props.highlightedMarker === marker.markerId ? 1 : 0.4}
-          icon={paw}
-          position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
-          onClick={() => {
-            props.toggleSheltersActive(marker.shelterIds);
-            props.highlightButton();
-          }}
-          onMouseOver={() => {
-            props.setMarkerScroll(marker.markerId);
-            props.setMarkerHighlight(marker.markerId)
-          }}
-          onMouseOut={() => {
-            props.setMarkerScroll(null);
-            props.setMarkerHighlight(null)
-          }}
-        >
-        </Marker>);
+        return renderMarker(marker, idx, props);
       })}
     </GoogleMap>
   </div>
-));
+);
+
+function renderMarker(marker, idx, props) {
+  return (
+    <Marker
+      key={idx}
+      opacity={props.highlightedMarker === marker.markerId ? 1 : 0.4}
+      icon={paw}
+      position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
+      onClick={() => {
+        props.onMarkerClick(marker);
+      }}
+      onMouseOver={() => {
+        props.onMarkerMouseOver(marker);
+      }}
+      onMouseOut={() => {
+        props.onMarkerMouseOut(marker);
+      }}
+    >
+    </Marker>);
+}
 
 export default MapComponent;
