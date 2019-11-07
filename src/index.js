@@ -10,7 +10,7 @@ import './assets/main.css';
 import 'semantic-ui-css/semantic.min.css';
 import { Icon, Segment } from 'semantic-ui-react';
 
-import SearchInput from './components/Header/SearchInput';
+import LocationSearch from './components/Header/LocationSearch';
 import MapView from './components/Map/MapView';
 import SheltersView from './components/Shelters/SheltersView';
 import PetsView from './components/Pets/PetsView';
@@ -43,7 +43,7 @@ class App extends React.Component {
                 <Icon name="paw" />
                 <span style={{ fontFamily: 'Luckiest Guy', marginLeft: 5, marginRight: 30 }}>PET MAPS</span>
               </div>
-              <SearchInput />
+              <LocationSearch />
             </div>
           </div>
           <div style={{
