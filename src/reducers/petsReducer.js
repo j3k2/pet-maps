@@ -1,4 +1,4 @@
-import { uniq, sortBy, groupBy } from 'lodash';
+import { uniq, sortBy } from 'lodash';
 
 import {
   RECEIVE_PETS,
@@ -48,7 +48,6 @@ export default (state = {
       return {
         ...state,
         items: sortBy(pets, ['id.$t']),
-        petsByShelter: groupBy(pets, 'shelterId.$t'),
         petFilters: petFilters,
         activePetFilters: {},
         loading: false
