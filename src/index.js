@@ -1,17 +1,19 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import reducers from './reducers/reducers';
-import PetsView from './components/Pets/PetsView';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import SearchInput from './components/Header/SearchInput';
-import MapView from './components/Map/MapView';
-import { Icon } from 'semantic-ui-react';
+
+import reducers from './reducers/reducers';
 import WebFont from 'webfontloader';
 import './assets/main.css';
-
 import 'semantic-ui-css/semantic.min.css';
+import { Icon, Segment } from 'semantic-ui-react';
+
+import SearchInput from './components/Header/SearchInput';
+import MapView from './components/Map/MapView';
+import SheltersView from './components/Shelters/SheltersView';
+import PetsView from './components/Pets/PetsView';
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
@@ -21,10 +23,7 @@ WebFont.load({
   }
 });
 
-class App extends Component {
-  state = {
-    panelVisible: false
-  }
+class App extends React.Component {
   render() {
     return (
       <Provider store={createStoreWithMiddleware(reducers)}>
@@ -52,7 +51,41 @@ class App extends Component {
             marginTop: 70,
             width: '100%'
           }}>
-          <MapView></MapView>
+            <div style={{
+              padding: 20,
+            }}>
+              <Segment style={{
+                background: '#198f35',
+                color: 'white',
+                padding: 20,
+                width: '100%',
+                minWidth: 441,
+                textAlign: 'center'
+              }}>
+                <div style={{
+                  display: 'inline-block',
+                }}>
+                  <MapView
+                  // highlightButton={() => {
+                  //   if (!this.state.init) {
+                  //     this.setState({ highlight: true });
+                  //   }
+                  // }} 
+                  />
+                </div>
+                <div style={{
+                  display: 'inline-block',
+                }}>
+                  <SheltersView
+                  // highlightButton={() => {
+                  //   if (!this.state.init) {
+                  //     this.setState({ highlight: true });
+                  //   }
+                  // }} 
+                  />
+                </div>
+                </Segment>
+            </div>
             <PetsView />
           </div>
         </div >

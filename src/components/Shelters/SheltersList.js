@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import { min } from 'lodash';
-import { connect } from 'react-redux';
 import { Ref, List, Loader, Checkbox } from 'semantic-ui-react';
-import { setActiveShelter, resetActiveShelters } from '../../actions/shelterActions';
-import { setMarkerHighlight } from '../../actions/mapActions';
 
 class SheltersList extends Component {
     listRefs = {};
@@ -32,7 +29,7 @@ class SheltersList extends Component {
                         }}
                         onClick={() => {
                             this.props.setActiveShelter(shelter.id.$t, this.props.activeShelterIds.indexOf(shelter.id.$t) > -1);
-                            this.props.highlightButton();
+                            // this.props.highlightButton();
                         }}
                     >
                         {/* <span>{shelter.markerId}:{shelter.latitude.$t}/{shelter.longitude.$t}</span> */}
@@ -83,9 +80,11 @@ class SheltersList extends Component {
                     overflowY: 'scroll',
                     padding: 20,
                     marginLeft: 0,
-                    height: '400px',
+                    height: '340px',
                     width: 400,
-                    background: 'white'
+                    background: 'white',
+                    position: 'relative',
+                    top: -38
                 }}>
                 {!this.props.loading && this.props.shelters && <List
                     style={{ color: 'black' }}
@@ -96,7 +95,7 @@ class SheltersList extends Component {
                     </span>
                     <a onClick={() => {
                         this.props.resetActiveShelters(this.props.shelters.length > this.props.activeShelterIds.length);
-                        this.props.highlightButton();
+                        // this.props.highlightButton();
                     }}
                         style={{
                             float: 'right',
@@ -117,14 +116,4 @@ class SheltersList extends Component {
     }
 }
 
-export default connect(state => {
-    return {
-        activeShelterIds: state.shelters.activeShelterIds,
-        shelters: state.shelters.items,
-        loading: state.shelters.loading,
-        petsByShelter: state.shelters.petsByShelter,
-        shelterFilters: state.shelters.shelterFilters,
-        highlightedMarker: state.markers.highlightedMarker,
-        scrolledMarker: state.markers.scrolledMarker
-    }
-}, { setActiveShelter, resetActiveShelters, setMarkerHighlight })(SheltersList);
+export default SheltersList;
