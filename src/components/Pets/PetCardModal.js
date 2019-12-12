@@ -37,7 +37,7 @@ function PetCardModal(props) {
                     <Segment style={{ width: 268 }}>
                         <span>
                             <Icon name="marker"></Icon>
-                            {props.pet.shelterName.substring(0, 24) + (props.pet.shelterName.length > 24 ? '...' : '')}<br />
+                            {props.pet.shelterName ? props.pet.shelterName : ''}<br />
                             {props.pet.contact.address1.$t ? <span>{props.pet.contact.address1.$t}<br /></span> : ''}
                             {props.pet.contact.address2.$t ? <span>{props.pet.contact.address2.$t}<br /></span> : ''}
                             {props.pet.contact.city.$t && props.pet.contact.state.$t && props.pet.contact.zip.$t && props.pet.contact.address1.$t ? <span>{`${props.pet.contact.city.$t}, ${props.pet.contact.state.$t} ${props.pet.contact.zip.$t}`}</span> : ''}
