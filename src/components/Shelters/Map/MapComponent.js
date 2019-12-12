@@ -2,7 +2,7 @@ import React from 'react';
 import { compose, withProps, withHandlers } from 'recompose'
 import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import { debounce } from 'lodash';
-import paw from '../../assets/pawprint_green.png';
+import paw from '../../../assets/pawprint_green.png';
 
 const MapComponent = compose(
   withProps({

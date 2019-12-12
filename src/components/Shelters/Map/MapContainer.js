@@ -3,13 +3,12 @@ import MapComponent from './MapComponent';
 import { connect } from 'react-redux';
 import {
   setUpdateOption,
-  setMarkerHighlight,
   setMarkerScroll
-} from '../../actions/mapActions';
+} from '../../../actions/mapActions';
 import {
   toggleSheltersActive,
   updateShelters
-} from '../../actions/shelterActions';
+} from '../../../actions/shelterActions';
 import { Checkbox } from 'semantic-ui-react';
 
 function MapWrapper(props) {
@@ -58,11 +57,9 @@ export default connect(state => {
     markers: state.markers.items,
     update: state.map.update,
     center: state.map.center,
-    highlightedMarker: state.markers.highlightedMarker
   }
 }, {
   updateShelters,
-  setMarkerHighlight,
   setMarkerScroll,
   toggleSheltersActive,
   setUpdateOption

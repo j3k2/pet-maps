@@ -29,18 +29,12 @@ class SheltersList extends Component {
                         }}
                         onClick={() => {
                             this.props.setActiveShelter(shelter.id.$t, this.props.activeShelterIds.indexOf(shelter.id.$t) > -1);
-                            // this.props.highlightButton();
                         }}
                     >
-                        {/* <span>{shelter.markerId}:{shelter.latitude.$t}/{shelter.longitude.$t}</span> */}
                         <List.Content>
                             <List.Header>
                                 {`${idx + 1}. ${shelter.name.$t}`}
                                 <Checkbox checked={this.props.activeShelterIds.indexOf(shelter.id.$t) > -1}
-                                    // onClick={(e, d) => {
-                                    //     this.props.setActiveShelter(shelter.id.$t, d.checked);
-                                    //     this.props.highlightButton();
-                                    // }}
                                     style={{ float: 'right', marginLeft: 10 }}></Checkbox>
                             </List.Header>
                             <List.Description>
@@ -80,11 +74,9 @@ class SheltersList extends Component {
                     overflowY: 'scroll',
                     padding: 20,
                     marginLeft: 0,
-                    height: '340px',
+                    height: '400px',
                     width: 400,
-                    background: 'white',
-                    position: 'relative',
-                    top: -38
+                    background: 'white'
                 }}>
                 {!this.props.loading && this.props.shelters && <List
                     style={{ color: 'black' }}
