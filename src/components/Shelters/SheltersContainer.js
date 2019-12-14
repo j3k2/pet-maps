@@ -1,5 +1,5 @@
 import React from 'react';
-import MapView from './Map/MapContainer';
+import MapContainer from './Map/MapContainer';
 import { Segment, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import SheltersList from './SheltersList';
@@ -7,7 +7,7 @@ import { fetchPets } from '../../actions/petActions';
 import { setActiveShelter, resetActiveShelters } from '../../actions/shelterActions';
 import { setMarkerHighlight } from '../../actions/mapActions';
 
-function SheltersFinder(props) {
+function SheltersContainer(props) {
     return (
         <div style={{
             padding: 20,
@@ -23,7 +23,7 @@ function SheltersFinder(props) {
                 <div style={{
                     display: 'inline-block',
                 }}>
-                    <MapView
+                    <MapContainer
                         highlightedMarker={props.highlightedMarker}
                         setMarkerHighlight={props.setMarkerHighlight}
                     />
@@ -72,4 +72,4 @@ export default connect(state => {
     setActiveShelter,
     resetActiveShelters,
     setMarkerHighlight
-})(SheltersFinder);
+})(SheltersContainer);

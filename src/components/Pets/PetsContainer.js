@@ -6,7 +6,7 @@ import { Loader, Segment } from 'semantic-ui-react'
 import PetCardsGroup from './PetCardsGroup';
 import PetFiltersMenu from './PetFiltersMenu';
 
-function PetsView(props) {
+function PetsContainer(props) {
     return (
         <div>
             {!props.loading && !isEmpty(props.petFilters) && <div style={{ padding: 20 }}>
@@ -29,4 +29,4 @@ export default connect(state => {
         petFilters: state.pets.petFilters,
         activePetFilters: state.pets.activePetFilters
     }
-}, { setActivePetFilters })(PetsView);
+}, { setActivePetFilters })(PetsContainer);

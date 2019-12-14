@@ -11,7 +11,7 @@ import {
 } from '../../../actions/shelterActions';
 import { Checkbox } from 'semantic-ui-react';
 
-function MapWrapper(props) {
+function MapContainer(props) {
   function handleCheckbox(e, data) {
     props.setUpdateOption(data.checked);
   }
@@ -63,4 +63,4 @@ export default connect(state => {
   setMarkerScroll,
   toggleSheltersActive,
   setUpdateOption
-})(MapWrapper);
+})(MapContainer);
