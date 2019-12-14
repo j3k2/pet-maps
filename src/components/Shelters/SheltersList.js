@@ -47,7 +47,7 @@ class SheltersList extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.scrolledMarker && this.listRefs[this.props.scrolledMarker]) {
+        if (this.props.scrolledMarker && this.listRefs.hasOwnProperty(this.props.scrolledMarker)) {
             const refs = this.listRefs[this.props.scrolledMarker];
             const offsets = refs.map(ref => {
                 return ref.offsetTop;
@@ -85,7 +85,7 @@ class SheltersList extends Component {
                     <span style={{ float: 'left' }}>
                         {`${this.props.shelters.length} results`}
                     </span>
-                    <a onClick={() => {
+                    <span onClick={() => {
                         this.props.resetActiveShelters(this.props.shelters.length > this.props.activeShelterIds.length);
                         // this.props.highlightButton();
                     }}
@@ -97,7 +97,7 @@ class SheltersList extends Component {
                         <span>
                             {this.props.shelters.length > this.props.activeShelterIds.length ? 'Select all' : 'Clear All'}
                         </span>
-                    </a>
+                    </span>
                     <br />
 
                     {this.renderShelters(this.props.shelters)}
