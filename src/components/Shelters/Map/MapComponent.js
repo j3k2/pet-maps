@@ -1,60 +1,48 @@
 import React from 'react';
-import { compose, withProps, withHandlers } from 'recompose'
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
+import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { debounce } from 'lodash';
 import paw from '../../../assets/pawprint_green.png';
 
-const MapComponent = compose(
-  withProps({
-    googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_MAPS_KEY}&v=3.exp&libraries=geometry,drawing,places`,
-    loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `400px`, width: '400px', display: 'inline-block' }} />,
-    mapElement: <div style={{ height: `100%` }} />,
-  }),
-  withHandlers((props) => {
-    const refs = {
-      map: undefined,
-    }
-
-    return {
-      onMapMounted: () => ref => {
-        refs.map = ref;
-      },
-      onBoundsChanged: () => (update) => {
-        if (!update || !refs.map.getCenter()) {
-          return;
-        }
-        debounce(() => {
-          props.onMapUpdate(refs.map)
-        }, 500)();
-      }
-    }
-  }),
-  withScriptjs,
-  withGoogleMap
-)((props) =>
-  <div style={{ display: 'inline' }}>
-    <GoogleMap
-      defaultZoom={13}
-      defaultCenter={{ lat: 37.7432421, lng: -122.497668 }}
-      center={props.center}
-      ref={props.onMapMounted}
-      options={{
-        zoomControl: false,
-        mapTypeControl: false,
-        scaleControl: false,
-        streetViewControl: false,
-        rotateControl: false,
-        fullscreenControl: false
-      }}
-      onBoundsChanged={() => { props.onBoundsChanged(props.update) }}
-    >
-      {props.markers && props.markers.length > 0 && props.markers.map((marker, idx) => {
-        return renderMarker(marker, idx, props);
-      })}
-    </GoogleMap>
-  </div>
-);
+class MapComponent extends React.Component {
+  render() {
+    return (
+      <LoadScript
+        googleMapsApiKey={process.env.REACT_APP_MAPS_KEY}
+      >
+        <GoogleMap
+          mapContainerStyle={{
+            height: 400,
+            width: 400
+          }}
+          zoom={13}
+          center={this.props.center}
+          options={{
+            zoomControl: false,
+            mapTypeControl: false,
+            scaleControl: false,
+            streetViewControl: false,
+            rotateControl: false,
+            fullscreenControl: false
+          }}
+          onLoad={(map) => {
+            this.map = map;
+          }}
+          onBoundsChanged={(map) => {
+            if (!this.props.update || !this.map.getCenter()) {
+              return;
+            }
+            debounce(() => {
+              this.props.onMapUpdate(this.map)
+            }, 500)();
+          }}>
+          {this.props.markers && this.props.markers.length > 0 && this.props.markers.map((marker, idx) => {
+            return renderMarker(marker, idx, this.props);
+          })}
+        </GoogleMap>
+      </LoadScript>
+    )
+  }
+}
 
 function renderMarker(marker, idx, props) {
   return (
