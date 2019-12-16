@@ -34,7 +34,12 @@ app.get('/api/shelters', async (req, res) => {
     });
   const token = tokenResponse.body.access_token;
 
-  const sheltersResponse = await request.get(`https://api.petfinder.com/v2/organizations?location=${req.query.zip}&distance=8&limit=100`)
+  const sheltersResponse = await request.get('https://api.petfinder.com/v2/organizations')
+    .query({
+      location: `${req.query.lat}, ${req.query.lng}`,
+      distance: 8,
+      limit: 100
+    })
     .set('Authorization', `Bearer ${token}`);
 
   const shelters = sheltersResponse.body.organizations ? sheltersResponse.body.organizations : [];
@@ -42,16 +47,28 @@ app.get('/api/shelters', async (req, res) => {
   const locations = await Promise.all(
     shelters.map(async shelter => {
       const response = await request.get(`https://maps.googleapis.com/maps/api/geocode/json`)
-        .query({ key: GEOCODE_KEY })
-        .query({ address: shelter.address.address1 ? `${shelter.address.address1}, ${shelter.address.postcode}` : shelter.address.postcode });
-      if (response.body.results[0].geometry.location.lat && response.body.results[0].geometry.location.lng) {
+        .query({
+          key: GEOCODE_KEY,
+          address: shelter.address.address1 ? `${shelter.address.address1}, ${shelter.address.postcode}` : shelter.address.postcode
+        })
+        .catch(err=>{
+          console.log(err);
+        })
+      if (response.body.results[0] && response.body.results[0].geometry.location.lat && response.body.results[0].geometry.location.lng) {
         return {
           lat: response.body.results[0].geometry.location.lat,
           lng: response.body.results[0].geometry.location.lng
         }
+      } else {
+        return {
+          lat: null,
+          lng: null
+        }
       }
     })
-  )
+  ).catch(err=>{
+    console.log(err);
+  })
 
   res.send({
     shelters,
@@ -63,16 +80,6 @@ app.get('/api/location', (req, res) => {
   request.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GEOCODE_KEY}&address=${req.query.query}`)
     .then(response => {
       res.send(response.body.results[0] ? response.body.results[0].geometry.location : null);
-    })
-    .catch(err => {
-      console.log(err);
-    })
-});
-
-app.get('/api/zip', (req, res) => {
-  request.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GEOCODE_KEY}&latlng=${req.query.lat},${req.query.lng}`)
-    .then(response => {
-      res.send(response.body.results[0].address_components);
     })
     .catch(err => {
       console.log(err);

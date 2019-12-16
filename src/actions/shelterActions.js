@@ -1,4 +1,4 @@
-import { get } from 'axios';
+import { get } from 'superagent';
 import { memoize } from 'lodash';
 
 export const FETCH_SHELTERS = 'FETCH_SHELTERS';
@@ -13,93 +13,82 @@ export const UPDATE_SHELTERS = 'UPDATE_SHELTERS';
 
 
 export function setActiveShelter(shelterId, checked) {
-    return (dispatch) => {
-        if (checked) {
-            dispatch({
-                type: REMOVE_SHELTER_FROM_ACTIVE,
-                payload: shelterId
-            })
-        } else {
-            dispatch({
-                type: ADD_SHELTER_TO_ACTIVE,
-                payload: shelterId
-            })
-        }
+  return (dispatch) => {
+    if (checked) {
+      dispatch({
+        type: REMOVE_SHELTER_FROM_ACTIVE,
+        payload: shelterId
+      })
+    } else {
+      dispatch({
+        type: ADD_SHELTER_TO_ACTIVE,
+        payload: shelterId
+      })
     }
+  }
 }
 
 export function toggleSheltersActive(shelterIds) {
-    return {
-        type: TOGGLE_SHELTERS_ACTIVE,
-        payload: shelterIds
-    };
+  return {
+    type: TOGGLE_SHELTERS_ACTIVE,
+    payload: shelterIds
+  };
 }
 
 export function resetActiveShelters(selected) {
-    return {
-        type: RESET_ACTIVE_SHELTERS,
-        payload: selected
-    };
+  return {
+    type: RESET_ACTIVE_SHELTERS,
+    payload: selected
+  };
 }
 
 export function updateShelters({ lat, lng, bounds, zoom }) {
-    return async (dispatch) => {
-        dispatch({
-            type: CLEAR_PETS
-        });
-
-        const zip = await fetchZip(lat, lng); //memoized
-        const shelters = await fetchShelters(zip, zoom, dispatch); //memoized
-        const filteredShelters = filterShelters(shelters, bounds);
-
-        dispatch({
-            type: RECEIVE_SHELTERS,
-            payload: filteredShelters
-        });
-
-        dispatch({
-            type: SET_MARKERS,
-            payload: filteredShelters
-        });
-    }
-}
-
-const filterShelters = (shelters, bounds, locations) => {
-    return shelters.filter((shelter) => {
-        return shelter.geocodeLat > bounds.sw.lat &&
-            shelter.geocodeLat < bounds.ne.lat &&
-            shelter.geocodeLng > bounds.sw.lng &&
-            shelter.geocodeLng < bounds.ne.lng;
-    });
-}
-
-const fetchShelters = memoize(async (zip, zoom, dispatch) => {
+  return async (dispatch) => {
     dispatch({
-        type: FETCH_SHELTERS
+      type: CLEAR_PETS
     });
 
-    const response = await get(`/api/shelters?zip=${zip}&count=${Math.round(1000 / zoom)}`).catch((error) => {
-        console.log('Error in fetchShelters: ' + error);
+    const shelters = await fetchShelters(lat, lng, dispatch); //memoized
+    const filteredShelters = filterShelters(shelters, bounds);
+
+    dispatch({
+      type: RECEIVE_SHELTERS,
+      payload: filteredShelters
     });
 
-    return response.data.shelters.map((shelter, idx) => {
-        shelter.geocodeLat = response.data.locations[idx].lat;
-        shelter.geocodeLng = response.data.locations[idx].lng;
-        shelter.markerId = 'lat' + shelter.geocodeLat + 'lng' + shelter.geocodeLng;
-        return shelter;
+    dispatch({
+      type: SET_MARKERS,
+      payload: filteredShelters
     });
+  }
+}
+
+const filterShelters = (shelters, bounds) => {
+  return shelters.filter((shelter) => {
+    return shelter.geocodeLat > bounds.sw.lat &&
+      shelter.geocodeLat < bounds.ne.lat &&
+      shelter.geocodeLng > bounds.sw.lng &&
+      shelter.geocodeLng < bounds.ne.lng;
+  });
+}
+
+const fetchShelters = memoize(async (lat, lng, dispatch) => {
+  dispatch({
+    type: FETCH_SHELTERS
+  });
+
+  const response = await get('/api/shelters')
+    .query({
+      lat,
+      lng, 
+    }).catch((error) => {
+      console.log('Error in fetchShelters: ' + error);
+    });
+
+  return response.body.shelters.map((shelter, idx) => {
+    shelter.geocodeLat = response.body.locations[idx].lat;
+    shelter.geocodeLng = response.body.locations[idx].lng;
+    shelter.markerId = 'lat' + shelter.geocodeLat + 'lng' + shelter.geocodeLng;
+    return shelter;
+  });
 });
-
-const fetchZip = memoize(async (lat, lng) => {
-    const response = await get(`/api/zip?lat=${lat}&lng=${lng}`).catch((error) => {
-        console.log('Error in fetchZip: ' + error);
-    });
-
-    const zipObject = response.data.find((component) => {
-        return component.types[0] === "postal_code"
-    });
-    
-    const zip = zipObject ? zipObject.long_name : null;
-
-    return zip;
-})
