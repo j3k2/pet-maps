@@ -46,23 +46,23 @@ class SheltersList extends Component {
         });
     }
 
-    componentDidUpdate() {
-      if (this.props.scrolledMarker && this.listRefs.hasOwnProperty(this.props.scrolledMarker)) {
-          const refs = this.listRefs[this.props.scrolledMarker];
-          const offsets = refs.map(ref => {
-              return ref.offsetTop;
-          });
-            this.containerRef.scrollTop =
-                min(offsets) -
-                this.containerRef.offsetTop -
-                parseInt(this.containerRef.style.paddingTop, 10) -
-                parseInt(this.containerRef.style.paddingBottom, 10);
-        }
-        if (!this.props.shelters || !this.props.shelters.length) {
-            // reset listRefs when shelters are refetched
-            this.listRefs = {};
-        }
-    }
+    // componentDidUpdate() {
+    //   if (this.props.scrolledMarker && this.listRefs.hasOwnProperty(this.props.scrolledMarker)) {
+    //       const refs = this.listRefs[this.props.scrolledMarker];
+    //       const offsets = refs.map(ref => {
+    //           return ref.offsetTop;
+    //       });
+    //         this.containerRef.scrollTop =
+    //             min(offsets) -
+    //             this.containerRef.offsetTop -
+    //             parseInt(this.containerRef.style.paddingTop, 10) -
+    //             parseInt(this.containerRef.style.paddingBottom, 10);
+    //     }
+    //     if (!this.props.shelters || !this.props.shelters.length) {
+    //         // reset listRefs when shelters are refetched
+    //         this.listRefs = {};
+    //     }
+    // }
 
     render() {
         return (
