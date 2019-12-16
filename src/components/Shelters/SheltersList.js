@@ -28,17 +28,17 @@ class SheltersList extends Component {
                             this.props.setMarkerHighlight(null);
                         }}
                         onClick={() => {
-                            this.props.setActiveShelter(shelter.id.$t, this.props.activeShelterIds.indexOf(shelter.id.$t) > -1);
+                            this.props.setActiveShelter(shelter.id, this.props.activeShelterIds.indexOf(shelter.id) > -1);
                         }}
                     >
                         <List.Content>
                             <List.Header>
-                                {`${idx + 1}. ${shelter.name.$t}`}
-                                <Checkbox checked={this.props.activeShelterIds.indexOf(shelter.id.$t) > -1}
+                                {`${idx + 1}. ${shelter.name}`}
+                                <Checkbox checked={this.props.activeShelterIds.indexOf(shelter.id) > -1}
                                     style={{ float: 'right', marginLeft: 10 }}></Checkbox>
                             </List.Header>
                             <List.Description>
-                                {shelter.address1.$t ? `${shelter.address1.$t} (${shelter.zip.$t})` : shelter.zip.$t}
+                                {shelter.address.address1  ? `${shelter.address.address1} (${shelter.address.postcode})` : shelter.address.postcode}
                             </List.Description>
                         </List.Content>
                     </List.Item>
@@ -47,11 +47,11 @@ class SheltersList extends Component {
     }
 
     componentDidUpdate() {
-        if (this.props.scrolledMarker && this.listRefs.hasOwnProperty(this.props.scrolledMarker)) {
-            const refs = this.listRefs[this.props.scrolledMarker];
-            const offsets = refs.map(ref => {
-                return ref.offsetTop;
-            });
+      if (this.props.scrolledMarker && this.listRefs.hasOwnProperty(this.props.scrolledMarker)) {
+          const refs = this.listRefs[this.props.scrolledMarker];
+          const offsets = refs.map(ref => {
+              return ref.offsetTop;
+          });
             this.containerRef.scrollTop =
                 min(offsets) -
                 this.containerRef.offsetTop -

@@ -29,9 +29,9 @@ export default (state = {
 
       function setShelterName(pet, shelters) {
         const shelter = shelters.find((shelter) => {
-          return pet.shelterId.$t === shelter.id.$t;
+          return pet.shelterId.$t === shelter.id;
         });
-        pet.shelterName = shelter.name.$t || null;
+        pet.shelterName = shelter.name || null;
       }
 
       const petFilters = {};

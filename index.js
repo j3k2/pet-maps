@@ -2,10 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const app = express();
-const axios = require('axios');
+const request = require('superagent');
 const bodyParser = require('body-parser')
 
 const PETFINDER_KEY = process.env.PETFINDER_KEY;
+
+const PETFINDER_ID = process.env.PETFINDER_ID;
+const PETFINDER_SECRET = process.env.PETFINDER_SECRET;
 const GEOCODE_KEY = process.env.GEOCODE_KEY;
 
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -13,75 +16,71 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'build')));
 
 app.get('/api/pets', (req, res) => {
-    axios.get(`https://api.petfinder.com/shelter.getPets?id=${req.query.shelterId}&key=${PETFINDER_KEY}&format=json`)
-        .then(response => {
-            res.send(response.data.petfinder.pets.pet || []);
-        })
-        .catch(err => {
-            console.log(err);
-        });
+  request.get(`https://api.petfinder.com/shelter.getPets?id=${req.query.shelterId}&key=${PETFINDER_KEY}&format=json`)
+    .then(response => {
+      res.send(response.body.petfinder.pets.pet || []);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 });
 
-app.get('/api/shelters', (req, res) => {
-    axios.get(`https://api.petfinder.com/shelter.find?location=${req.query.zip}&count=${req.query.count}&key=${PETFINDER_KEY}&format=json`)
-        .then(response => {
-            const shelters = response.data.petfinder.shelters ? response.data.petfinder.shelters.shelter : [];
-            const geocodeShelters = shelters.map(shelter => {
-                return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GEOCODE_KEY}&address=${shelter.address1.$t}, ${shelter.zip.$t}`)
-                    .then((response) => {
-                        if (response.data.results[0].geometry.location.lat && response.data.results[0].geometry.location.lng) {
-                            return {
-                                lat: response.data.results[0].geometry.location.lat,
-                                lng: response.data.results[0].geometry.location.lng
-                            }
-                        }
-                    })
-                    .catch(() => {
-                        return {
-                            lat: parseFloat(shelter.latitude.$t),
-                            lng: parseFloat(shelter.longitude.$t)
-                        }
-                    })
-            });
+app.get('/api/shelters', async (req, res) => {
+  const tokenResponse = await request.post('https://api.petfinder.com/v2/oauth2/token')
+    .send({
+      grant_type: 'client_credentials',
+      client_id: PETFINDER_ID,
+      client_secret: PETFINDER_SECRET
+    });
+  const token = tokenResponse.body.access_token;
 
-            Promise.all(geocodeShelters)
-                .then(locations => {
-                    res.send({
-                        shelters,
-                        locations
-                    })
-                })
-                .catch((err) => {
-                    console.log(err);
-                });
-        })
-        .catch((err) => {
-            console.log(err);
-        })
+  const sheltersResponse = await request.get(`https://api.petfinder.com/v2/organizations?location=${req.query.zip}&distance=8&limit=100`)
+    .set('Authorization', `Bearer ${token}`);
+
+  const shelters = sheltersResponse.body.organizations ? sheltersResponse.body.organizations : [];
+
+  const locations = await Promise.all(
+    shelters.map(async shelter => {
+      const response = await request.get(`https://maps.googleapis.com/maps/api/geocode/json`)
+        .query({ key: GEOCODE_KEY })
+        .query({ address: shelter.address.address1 ? `${shelter.address.address1}, ${shelter.address.postcode}` : shelter.address.postcode });
+      if (response.body.results[0].geometry.location.lat && response.body.results[0].geometry.location.lng) {
+        return {
+          lat: response.body.results[0].geometry.location.lat,
+          lng: response.body.results[0].geometry.location.lng
+        }
+      }
+    })
+  )
+
+  res.send({
+    shelters,
+    locations
+  })
 });
 
 app.get('/api/location', (req, res) => {
-    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GEOCODE_KEY}&address=${req.query.query}`)
-        .then(response => {
-            res.send(response.data.results[0] ? response.data.results[0].geometry.location : null);
-        })
-        .catch(err => {
-            console.log(err);
-        })
+  request.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GEOCODE_KEY}&address=${req.query.query}`)
+    .then(response => {
+      res.send(response.body.results[0] ? response.body.results[0].geometry.location : null);
+    })
+    .catch(err => {
+      console.log(err);
+    })
 });
 
 app.get('/api/zip', (req, res) => {
-    axios.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GEOCODE_KEY}&latlng=${req.query.lat},${req.query.lng}`)
-        .then(response => {
-            res.send(response.data.results[0].address_components);
-        })
-        .catch(err => {
-            console.log(err);
-        })
+  request.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GEOCODE_KEY}&latlng=${req.query.lat},${req.query.lng}`)
+    .then(response => {
+      res.send(response.body.results[0].address_components);
+    })
+    .catch(err => {
+      console.log(err);
+    })
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname + '/build/index.html'));
+  res.sendFile(path.join(__dirname + '/build/index.html'));
 });
 
 const port = process.env.PORT || 5000;

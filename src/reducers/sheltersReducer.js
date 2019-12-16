@@ -39,7 +39,7 @@ export default (state = {
                 return {
                     ...state,
                     activeShelterIds: state.items.map((shelter) => {
-                        return shelter.id.$t;
+                        return shelter.id;
                     })
                 };
             } else {
@@ -82,7 +82,7 @@ export default (state = {
                 ...state,
                 items: sortBy(action.payload, ['markerId']).reverse(),
                 activeShelterIds: action.payload.map((shelter) => {
-                    return shelter.id.$t;
+                    return shelter.id;
                 }),
                 loading: false
             }

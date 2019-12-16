@@ -18,7 +18,7 @@ export default (state = {
             const markers = {};
             shelters.forEach((shelter) => {
                 if (markers[shelter.markerId]) {
-                    markers[shelter.markerId].shelterIds.push(shelter.id.$t);
+                    markers[shelter.markerId].shelterIds.push(shelter.id);
                 } else {
                     markers[shelter.markerId] = {
                         lat: shelter.geocodeLat,
@@ -26,7 +26,7 @@ export default (state = {
                         markerId: shelter.markerId
                     };
                     markers[shelter.markerId].shelterIds = [];
-                    markers[shelter.markerId].shelterIds.push(shelter.id.$t);
+                    markers[shelter.markerId].shelterIds.push(shelter.id);
                 }
             });
             return {
