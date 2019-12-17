@@ -19,7 +19,11 @@ app.get('/api/pets', async (req, res) => {
       grant_type: 'client_credentials',
       client_id: PETFINDER_ID,
       client_secret: PETFINDER_SECRET
+    })
+    .catch(err => {
+      console.log(err);
     });
+
   const token = tokenResponse.body.access_token;
 
   const petsResponse = await request.get('https://api.petfinder.com/v2/animals')
@@ -32,8 +36,8 @@ app.get('/api/pets', async (req, res) => {
     .catch(err => {
       console.log(err);
     });
-    
-  res.send({pets: petsResponse.body.animals || []});
+
+  res.send({ pets: petsResponse.body.animals || [] });
 });
 
 app.get('/api/shelters', async (req, res) => {
@@ -42,7 +46,11 @@ app.get('/api/shelters', async (req, res) => {
       grant_type: 'client_credentials',
       client_id: PETFINDER_ID,
       client_secret: PETFINDER_SECRET
+    })
+    .catch(err => {
+      console.log(err);
     });
+
   const token = tokenResponse.body.access_token;
 
   const sheltersResponse = await request.get('https://api.petfinder.com/v2/organizations')
@@ -51,7 +59,10 @@ app.get('/api/shelters', async (req, res) => {
       distance: 8,
       limit: 100
     })
-    .set('Authorization', `Bearer ${token}`);
+    .set('Authorization', `Bearer ${token}`)
+    .catch(err => {
+      console.log(err);
+    });
 
   const shelters = sheltersResponse.body.organizations ? sheltersResponse.body.organizations : [];
 
@@ -87,14 +98,14 @@ app.get('/api/shelters', async (req, res) => {
   })
 });
 
-app.get('/api/location', (req, res) => {
-  request.get(`https://maps.googleapis.com/maps/api/geocode/json?key=${GEOCODE_KEY}&address=${req.query.query}`)
-    .then(response => {
-      res.send(response.body.results[0] ? response.body.results[0].geometry.location : null);
-    })
+app.get('/api/location', async (req, res) => {
+  const response = await request.get('https://maps.googleapis.com/maps/api/geocode/json')
+    .query({ key: GEOCODE_KEY, address: req.query.query })
     .catch(err => {
       console.log(err);
     })
+
+  res.send(response.body.results[0] ? response.body.results[0].geometry.location : null);
 });
 
 app.get('*', (req, res) => {
