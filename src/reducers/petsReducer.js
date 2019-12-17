@@ -22,32 +22,32 @@ export default (state = {
           if (!petFilters[field]) {
             petFilters[field] = [];
           }
-          petFilters[field].push(pet[field].$t);
+          petFilters[field].push(pet[field]);
           petFilters[field] = uniq(petFilters[field]);
         });
       }
 
       function setShelterName(pet, shelters) {
         const shelter = shelters.find((shelter) => {
-          return pet.shelterId.$t === shelter.id;
+          return pet.organization_id === shelter.id;
         });
         pet.shelterName = shelter.name || null;
       }
 
       const petFilters = {};
       pets = pets.map((pet) => {
-        if (pet.media && pet.media.photos) {
-          pet.media.photos.photo = pet.media.photos.photo.filter((photo) => {
-            return photo['@size'] === 'x'
+        if (pet.photos) {
+          pet.photos = pet.photos.map((photo) => {
+            return photo.full
           });
         }
         setShelterName(pet, action.payload.shelters.items);
-        generatePetFilters(pet, ['animal', 'size', 'age', 'sex']);
+        generatePetFilters(pet, ['species', 'size', 'age', 'gender']);
         return pet;
       });
       return {
         ...state,
-        items: sortBy(pets, ['id.$t']),
+        items: sortBy(pets, 'id'),
         petFilters: petFilters,
         activePetFilters: {},
         loading: false

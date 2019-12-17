@@ -5,8 +5,6 @@ const app = express();
 const request = require('superagent');
 const bodyParser = require('body-parser')
 
-const PETFINDER_KEY = process.env.PETFINDER_KEY;
-
 const PETFINDER_ID = process.env.PETFINDER_ID;
 const PETFINDER_SECRET = process.env.PETFINDER_SECRET;
 const GEOCODE_KEY = process.env.GEOCODE_KEY;
@@ -15,14 +13,27 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'build')));
 
-app.get('/api/pets', (req, res) => {
-  request.get(`https://api.petfinder.com/shelter.getPets?id=${req.query.shelterId}&key=${PETFINDER_KEY}&format=json`)
-    .then(response => {
-      res.send(response.body.petfinder.pets.pet || []);
+app.get('/api/pets', async (req, res) => {
+  const tokenResponse = await request.post('https://api.petfinder.com/v2/oauth2/token')
+    .send({
+      grant_type: 'client_credentials',
+      client_id: PETFINDER_ID,
+      client_secret: PETFINDER_SECRET
+    });
+  const token = tokenResponse.body.access_token;
+
+  const petsResponse = await request.get('https://api.petfinder.com/v2/animals')
+    .query({
+      organization: typeof req.query.shelterIds === 'string' ? req.query.shelterIds : req.query.shelterIds.join(','),
+      status: 'adoptable',
+      limit: 100
     })
+    .set('Authorization', `Bearer ${token}`)
     .catch(err => {
       console.log(err);
     });
+    
+  res.send({pets: petsResponse.body.animals || []});
 });
 
 app.get('/api/shelters', async (req, res) => {
@@ -51,7 +62,7 @@ app.get('/api/shelters', async (req, res) => {
           key: GEOCODE_KEY,
           address: shelter.address.address1 ? `${shelter.address.address1}, ${shelter.address.postcode}` : shelter.address.postcode
         })
-        .catch(err=>{
+        .catch(err => {
           console.log(err);
         })
       if (response.body.results[0] && response.body.results[0].geometry.location.lat && response.body.results[0].geometry.location.lng) {
@@ -66,7 +77,7 @@ app.get('/api/shelters', async (req, res) => {
         }
       }
     })
-  ).catch(err=>{
+  ).catch(err => {
     console.log(err);
   })
 

@@ -15,7 +15,7 @@ function renderPetCards(pets, activePetFilters) {
     return map(reject(pets, (pet) => {
         let rejectPet = false;
         each(activePetFilters, (activeFilter, fieldName) => {
-            if (activeFilter.length > 0 && activePetFilters[fieldName].indexOf(pet[fieldName].$t) < 0) {
+            if (activeFilter.length > 0 && activePetFilters[fieldName].indexOf(pet[fieldName]) < 0) {
                 rejectPet = true;
             }
         });
@@ -25,7 +25,7 @@ function renderPetCards(pets, activePetFilters) {
             return;
         }
         return <PetCard
-                key={pet.id.$t}
+                key={pet.id}
                 pet={pet}></PetCard>
     });
 }
