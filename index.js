@@ -56,7 +56,8 @@ app.get('/api/shelters', async (req, res) => {
   const sheltersResponse = await request.get('https://api.petfinder.com/v2/organizations')
     .query({
       location: `${req.query.lat}, ${req.query.lng}`,
-      distance: 8,
+      distance: 64,
+      sort: 'distance',
       limit: 100
     })
     .set('Authorization', `Bearer ${token}`)
