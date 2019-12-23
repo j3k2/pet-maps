@@ -6,7 +6,7 @@ import {
   SET_ACTIVE_PET_FILTERS,
 } from '../actions/petActions';
 import {
-  CLEAR_PETS
+  RESET_SHELTERS
 } from '../actions/shelterActions';
 
 export default (state = {
@@ -65,7 +65,7 @@ export default (state = {
         ...state,
         activePetFilters: activePetFilters
       };
-    case CLEAR_PETS:
+    case RESET_SHELTERS:
       return {
         items: null
       };

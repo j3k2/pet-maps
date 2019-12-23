@@ -53,19 +53,33 @@ app.get('/api/shelters', async (req, res) => {
 
   const token = tokenResponse.body.access_token;
 
-  const sheltersResponse = await request.get('https://api.petfinder.com/v2/organizations')
-    .query({
-      location: `${req.query.lat}, ${req.query.lng}`,
-      distance: 64,
-      sort: 'distance',
-      limit: 100
-    })
-    .set('Authorization', `Bearer ${token}`)
-    .catch(err => {
-      console.log(err);
-    });
+  async function fetchShelters(lat, lng, distance, token) {
+    let lastPageLength = null;
+    let page = 1;
+    let shelters = [];
 
-  const shelters = sheltersResponse.body.organizations ? sheltersResponse.body.organizations : [];
+    while(lastPageLength === null || lastPageLength === 100) {
+      const sheltersResponse = await request.get('https://api.petfinder.com/v2/organizations')
+      .query({
+        location: `${lat}, ${lng}`,
+        distance: Math.ceil(distance),
+        page: page++,
+        sort: 'distance',
+        limit: 100
+      })
+      .set('Authorization', `Bearer ${token}`)
+      .catch(err => {
+        console.log(err);
+      });
+      const sheltersForPage = sheltersResponse.body.organizations ? sheltersResponse.body.organizations : [];
+      shelters = shelters.concat(sheltersForPage);
+      lastPageLength = sheltersForPage.length;
+    }
+
+    return shelters;
+  }
+
+  const shelters = await fetchShelters(req.query.lat, req.query.lng, req.query.distance, token)
 
   const locations = await Promise.all(
     shelters.map(async shelter => {

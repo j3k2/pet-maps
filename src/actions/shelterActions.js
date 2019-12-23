@@ -8,7 +8,7 @@ export const REMOVE_SHELTER_FROM_ACTIVE = 'REMOVE_SHELTER_FROM_ACTIVE';
 export const ADD_SHELTER_TO_ACTIVE = 'ADD_SHELTER_TO_ACTIVE';
 export const TOGGLE_SHELTERS_ACTIVE = 'TOGGLE_SHELTERS_ACTIVE';
 export const RESET_ACTIVE_SHELTERS = 'RESET_ACTIVE_SHELTERS';
-export const CLEAR_PETS = 'CLEAR_PETS';
+export const RESET_SHELTERS = 'RESET_SHELTERS';
 export const UPDATE_SHELTERS = 'UPDATE_SHELTERS';
 
 
@@ -45,10 +45,10 @@ export function resetActiveShelters(selected) {
 export function updateShelters({ lat, lng, bounds, zoom }) {
   return async (dispatch) => {
     dispatch({
-      type: CLEAR_PETS
+      type: RESET_SHELTERS
     });
-
-    const shelters = await fetchShelters(lat, lng, dispatch); //memoized
+    
+    const shelters = await fetchShelters(lat, lng, zoom, dispatch); //memoized
     const filteredShelters = filterShelters(shelters, bounds);
 
     dispatch({
@@ -72,15 +72,21 @@ const filterShelters = (shelters, bounds) => {
   });
 }
 
-const fetchShelters = memoize(async (lat, lng, dispatch) => {
+const fetchShelters = memoize(async (lat, lng, zoom, dispatch) => {
   dispatch({
     type: FETCH_SHELTERS
   });
+
+  const pixels = 400
+  const distance = (97.27130 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoom)) * pixels
+// https://groups.google.com/forum/#!topic/google-maps-js-api-v3/hDRO4oHVSeM
+// https://medium.com/techtrument/how-many-miles-are-in-a-pixel-a0baf4611fff
 
   const response = await get('/api/shelters')
     .query({
       lat,
       lng, 
+      distance
     }).catch((error) => {
       console.log('Error in fetchShelters: ' + error);
     });
