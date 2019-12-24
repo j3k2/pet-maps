@@ -73,7 +73,7 @@ function PetCardModal({ pet, modal, onModalClose }) {
             })}
           </div>}
           <p>
-            {pet.description}
+            {pet.description} (<a target="_blank" rel="noopener noreferrer" href={pet.url}>Full profile at petfinder.com</a>)
           </p>
         </Modal.Description>
       </Modal.Content>
