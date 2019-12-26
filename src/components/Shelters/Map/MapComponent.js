@@ -2,7 +2,6 @@ import React from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { debounce } from 'lodash';
 import paw from '../../../assets/pawprint_green.png';
-import blackPaw from '../../../assets/animal-paw-print.png';
 
 class MapComponent extends React.Component {
   render() {
@@ -50,7 +49,7 @@ function renderMarker(marker, idx, props) {
     <Marker
       key={idx}
       opacity={props.highlightedMarker === marker.markerId ? 1 : 0.4}
-      icon={marker.inactive ? blackPaw : paw}
+      icon={paw}
       position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
       onClick={() => {
         props.onMarkerClick(marker);
