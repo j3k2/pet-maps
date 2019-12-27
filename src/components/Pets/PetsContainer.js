@@ -1,32 +1,50 @@
 import React from 'react';
-import { isEmpty } from 'lodash';
+import { debounce } from 'lodash';
 import { connect } from 'react-redux';
-import { setActivePetFilters } from '../../actions/petActions';
+import { setActivePetFilters, fetchMorePets } from '../../actions/petActions';
 import { Loader, Segment } from 'semantic-ui-react'
 import PetCardsGroup from './PetCardsGroup';
-import PetFiltersMenu from './PetFiltersMenu';
+// import PetFiltersMenu from './PetFiltersMenu';
 
-function PetsContainer(props) {
+class PetsContainer extends React.Component {
+  componentDidMount() {
+    window.addEventListener('scroll', debounce(()=>{
+      if(this.props.pets && 
+        !this.props.loading && 
+        this.props.currentPage < this.props.totalPages &&
+        document.documentElement.scrollTop + document.body.clientHeight === document.getElementById('root').clientHeight) {
+          this.props.fetchMorePets(this.props.currentPage);
+      }
+    }, 500));
+  }
+  
+  render() {
     return (
-        <div>
-            {!props.loading && !isEmpty(props.petFilters) && <div style={{ padding: 20 }}>
-                <PetFiltersMenu petFilters={props.petFilters}  setActivePetFilters={props.setActivePetFilters} />
-                <PetCardsGroup pets={props.pets} activePetFilters={props.activePetFilters}/>
-            </div>}
-            {props.loading && <Loader active inline='centered'>Loading Pets</Loader>}
-            {!props.loading && props.pets && props.pets.length === 0 &&
-                <Segment>No pets found for the selected shelters.</Segment>
-            }
+      <div>
+        <div style={{ padding: 20 }}>
+          {/* <PetFiltersMenu petFilters={this.props.petFilters} setActivePetFilters={this.props.setActivePetFilters} /> */}
+          <PetCardsGroup pets={this.props.pets}
+            activePetFilters={this.props.activePetFilters}
+          />
         </div>
+        {this.props.loading && <Loader active inline='centered'>Loading Pets</Loader>}
+        {!this.props.loading && this.props.pets && this.props.pets.length === 0 &&
+          <Segment>No pets found for the selected shelters.</Segment>
+        }
+      </div>
     )
+  }
 }
 
 export default connect(state => {
-    return {
-        shelters: state.shelters.items,
-        pets: state.pets.items,
-        loading: state.pets.loading,
-        petFilters: state.pets.petFilters,
-        activePetFilters: state.pets.activePetFilters
-    }
-}, { setActivePetFilters })(PetsContainer);
+  return {
+    shelters: state.shelters.items,
+    currentPage: state.pets.pagination ? state.pets.pagination.current_page : 0,
+    totalPages: state.pets.pagination ? state.pets.pagination.total_pages : 0,
+    pets: state.pets.items,
+    loading: state.pets.loading,
+    petFilters: state.pets.petFilters,
+    activePetFilters: state.pets.activePetFilters
+  }
+}, { setActivePetFilters,
+    fetchMorePets })(PetsContainer);

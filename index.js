@@ -3,7 +3,7 @@ const express = require('express');
 const path = require('path');
 const app = express();
 const request = require('superagent');
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 
 const PETFINDER_ID = process.env.PETFINDER_ID;
 const PETFINDER_SECRET = process.env.PETFINDER_SECRET;
@@ -26,18 +26,20 @@ app.get('/api/pets', async (req, res) => {
 
   const token = tokenResponse.body.access_token;
 
-  const petsResponse = await request.get('https://api.petfinder.com/v2/animals')
+  const response = await request.get('https://api.petfinder.com/v2/animals')
     .query({
       organization: typeof req.query.shelterIds === 'string' ? req.query.shelterIds : req.query.shelterIds.join(','),
       status: 'adoptable',
-      limit: 100
+      page: req.query.page,
+      limit: 20
     })
     .set('Authorization', `Bearer ${token}`)
     .catch(err => {
       console.log(err);
     });
 
-  res.send({ pets: petsResponse.body.animals || [] });
+  res.send({ pets: response.body.animals || [], 
+    pagination: response.body.pagination || {} });
 });
 
 app.get('/api/shelters', async (req, res) => {
@@ -54,26 +56,27 @@ app.get('/api/shelters', async (req, res) => {
   const token = tokenResponse.body.access_token;
 
   async function fetchShelters(lat, lng, distance, token) {
-    let lastPageLength = null;
+    let totalPages = null;
     let page = 1;
     let shelters = [];
 
-    while(lastPageLength === null || lastPageLength === 100) {
-      const sheltersResponse = await request.get('https://api.petfinder.com/v2/organizations')
-      .query({
-        location: `${lat}, ${lng}`,
-        distance: Math.ceil(distance),
-        page: page++,
-        sort: 'distance',
-        limit: 100
-      })
-      .set('Authorization', `Bearer ${token}`)
-      .catch(err => {
-        console.log(err);
-      });
-      const sheltersForPage = sheltersResponse.body.organizations ? sheltersResponse.body.organizations : [];
+    while (totalPages === null || page <= totalPages) {
+      const response = await request.get('https://api.petfinder.com/v2/organizations')
+        .query({
+          location: `${lat}, ${lng}`,
+          distance: Math.ceil(distance),
+          page: page++,
+          sort: 'distance',
+          limit: 100
+        })
+        .set('Authorization', `Bearer ${token}`)
+        .catch(err => {
+          console.log(err);
+        });
+        
+      const sheltersForPage = response.body.organizations || [];
       shelters = shelters.concat(sheltersForPage);
-      lastPageLength = sheltersForPage.length;
+      totalPages = response.body.pagination.total_pages;
     }
 
     return shelters;

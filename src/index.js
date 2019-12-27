@@ -11,7 +11,7 @@ import 'semantic-ui-css/semantic.min.css';
 
 import Header from './components/Header/Header';
 import SheltersFinder from './components/Shelters/SheltersContainer';
-import PetsView from './components/Pets/PetsContainer';
+import PetsContainer from './components/Pets/PetsContainer';
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
@@ -33,7 +33,7 @@ class App extends React.Component {
             width: '100%'
           }}>
             <SheltersFinder />
-            <PetsView />
+            <PetsContainer />
           </div>
         </div >
       </Provider >
