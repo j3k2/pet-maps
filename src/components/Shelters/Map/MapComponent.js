@@ -2,6 +2,7 @@ import React from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api'
 import { debounce } from 'lodash';
 import paw from '../../../assets/pawprint_green.png';
+import { constants } from '../../../config';
 
 class MapComponent extends React.Component {
   render() {
@@ -11,8 +12,8 @@ class MapComponent extends React.Component {
       >
         <GoogleMap
           mapContainerStyle={{
-            height: 400,
-            width: 400
+            height: constants.mapWidth,
+            width: constants.mapWidth
           }}
           zoom={13}
           center={this.props.center}

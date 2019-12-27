@@ -1,5 +1,6 @@
 import { get } from 'superagent';
 import { memoize } from 'lodash';
+import { constants } from '../config';
 
 export const FETCH_SHELTERS = 'FETCH_SHELTERS';
 export const RECEIVE_SHELTERS = 'RECEIVE_SHELTERS';
@@ -77,8 +78,9 @@ const fetchShelters = memoize(async (lat, lng, zoom, dispatch) => {
     type: FETCH_SHELTERS
   });
 
-  const pixels = 400
-  const distance = (97.27130 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoom)) * pixels
+  const mapWidth = constants.mapWidth;
+  const mapRadiusInPixels = Math.sqrt(Math.pow(mapWidth / 2, 2) + Math.pow(mapWidth / 2, 2));
+  const mapRadiusInMiles = (97.27130 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoom)) * mapRadiusInPixels;
 // https://groups.google.com/forum/#!topic/google-maps-js-api-v3/hDRO4oHVSeM
 // https://medium.com/techtrument/how-many-miles-are-in-a-pixel-a0baf4611fff
 
@@ -86,7 +88,7 @@ const fetchShelters = memoize(async (lat, lng, zoom, dispatch) => {
     .query({
       lat,
       lng, 
-      distance
+      distance: mapRadiusInMiles
     }).catch((error) => {
       console.log('Error in fetchShelters: ' + error);
     });
