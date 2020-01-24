@@ -4,7 +4,8 @@ import {
 } from '../actions/mapActions';
 
 import {
-    RECEIVE_MARKERS
+    SET_MARKERS,
+    RESET_SHELTERS
 } from '../actions/shelterActions';
 
 export default (state = {
@@ -13,12 +14,18 @@ export default (state = {
     scrolledMarker: null
 }, action) => {
     switch (action.type) {
-        case RECEIVE_MARKERS: {
+        case RESET_SHELTERS: {
+          return {
+            ...state,
+            items: []
+          }
+        }
+        case SET_MARKERS: {
             const shelters = action.payload;
             const markers = {};
             shelters.forEach((shelter) => {
                 if (markers[shelter.markerId]) {
-                    markers[shelter.markerId].shelterIds.push(shelter.id.$t);
+                    markers[shelter.markerId].shelterIds.push(shelter.id);
                 } else {
                     markers[shelter.markerId] = {
                         lat: shelter.geocodeLat,
@@ -26,7 +33,7 @@ export default (state = {
                         markerId: shelter.markerId
                     };
                     markers[shelter.markerId].shelterIds = [];
-                    markers[shelter.markerId].shelterIds.push(shelter.id.$t);
+                    markers[shelter.markerId].shelterIds.push(shelter.id);
                 }
             });
             return {

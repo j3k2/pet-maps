@@ -22,7 +22,7 @@ class ImageViewer extends Component {
                     }}
                     width={228}
                     height={228}
-                    src={this.props.images ? this.props.images[this.state.imageIndex].$t : ''}></Image>
+                    src={this.props.images ? this.props.images[this.state.imageIndex] : ''}></Image>
                 {(!this.props.images || this.props.images.length === 0) && <span style={{ position: 'relative', bottom: 10, textAlign: 'center' }}>No photos</span>}
                 {this.props.images && this.props.images.length === 1 && <span style={{ position: 'relative', bottom: 10, textAlign: 'center' }}>{this.state.imageIndex + 1}/{this.props.images.length}</span>}
                 {this.props.images && this.props.images.length > 1 && <span style={{ textAlign: 'center' }}><Icon
@@ -43,7 +43,7 @@ class ImageViewer extends Component {
                 <Modal style={{ width: 'auto', textAlign: 'center' }} open={this.state.modalOpen} onClose={() => {
                     this.setState({ modalOpen: false });
                 }}>
-                    <Image style={{ display: 'inline' }} src={this.props.images ? this.props.images[this.state.imageIndex].$t : ''}></Image>
+                    <Image style={{ display: 'inline' }} src={this.props.images ? this.props.images[this.state.imageIndex] : ''}></Image>
                 </Modal>
             </Card>
         )

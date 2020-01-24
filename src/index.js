@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import reducers from './reducers/reducers';
-import PetsView from './components/Pets/PetsView';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import SearchInput from './components/Header/SearchInput';
-import MapView from './components/Map/MapView';
-import { Icon } from 'semantic-ui-react';
+
+import reducers from './reducers/reducers';
 import WebFont from 'webfontloader';
 import './assets/main.css';
-
 import 'semantic-ui-css/semantic.min.css';
+
+import Header from './components/Header/Header';
+import SheltersFinder from './components/Shelters/SheltersContainer';
+import PetsContainer from './components/Pets/PetsContainer';
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
@@ -21,39 +21,19 @@ WebFont.load({
   }
 });
 
-class App extends Component {
-  state = {
-    panelVisible: false
-  }
+class App extends React.Component {
   render() {
     return (
       <Provider store={createStoreWithMiddleware(reducers)}>
         <div>
-          <div style={{
-            position: 'fixed',
-            height: 70,
-            zIndex: 999,
-            width: '100%',
-            minWidth: 840,
-            fontSize: 18,
-            background: '#198f35',
-            color: 'white'
-          }}>
-            <div style={{ padding: 10, paddingLeft: 20 }}>
-              <div style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
-                <Icon name="paw" />
-                <span style={{ fontFamily: 'Luckiest Guy', marginLeft: 5, marginRight: 30 }}>PET MAPS</span>
-              </div>
-              <SearchInput />
-            </div>
-          </div>
+          <Header />
           <div style={{
             display: 'inline-block',
             marginTop: 70,
             width: '100%'
           }}>
-          <MapView></MapView>
-            <PetsView />
+            <SheltersFinder />
+            <PetsContainer />
           </div>
         </div >
       </Provider >

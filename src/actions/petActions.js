@@ -1,43 +1,68 @@
-import { get } from 'axios';
-import {reduce} from 'lodash'
+import { get } from 'superagent';
 export const FETCH_PETS = 'FETCH_PETS';
 export const RECEIVE_PETS = 'RECEIVE_PETS';
 export const SET_ACTIVE_PET_FILTERS = 'SET_ACTIVE_PET_FILTERS';
+export const FETCH_MORE_PETS = 'FETCH_MORE_PETS';
+export const RECEIVE_MORE_PETS = 'RECEIVE_MORE_PETS';
 
 export function fetchPets(shelterIds) {
-    return (dispatch, getState) => {
-        dispatch({
-            type: FETCH_PETS
-        });
+  return async (dispatch, getState) => {
+    dispatch({
+      type: FETCH_PETS
+    });
+    
+    const response = await get('/api/pets')
+      .query({
+        shelterIds,
+        page: 1
+      }).catch((error) => {
+        console.log('Error in fetchPets: ' + error);
+      });
 
-        const requests = shelterIds.map((shelterId) => {
-            return get(`/api/pets?shelterId=${shelterId}`);
-        });
+    const { shelters } = getState();
+    dispatch({
+      type: RECEIVE_PETS,
+      payload: {
+        pets: response.body.pets,
+        pagination: response.body.pagination,
+        shelters
+      }
+    });
+  }
+}
 
-        Promise.all(requests)
-            .then((res) => {
-                const { shelters } = getState();
-                dispatch({
-                    type: RECEIVE_PETS,
-                    payload: {
-                        pets: reduce(res, (pets, currentRes) => {
-                            return pets.concat(currentRes.data);
-                        }, []),
-                        shelters
-                    }
-                });
-            });
-    }
+export function fetchMorePets(currentPage) {
+  return async (dispatch, getState) => {
+    dispatch({
+      type: FETCH_PETS
+    });
+
+    const response = await get('/api/pets')
+      .query({
+        shelterIds: getState().shelters.activeShelterIds,
+        page: currentPage + 1
+      }).catch((error) => {
+        console.log('Error in fetchPets: ' + error);
+      });
+      const { shelters } = getState();
+
+    dispatch({
+      type: RECEIVE_MORE_PETS,
+      payload: {
+        pets: response.body.pets,
+        pagination: response.body.pagination,
+        shelters
+      }
+    });
+  }
 }
 
 export function setActivePetFilters(value, field) {
-    return (dispatch) => {
-        dispatch({
-            type: SET_ACTIVE_PET_FILTERS,
-            payload: {
-                value,
-                field
-            }
-        });
+  return {
+    type: SET_ACTIVE_PET_FILTERS,
+    payload: {
+      value,
+      field
     }
+  };
 };

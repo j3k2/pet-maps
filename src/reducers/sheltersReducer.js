@@ -1,4 +1,4 @@
-import { uniq, reject, find, filter, sortBy, difference } from 'lodash';
+import { uniq, sortBy } from 'lodash';
 import {
     FETCH_SHELTERS,
     ADD_SHELTER_TO_ACTIVE,
@@ -10,8 +10,7 @@ import {
 
 export default (state = {
     loading: false,
-    items: [],
-    fetched: false,
+    items: null,
     activeShelterIds: []
 }, action) => {
     switch (action.type) {
@@ -27,8 +26,8 @@ export default (state = {
             };
         }
         case REMOVE_SHELTER_FROM_ACTIVE: {
-            const activeShelterIds = reject(state.activeShelterIds, (shelterId) => {
-                return shelterId === action.payload;
+            const activeShelterIds = state.activeShelterIds.filter((shelterId) => {
+                return shelterId !== action.payload;
             });
             return {
                 ...state,
@@ -40,7 +39,7 @@ export default (state = {
                 return {
                     ...state,
                     activeShelterIds: state.items.map((shelter) => {
-                        return shelter.id.$t;
+                        return shelter.id;
                     })
                 };
             } else {
@@ -57,7 +56,7 @@ export default (state = {
             let activeShelterIds = state.activeShelterIds;
 
             shelterIds.forEach(shelterId => {
-                const activeShelter = find(activeShelterIds, activeShelter => {
+                const activeShelter = activeShelterIds.find(activeShelter => {
                     return activeShelter === shelterId;
                 });
                 if (activeShelter) {
@@ -68,8 +67,8 @@ export default (state = {
             })
 
             if (shelterIdsInactive.length) {
-                activeShelterIds = reject(activeShelterIds, activeShelter => {
-                    return shelterIdsInactive.indexOf(activeShelter) > -1;
+                activeShelterIds = activeShelterIds.filter(activeShelter => {
+                    return shelterIdsInactive.indexOf(activeShelter) === -1;
                 });
             }
 
@@ -79,28 +78,12 @@ export default (state = {
             }
         }
         case RECEIVE_SHELTERS: {
-            const shelters = filter(action.payload || state.items, (shelter, idx) => {
-                shelter.geocodeLat = action.meta.locations[idx].lat;
-                shelter.geocodeLng = action.meta.locations[idx].lng;
-                shelter.markerId = 'lat' + shelter.geocodeLat + 'lng' + shelter.geocodeLng;
-                return shelter.geocodeLat > action.meta.bounds.sw.lat &&
-                    shelter.geocodeLat < action.meta.bounds.ne.lat &&
-                    shelter.geocodeLng > action.meta.bounds.sw.lng &&
-                    shelter.geocodeLng < action.meta.bounds.ne.lng;
-            });
-            const incomingShelterIds = shelters.map((shelter) => {
-                return shelter.id.$t;
-            });
-            const existingShelterIds = state.items.map((shelter) => {
-                return shelter.id.$t;
-            });
             return {
                 ...state,
-                items: sortBy(shelters, ['markerId']).reverse(),
-                fetched: true,
-                activeShelterIds: difference(incomingShelterIds, existingShelterIds).length ? shelters.map((shelter) => {
-                    return shelter.id.$t;
-                }) : state.activeShelterIds,
+                items: sortBy(action.payload, ['markerId']).reverse(),
+                activeShelterIds: action.payload.map((shelter) => {
+                    return shelter.id;
+                }),
                 loading: false
             }
         }

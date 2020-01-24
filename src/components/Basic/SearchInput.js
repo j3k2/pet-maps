@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { Input } from 'semantic-ui-react';
-import { connect } from 'react-redux';
-import { setCenterAndUpdateMap } from '../../actions/mapActions';
 
 class SearchInput extends Component {
     state = {
@@ -9,7 +7,7 @@ class SearchInput extends Component {
     }
 
     handleButton = () => {
-        this.props.setCenterAndUpdateMap(this.state.inputValue)
+        this.props.onSearch(this.state.inputValue)
     }
 
     handleChange = (e) => {
@@ -26,8 +24,9 @@ class SearchInput extends Component {
 
     render() {
         return (
-            <Input type="text" style={{ margin: 'auto', width: 300 }}
-                placeholder="Enter postal code or city name"
+            <Input type="text" 
+                style={{ width: this.props.width }}
+                placeholder={this.props.placeholder}
                 onKeyDown={this.handleKeyDown}
                 onChange={this.handleChange}
                 value={this.state.inputValue} />
@@ -35,6 +34,4 @@ class SearchInput extends Component {
     }
 }
 
-export default connect(state => {
-    return { center: state.map.center }
-}, { setCenterAndUpdateMap })(SearchInput);
+export default SearchInput;
