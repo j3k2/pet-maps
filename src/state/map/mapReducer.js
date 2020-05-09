@@ -46,6 +46,7 @@ export default (state = {
         }
       });
       return {
+        ...state,
         markers: Object.values(markers)
       }
     }
