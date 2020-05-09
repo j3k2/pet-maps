@@ -3,11 +3,11 @@ import MapComponent from './MapComponent';
 import { connect } from 'react-redux';
 import {
   setUpdateOption
-} from '../../../actions/mapActions';
+} from '../../state/map/mapActions';
 import {
   toggleSheltersActive,
   updateShelters
-} from '../../../actions/shelterActions';
+} from '../../state/shelters/shelterActions';
 import { Checkbox } from 'semantic-ui-react';
 
 function MapContainer(props) {
@@ -51,7 +51,7 @@ function MapContainer(props) {
 
 export default connect(state => {
   return {
-    markers: state.markers.items,
+    markers: state.map.markers,
     update: state.map.update,
     center: state.map.center,
   }

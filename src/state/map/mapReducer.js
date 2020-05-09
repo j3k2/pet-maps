@@ -1,21 +1,32 @@
-import {
-  SET_MARKER_HIGHLIGHT
-} from '../actions/mapActions';
+import { SET_CENTER, SET_UPDATE_OPTION, SET_MARKER_HIGHLIGHT } from './mapActions';
 
 import {
   SET_MARKERS,
   RESET_SHELTERS
-} from '../actions/shelterActions';
+} from '../shelters/shelterActions';
 
 export default (state = {
-  items: {},
+  loading: {},
+  center: null,
+  update: true,
+  markers: {},
   highlightedMarker: null
 }, action) => {
   switch (action.type) {
+    case SET_CENTER:
+      return {
+        ...state,
+        center: action.payload
+      };
+    case SET_UPDATE_OPTION:
+      return {
+        ...state,
+        update: action.payload
+      };
     case RESET_SHELTERS: {
       return {
         ...state,
-        items: []
+        markers: []
       }
     }
     case SET_MARKERS: {
@@ -35,7 +46,7 @@ export default (state = {
         }
       });
       return {
-        items: Object.values(markers)
+        markers: Object.values(markers)
       }
     }
     case SET_MARKER_HIGHLIGHT: {

@@ -5,10 +5,10 @@ import {
   FETCH_PETS,
   RECEIVE_MORE_PETS,
   SET_ACTIVE_PET_FILTERS,
-} from '../actions/petActions';
+} from './petsActions';
 import {
   RESET_SHELTERS
-} from '../actions/shelterActions';
+} from '../shelters/shelterActions';
 
 export default (state = {
   loading: false,

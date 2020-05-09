@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
-import reducers from './reducers/reducers';
+import reducers from './reducers';
 import WebFont from 'webfontloader';
 import './assets/main.css';
 import 'semantic-ui-css/semantic.min.css';

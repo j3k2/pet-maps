@@ -1,7 +1,7 @@
 import React from 'react';
 import { debounce } from 'lodash';
 import { connect } from 'react-redux';
-import { setActivePetFilters, fetchMorePets } from '../../actions/petActions';
+import { setActivePetFilters, fetchMorePets } from '../../state/pets/petsActions';
 import { Loader, Segment } from 'semantic-ui-react'
 import PetCardsGroup from './PetCardsGroup';
 // import PetFiltersMenu from './PetFiltersMenu';

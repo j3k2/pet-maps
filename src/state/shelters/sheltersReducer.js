@@ -6,7 +6,7 @@ import {
     RESET_ACTIVE_SHELTERS,
     TOGGLE_SHELTERS_ACTIVE,
     RECEIVE_SHELTERS
-} from '../actions/shelterActions';
+} from '../shelters/shelterActions';
 
 export default (state = {
     loading: false,

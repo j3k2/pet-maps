@@ -1,11 +1,11 @@
 import React from 'react';
-import MapContainer from './Map/MapContainer';
+import MapContainer from '../Map/MapContainer';
 import { Segment, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import SheltersList from './SheltersList';
-import { fetchPets } from '../../actions/petActions';
-import { setActiveShelter, resetActiveShelters } from '../../actions/shelterActions';
-import { setMarkerHighlight } from '../../actions/mapActions';
+import { fetchPets } from '../../state/pets/petsActions';
+import { setActiveShelter, resetActiveShelters } from '../../state/shelters/shelterActions';
+import { setMarkerHighlight } from '../../state/map/mapActions';
 
 function SheltersContainer(props) {
   return (
@@ -63,7 +63,7 @@ export default connect(state => {
     activeShelterIds: state.shelters.activeShelterIds,
     shelters: state.shelters.items,
     loading: state.shelters.loading,
-    highlightedMarker: state.markers.highlightedMarker
+    highlightedMarker: state.map.highlightedMarker
   }
 }, {
   fetchPets,

@@ -1,6 +1,6 @@
 import { get } from 'superagent';
 import { memoize } from 'lodash';
-import { constants } from '../config';
+import { constants } from '../../config';
 
 export const FETCH_SHELTERS = 'FETCH_SHELTERS';
 export const RECEIVE_SHELTERS = 'RECEIVE_SHELTERS';
