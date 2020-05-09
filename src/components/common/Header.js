@@ -1,8 +1,7 @@
 import React from 'react';
-import LocationSearch from './LocationSearch';
 import { Icon } from 'semantic-ui-react';
 
-function Header() {
+function Header(props) {
     return (
         <div style={{
             position: 'fixed',
@@ -19,7 +18,7 @@ function Header() {
                     <Icon name="paw" />
                     <span style={{ fontFamily: 'Luckiest Guy', marginLeft: 5, marginRight: 30 }}>PET MAPS</span>
                 </div>
-                <LocationSearch />
+                {props.children}
             </div>
         </div>
     )

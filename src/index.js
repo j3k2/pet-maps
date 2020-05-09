@@ -9,7 +9,8 @@ import WebFont from 'webfontloader';
 import './assets/main.css';
 import 'semantic-ui-css/semantic.min.css';
 
-import Header from './components/Header/Header';
+import Header from './components/common/Header';
+import LocationSearch from './components/LocationSearch/LocationSearch';
 import SheltersFinder from './components/Shelters/SheltersContainer';
 import PetsContainer from './components/Pets/PetsContainer';
 
@@ -26,7 +27,9 @@ class App extends React.Component {
     return (
       <Provider store={createStoreWithMiddleware(reducers)}>
         <div>
-          <Header />
+          <Header>
+            <LocationSearch />
+          </Header>
           <div style={{
             display: 'inline-block',
             marginTop: 70,

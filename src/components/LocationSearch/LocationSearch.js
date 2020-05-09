@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { setCenterAndUpdateOption } from '../../state/map/mapActions';
-import SearchInput from '../Basic/SearchInput';
+import SearchInput from '../common/SearchInput';
 
 function LocationSearch(props) {
     return (
