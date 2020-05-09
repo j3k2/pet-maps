@@ -23,16 +23,14 @@ function SheltersContainer(props) {
         <div style={{
           display: 'inline-block',
         }}>
-          <MapContainer
-            highlightedMarker={props.highlightedMarker}
-            setMarkerHighlight={props.setMarkerHighlight}
-          />
+          <MapContainer/>
         </div>
         <div style={{
           display: 'inline-block',
         }}>
           <SheltersList
             highlightedMarker={props.highlightedMarker}
+            scrolledMarker={props.scrolledMarker}
             setMarkerHighlight={props.setMarkerHighlight}
             setActiveShelter={props.setActiveShelter}
             activeShelterIds={props.activeShelterIds}
@@ -63,7 +61,8 @@ export default connect(state => {
     activeShelterIds: state.shelters.activeShelterIds,
     shelters: state.shelters.items,
     loading: state.shelters.loading,
-    highlightedMarker: state.map.highlightedMarker
+    highlightedMarker: state.map.highlightedMarker,
+    scrolledMarker: state.map.scrolledMarker
   }
 }, {
   fetchPets,
