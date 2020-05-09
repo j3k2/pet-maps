@@ -3,7 +3,6 @@ import { get } from 'superagent';
 export const SET_CENTER = 'SET_CENTER';
 export const SET_UPDATE_OPTION = 'SET_UPDATE_OPTION';
 export const SET_MARKER_HIGHLIGHT = 'SET_MARKER_HIGHLIGHT';
-export const SET_MARKER_SCROLL = 'SET_MARKER_SCROLL';
 
 export function setCenterAndUpdateOption(query) {
   return async (dispatch) => {
@@ -32,13 +31,6 @@ export function setUpdateOption(val) {
 export function setMarkerHighlight(markerId) {
   return {
     type: SET_MARKER_HIGHLIGHT,
-    payload: markerId
-  };
-}
-
-export function setMarkerScroll(markerId) {
-  return {
-    type: SET_MARKER_SCROLL,
     payload: markerId
   };
 }

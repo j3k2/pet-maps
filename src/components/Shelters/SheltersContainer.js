@@ -8,68 +8,66 @@ import { setActiveShelter, resetActiveShelters } from '../../actions/shelterActi
 import { setMarkerHighlight } from '../../actions/mapActions';
 
 function SheltersContainer(props) {
-    return (
+  return (
+    <div style={{
+      padding: 20,
+    }}>
+      <Segment style={{
+        background: '#198f35',
+        color: 'white',
+        padding: 20,
+        width: '100%',
+        minWidth: 441,
+        textAlign: 'center'
+      }}>
         <div style={{
-            padding: 20,
+          display: 'inline-block',
         }}>
-            <Segment style={{
-                background: '#198f35',
-                color: 'white',
-                padding: 20,
-                width: '100%',
-                minWidth: 441,
-                textAlign: 'center'
-            }}>
-                <div style={{
-                    display: 'inline-block',
-                }}>
-                    <MapContainer
-                        highlightedMarker={props.highlightedMarker}
-                        setMarkerHighlight={props.setMarkerHighlight}
-                    />
-                </div>
-                <div style={{
-                    display: 'inline-block',
-                }}>
-                    <SheltersList
-                        highlightedMarker={props.highlightedMarker}
-                        setMarkerHighlight={props.setMarkerHighlight}
-                        setActiveShelter={props.setActiveShelter}
-                        activeShelterIds={props.activeShelterIds}
-                        scrolledMarker={props.scrolledMarker}
-                        shelters={props.shelters}
-                        loading={props.loading}
-                        resetActiveShelters={props.resetActiveShelters}
-                    />
-                </div>
-                <br />
-                <Button
-                    style={{
-                        position: 'relative'
-                    }}
-                    onClick={() => {
-                        props.fetchPets(props.activeShelterIds);
-
-                    }}>
-                    Find Pets
-                </Button>
-            </Segment>
+          <MapContainer
+            highlightedMarker={props.highlightedMarker}
+            setMarkerHighlight={props.setMarkerHighlight}
+          />
         </div>
-    )
+        <div style={{
+          display: 'inline-block',
+        }}>
+          <SheltersList
+            highlightedMarker={props.highlightedMarker}
+            setMarkerHighlight={props.setMarkerHighlight}
+            setActiveShelter={props.setActiveShelter}
+            activeShelterIds={props.activeShelterIds}
+            shelters={props.shelters}
+            loading={props.loading}
+            resetActiveShelters={props.resetActiveShelters}
+          />
+        </div>
+        <br />
+        <Button
+          style={{
+            position: 'relative'
+          }}
+          onClick={() => {
+            props.fetchPets(props.activeShelterIds);
+
+          }}>
+          Find Pets
+                </Button>
+      </Segment>
+    </div>
+  )
 
 }
 
 export default connect(state => {
-    return {
-        activeShelterIds: state.shelters.activeShelterIds,
-        shelters: state.shelters.items,
-        loading: state.shelters.loading,
-        highlightedMarker: state.markers.highlightedMarker,
-        scrolledMarker: state.markers.scrolledMarker
-    }
+  return {
+    activeShelterIds: state.shelters.activeShelterIds,
+    shelters: state.shelters.items,
+    loading: state.shelters.loading,
+    highlightedMarker: state.markers.highlightedMarker
+  }
 }, {
-    fetchPets,
-    setActiveShelter,
-    resetActiveShelters,
-    setMarkerHighlight
+  fetchPets,
+  setActiveShelter,
+  resetActiveShelters,
+  setMarkerHighlight
 })(SheltersContainer);

@@ -49,8 +49,8 @@ class SheltersList extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.scrolledMarker && this.listRefs[this.props.scrolledMarker]) {
-      const refs = this.listRefs[this.props.scrolledMarker];
+    if (this.props.highlightedMarker && this.listRefs[this.props.highlightedMarker]) {
+      const refs = this.listRefs[this.props.highlightedMarker];
       const offsets = refs.map(ref => {
         return ref.offsetTop;
       });

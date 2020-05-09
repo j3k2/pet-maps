@@ -2,8 +2,7 @@ import React from 'react';
 import MapComponent from './MapComponent';
 import { connect } from 'react-redux';
 import {
-  setUpdateOption,
-  setMarkerScroll
+  setUpdateOption
 } from '../../../actions/mapActions';
 import {
   toggleSheltersActive,
@@ -40,11 +39,9 @@ function MapContainer(props) {
         //   props.highlightButton();
         }}
         onMarkerMouseOver={(marker) => {
-          props.setMarkerScroll(marker.markerId);
           props.setMarkerHighlight(marker.markerId)
         }}
         onMarkerMouseOut={() => {
-          props.setMarkerScroll(null);
           props.setMarkerHighlight(null);
         }}
       />}
@@ -60,7 +57,6 @@ export default connect(state => {
   }
 }, {
   updateShelters,
-  setMarkerScroll,
   toggleSheltersActive,
   setUpdateOption
 })(MapContainer);
