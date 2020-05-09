@@ -1,3 +1,3 @@
 export const constants = {
-  mapWidth: 400
+  MAP_SIZE: 400
 };

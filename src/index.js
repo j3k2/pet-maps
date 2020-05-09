@@ -11,7 +11,7 @@ import 'semantic-ui-css/semantic.min.css';
 
 import Header from './common/components/Header';
 import LocationSearch from './features/map/components/LocationSearch';
-import SheltersFinder from './features/shelters/components/SheltersContainer';
+import SheltersContainer from './features/shelters/components/SheltersContainer';
 import PetsContainer from './features/pets/components/PetsContainer';
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
@@ -35,7 +35,7 @@ class App extends React.Component {
             marginTop: 70,
             width: '100%'
           }}>
-            <SheltersFinder />
+            <SheltersContainer />
             <PetsContainer />
           </div>
         </div >

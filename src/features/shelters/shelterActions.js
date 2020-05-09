@@ -78,7 +78,7 @@ const fetchShelters = memoize(async (lat, lng, zoom, dispatch) => {
     type: FETCH_SHELTERS
   });
 
-  const mapWidth = constants.mapWidth;
+  const mapWidth = constants.MAP_SIZE;
   const mapRadiusInPixels = Math.sqrt(Math.pow(mapWidth / 2, 2) + Math.pow(mapWidth / 2, 2));
   const mapRadiusInMiles = (97.27130 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoom)) * mapRadiusInPixels;
 // https://groups.google.com/forum/#!topic/google-maps-js-api-v3/hDRO4oHVSeM
