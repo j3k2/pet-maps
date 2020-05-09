@@ -9,10 +9,10 @@ import WebFont from 'webfontloader';
 import './assets/main.css';
 import 'semantic-ui-css/semantic.min.css';
 
-import Header from './components/common/Header';
-import LocationSearch from './components/LocationSearch/LocationSearch';
-import SheltersFinder from './components/Shelters/SheltersContainer';
-import PetsContainer from './components/Pets/PetsContainer';
+import Header from './common/components/Header';
+import LocationSearch from './features/map/components/LocationSearch';
+import SheltersFinder from './features/shelters/components/SheltersContainer';
+import PetsContainer from './features/pets/components/PetsContainer';
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 

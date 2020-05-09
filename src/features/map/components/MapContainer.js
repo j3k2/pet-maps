@@ -3,11 +3,11 @@ import MapComponent from './MapComponent';
 import { connect } from 'react-redux';
 import {
   setUpdateOption
-} from '../../state/map/mapActions';
+} from '../mapActions';
 import {
   toggleSheltersActive,
   updateShelters
-} from '../../state/shelters/shelterActions';
+} from '../../shelters/shelterActions';
 import { Checkbox } from 'semantic-ui-react';
 
 function MapContainer(props) {
