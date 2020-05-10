@@ -21,7 +21,7 @@ class SheltersList extends Component {
               textAlign: 'left',
               whiteSpace: 'pre-wrap',
               borderRadius: 0,
-              borderLeft: this.props.scrolledMarker === shelter.markerId ? 'solid 4px #198f35' : 'none'
+              borderLeft: this.props.highlightedMarker === shelter.markerId ? 'solid 4px #198f35' : 'none'
             }}
             onMouseEnter={() => {
               this.props.setMarkerHighlight(shelter.markerId);
