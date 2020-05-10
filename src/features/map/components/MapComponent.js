@@ -18,6 +18,7 @@ class MapComponent extends React.Component {
           zoom={13}
           center={this.props.center}
           options={{
+            minZoom: 12,
             zoomControl: false,
             mapTypeControl: false,
             scaleControl: false,
