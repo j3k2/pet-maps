@@ -11,6 +11,7 @@ export const TOGGLE_SHELTERS_ACTIVE = 'TOGGLE_SHELTERS_ACTIVE';
 export const RESET_ACTIVE_SHELTERS = 'RESET_ACTIVE_SHELTERS';
 export const RESET_SHELTERS = 'RESET_SHELTERS';
 export const UPDATE_SHELTERS = 'UPDATE_SHELTERS';
+export const SET_MARKER_SCROLL = 'SET_MARKER_SCROLL';
 
 
 export function setActiveShelter(shelterId, checked) {
@@ -100,3 +101,10 @@ const fetchShelters = memoize(async (lat, lng, zoom, dispatch) => {
     return shelter;
   });
 });
+
+export function setMarkerScroll(markerId) {
+  return {
+    type: SET_MARKER_SCROLL,
+    payload: markerId
+  };
+}

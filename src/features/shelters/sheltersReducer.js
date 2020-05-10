@@ -5,13 +5,15 @@ import {
     REMOVE_SHELTER_FROM_ACTIVE,
     RESET_ACTIVE_SHELTERS,
     TOGGLE_SHELTERS_ACTIVE,
-    RECEIVE_SHELTERS
+    RECEIVE_SHELTERS,
+    SET_MARKER_SCROLL
 } from './shelterActions';
 
 export default (state = {
     loading: false,
     items: null,
-    activeShelterIds: []
+    activeShelterIds: [],
+    scrolledMarker: null
 }, action) => {
     switch (action.type) {
         case FETCH_SHELTERS:
@@ -86,6 +88,12 @@ export default (state = {
                 }),
                 loading: false
             }
+        }
+        case SET_MARKER_SCROLL: {
+          return {
+            ...state,
+            scrolledMarker: action.payload
+          };
         }
         default:
             return state;

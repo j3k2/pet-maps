@@ -1,4 +1,4 @@
-import { SET_CENTER, SET_UPDATE_OPTION, SET_MARKER_HIGHLIGHT, SET_MARKER_SCROLL } from './mapActions';
+import { SET_CENTER, SET_UPDATE_OPTION, SET_MARKER_HIGHLIGHT } from './mapActions';
 
 import {
   SET_MARKERS,
@@ -10,8 +10,7 @@ export default (state = {
   center: null,
   update: true,
   markers: {},
-  highlightedMarker: null,
-  scrolledMarker: null
+  highlightedMarker: null
 }, action) => {
   switch (action.type) {
     case SET_CENTER:
@@ -55,12 +54,6 @@ export default (state = {
       return {
         ...state,
         highlightedMarker: action.payload
-      };
-    }
-    case SET_MARKER_SCROLL: {
-      return {
-        ...state,
-        scrolledMarker: action.payload
       };
     }
     default:

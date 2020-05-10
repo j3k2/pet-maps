@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import {
   setUpdateOption,
   setMarkerHighlight,
-  setMarkerScroll
 } from '../mapActions';
 import {
   toggleSheltersActive,
-  updateShelters
+  updateShelters,
+  setMarkerScroll
 } from '../../shelters/shelterActions';
 import { Checkbox } from 'semantic-ui-react';
 
