@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { setCenterAndUpdateOption } from '../mapActions';
+import { locationSearched } from '../mapActions';
 import SearchInput from '../../../common/components/SearchInput';
 
 function LocationSearch(props) {
     return (
         <SearchInput
-            onSearch={props.setCenterAndUpdateOption}
+            onSearch={props.locationSearched}
             placeholder='Enter postal code or city name'
             width={300}
         />
@@ -14,4 +14,4 @@ function LocationSearch(props) {
 }
 
 
-export default connect(null, { setCenterAndUpdateOption })(LocationSearch);
+export default connect(null, { locationSearched })(LocationSearch);

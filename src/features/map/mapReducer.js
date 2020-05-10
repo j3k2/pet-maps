@@ -1,8 +1,9 @@
-import { SET_CENTER, SET_UPDATE_OPTION, SET_MARKER_HIGHLIGHT } from './mapActions';
+import { LOCATION_SEARCHED, MARKER_HOVERED, UPDATE_TOGGLED } from './mapActions';
 
 import {
-  SET_MARKERS,
-  RESET_SHELTERS
+  MARKERS_RECEIVED,
+  SHELTERS_RECEIVED,
+  SHELTER_LIST_ITEM_HOVERED
 } from '../shelters/shelterActions';
 
 export default (state = {
@@ -13,23 +14,24 @@ export default (state = {
   highlightedMarker: null
 }, action) => {
   switch (action.type) {
-    case SET_CENTER:
+    case LOCATION_SEARCHED:
       return {
         ...state,
-        center: action.payload
+        center: action.payload.center,
+        update: action.payload.update
       };
-    case SET_UPDATE_OPTION:
+    case UPDATE_TOGGLED:
       return {
         ...state,
         update: action.payload
-      };
-    case RESET_SHELTERS: {
+      }
+    case SHELTERS_RECEIVED: {
       return {
         ...state,
         markers: []
       }
     }
-    case SET_MARKERS: {
+    case MARKERS_RECEIVED: {
       const shelters = action.payload;
       const markers = {};
       shelters.forEach((shelter) => {
@@ -50,7 +52,13 @@ export default (state = {
         markers: Object.values(markers)
       }
     }
-    case SET_MARKER_HIGHLIGHT: {
+    case MARKER_HOVERED: {
+      return {
+        ...state,
+        highlightedMarker: action.payload
+      };
+    }
+    case SHELTER_LIST_ITEM_HOVERED: {
       return {
         ...state,
         highlightedMarker: action.payload

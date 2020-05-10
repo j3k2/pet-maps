@@ -1,37 +1,35 @@
 import { get } from 'superagent';
 
-export const SET_CENTER = 'SET_CENTER';
-export const SET_UPDATE_OPTION = 'SET_UPDATE_OPTION';
-export const SET_MARKER_HIGHLIGHT = 'SET_MARKER_HIGHLIGHT';
+export const LOCATION_SEARCHED = 'LOCATION_SEARCHED';
+export const MARKER_HOVERED = 'MARKER_HOVERED';
+export const UPDATE_TOGGLED = 'UPDATE_TOGGLED';
 
-export function setCenterAndUpdateOption(query) {
+export function locationSearched(query) {
   return async (dispatch) => {
     const response = await get('/api/location')
       .query({ query }).catch((error) => {
-        console.log('Error in setCenterAndUpdateOption: ' + error);
+        console.log('Error in locationSearched: ' + error);
       });
-    dispatch(setCenter(response.body));
-    dispatch(setUpdateOption(true));
+    dispatch({
+      type: LOCATION_SEARCHED,
+      payload: {
+        center: response.body,
+        update: true
+      }
+    })
   }
 }
 
-export function setCenter(center) {
+export function updateToggled(val) {
   return {
-    type: SET_CENTER,
-    payload: center
-  };
-}
-
-export function setUpdateOption(val) {
-  return {
-    type: SET_UPDATE_OPTION,
+    type: UPDATE_TOGGLED,
     payload: val
   };
 }
 
-export function setMarkerHighlight(markerId) {
+export function markerHovered(markerId) {
   return {
-    type: SET_MARKER_HIGHLIGHT,
+    type: MARKER_HOVERED,
     payload: markerId
   };
 }

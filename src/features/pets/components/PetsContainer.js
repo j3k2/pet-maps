@@ -1,23 +1,26 @@
 import React from 'react';
 import { debounce } from 'lodash';
 import { connect } from 'react-redux';
-import { setActivePetFilters, fetchMorePets } from '../petsActions';
+import {
+  // setActivePetFilters,
+  morePetsRequested
+} from '../petsActions';
 import { Loader, Segment } from 'semantic-ui-react'
 import PetCardsGroup from './PetCardsGroup';
 // import PetFiltersMenu from './PetFiltersMenu';
 
 class PetsContainer extends React.Component {
   componentDidMount() {
-    window.addEventListener('scroll', debounce(()=>{
-      if(this.props.pets && 
-        !this.props.loading && 
+    window.addEventListener('scroll', debounce(() => {
+      if (this.props.pets &&
+        !this.props.loading &&
         this.props.currentPage < this.props.totalPages &&
         document.documentElement.scrollTop + document.body.clientHeight === document.getElementById('root').clientHeight) {
-          this.props.fetchMorePets(this.props.currentPage);
+        this.props.morePetsRequested(this.props.currentPage);
       }
     }, 500));
   }
-  
+
   render() {
     return (
       <div>
@@ -46,5 +49,7 @@ export default connect(state => {
     petFilters: state.pets.petFilters,
     activePetFilters: state.pets.activePetFilters
   }
-}, { setActivePetFilters,
-    fetchMorePets })(PetsContainer);
+}, {
+  // setActivePetFilters,
+  morePetsRequested
+})(PetsContainer);

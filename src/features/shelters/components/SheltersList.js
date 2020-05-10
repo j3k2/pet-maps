@@ -24,13 +24,13 @@ class SheltersList extends Component {
               borderLeft: this.props.highlightedMarker === shelter.markerId ? 'solid 4px #198f35' : 'none'
             }}
             onMouseEnter={() => {
-              this.props.setMarkerHighlight(shelter.markerId);
+              this.props.shelterListItemHovered(shelter.markerId);
             }}
             onMouseLeave={() => {
-              this.props.setMarkerHighlight(null);
+              this.props.shelterListItemHovered(null);
             }}
             onClick={() => {
-              this.props.setActiveShelter(shelter.id, this.props.activeShelterIds.indexOf(shelter.id) > -1);
+              this.props.shelterSelectionToggled(shelter.id, this.props.activeShelterIds.indexOf(shelter.id) > -1);
             }}
           >
             <List.Content>
@@ -88,7 +88,7 @@ class SheltersList extends Component {
             {`${this.props.shelters.length} results`}
           </span>
           <span onClick={() => {
-            this.props.resetActiveShelters(this.props.shelters.length > this.props.activeShelterIds.length);
+            this.props.allSheltersToggled(this.props.shelters.length > this.props.activeShelterIds.length);
             // this.props.highlightButton();
           }}
             style={{

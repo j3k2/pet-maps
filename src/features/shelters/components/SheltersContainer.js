@@ -3,9 +3,8 @@ import MapContainer from '../../map/components/MapContainer';
 import { Segment, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import SheltersList from './SheltersList';
-import { fetchPets } from '../../pets/petsActions';
-import { setActiveShelter, resetActiveShelters } from '../shelterActions';
-import { setMarkerHighlight } from '../../map/mapActions';
+import { petsRequested } from '../../pets/petsActions';
+import { shelterSelectionToggled, allSheltersToggled, shelterListItemHovered } from '../shelterActions';
 
 function SheltersContainer(props) {
   return (
@@ -31,12 +30,12 @@ function SheltersContainer(props) {
           <SheltersList
             highlightedMarker={props.highlightedMarker}
             scrolledMarker={props.scrolledMarker}
-            setMarkerHighlight={props.setMarkerHighlight}
-            setActiveShelter={props.setActiveShelter}
+            shelterListItemHovered={props.shelterListItemHovered}
+            shelterSelectionToggled={props.shelterSelectionToggled}
             activeShelterIds={props.activeShelterIds}
             shelters={props.shelters}
             loading={props.loading}
-            resetActiveShelters={props.resetActiveShelters}
+            allSheltersToggled={props.allSheltersToggled}
           />
         </div>
         <br />
@@ -45,8 +44,7 @@ function SheltersContainer(props) {
             position: 'relative'
           }}
           onClick={() => {
-            props.fetchPets(props.activeShelterIds);
-
+            props.petsRequested(props.activeShelterIds);
           }}>
           Find Pets
                 </Button>
@@ -65,8 +63,8 @@ export default connect(state => {
     highlightedMarker: state.map.highlightedMarker
   }
 }, {
-  fetchPets,
-  setActiveShelter,
-  resetActiveShelters,
-  setMarkerHighlight
+  petsRequested,
+  shelterSelectionToggled,
+  allSheltersToggled,
+  shelterListItemHovered
 })(SheltersContainer);

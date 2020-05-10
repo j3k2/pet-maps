@@ -1,13 +1,13 @@
 // import { uniq, sortBy } from 'lodash';
 
 import {
-  RECEIVE_PETS,
-  FETCH_PETS,
-  RECEIVE_MORE_PETS,
-  SET_ACTIVE_PET_FILTERS,
+  PETS_RECEIVED,
+  PETS_REQUESTED,
+  MORE_PETS_RECEIVED,
+  // SET_ACTIVE_PET_FILTERS,
 } from './petsActions';
 import {
-  RESET_SHELTERS
+  SHELTERS_RECEIVED
 } from '../shelters/shelterActions';
 
 export default (state = {
@@ -16,7 +16,7 @@ export default (state = {
   pagination: {}
 }, action) => {
   switch (action.type) {
-    case RECEIVE_PETS: {
+    case PETS_RECEIVED: {
       let pets = action.payload.pets;
 
       // function generatePetFilters(pet, fields) {
@@ -57,12 +57,12 @@ export default (state = {
         loading: false
       };
     }
-    case FETCH_PETS: 
+    case PETS_REQUESTED: 
       return {
         ...state,
         loading: true
       };
-    case RECEIVE_MORE_PETS: {
+    case MORE_PETS_RECEIVED: {
       let pets = action.payload.pets;
       function setShelterName(pet, shelters) {
         const shelter = shelters.find((shelter) => {
@@ -88,15 +88,15 @@ export default (state = {
         loading: false
       };
     }
-    case SET_ACTIVE_PET_FILTERS:
-      const activePetFilters = Object.assign({}, state.activePetFilters, {
-        [action.payload.field]: action.payload.value
-      });
-      return {
-        ...state,
-        activePetFilters: activePetFilters
-      };
-    case RESET_SHELTERS:
+    // case SET_ACTIVE_PET_FILTERS:
+    //   const activePetFilters = Object.assign({}, state.activePetFilters, {
+    //     [action.payload.field]: action.payload.value
+    //   });
+    //   return {
+    //     ...state,
+    //     activePetFilters: activePetFilters
+    //   };
+    case SHELTERS_RECEIVED:
       return {
         items: null
       };

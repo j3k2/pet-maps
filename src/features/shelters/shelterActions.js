@@ -2,64 +2,50 @@ import { get } from 'superagent';
 import { memoize } from 'lodash';
 import { constants } from '../../config';
 
-export const FETCH_SHELTERS = 'FETCH_SHELTERS';
-export const RECEIVE_SHELTERS = 'RECEIVE_SHELTERS';
-export const SET_MARKERS = 'SET_MARKERS';
-export const REMOVE_SHELTER_FROM_ACTIVE = 'REMOVE_SHELTER_FROM_ACTIVE';
-export const ADD_SHELTER_TO_ACTIVE = 'ADD_SHELTER_TO_ACTIVE';
-export const TOGGLE_SHELTERS_ACTIVE = 'TOGGLE_SHELTERS_ACTIVE';
-export const RESET_ACTIVE_SHELTERS = 'RESET_ACTIVE_SHELTERS';
-export const RESET_SHELTERS = 'RESET_SHELTERS';
-export const UPDATE_SHELTERS = 'UPDATE_SHELTERS';
-export const SET_MARKER_SCROLL = 'SET_MARKER_SCROLL';
+export const SHELTERS_REQUESTED = 'SHELTERS_REQUESTED';
+export const SHELTERS_RECEIVED = 'SHELTERS_RECEIVED';
+export const MARKERS_RECEIVED = 'MARKERS_RECEIVED';
+export const SHELTER_SELECTION_TOGGLED = 'SHELTER_SELECTION_TOGGLED'
+export const MARKER_SHELTERS_TOGGLED = 'MARKER_SHELTERS_TOGGLED';
+export const ALL_SHELTERS_TOGGLED = 'ALL_SHELTERS_TOGGLED';
+export const SHELTER_LIST_ITEM_HOVERED = 'SHELTER_LIST_ITEM_HOVERED';
 
-
-export function setActiveShelter(shelterId, checked) {
-  return (dispatch) => {
-    if (checked) {
-      dispatch({
-        type: REMOVE_SHELTER_FROM_ACTIVE,
-        payload: shelterId
-      })
-    } else {
-      dispatch({
-        type: ADD_SHELTER_TO_ACTIVE,
-        payload: shelterId
-      })
+export function shelterSelectionToggled(shelterId, checked) {
+  return {
+    type: SHELTER_SELECTION_TOGGLED,
+    payload: {
+      shelterId,
+      checked
     }
   }
 }
 
-export function toggleSheltersActive(shelterIds) {
+export function markerSheltersToggled(shelterIds) {
   return {
-    type: TOGGLE_SHELTERS_ACTIVE,
+    type: MARKER_SHELTERS_TOGGLED,
     payload: shelterIds
   };
 }
 
-export function resetActiveShelters(selected) {
+export function allSheltersToggled(selected) {
   return {
-    type: RESET_ACTIVE_SHELTERS,
+    type: ALL_SHELTERS_TOGGLED,
     payload: selected
   };
 }
 
-export function updateShelters({ lat, lng, bounds, zoom }) {
+export function mapUpdated({ lat, lng, bounds, zoom }) {
   return async (dispatch) => {
-    dispatch({
-      type: RESET_SHELTERS
-    });
-    
-    const shelters = await fetchShelters(lat, lng, zoom, dispatch); //memoized
+    const shelters = await sheltersRequested(lat, lng, zoom, dispatch); //memoized
     const filteredShelters = filterShelters(shelters, bounds);
 
     dispatch({
-      type: RECEIVE_SHELTERS,
+      type: SHELTERS_RECEIVED,
       payload: filteredShelters
     });
 
     dispatch({
-      type: SET_MARKERS,
+      type: MARKERS_RECEIVED,
       payload: filteredShelters
     });
   }
@@ -74,24 +60,24 @@ const filterShelters = (shelters, bounds) => {
   });
 }
 
-const fetchShelters = memoize(async (lat, lng, zoom, dispatch) => {
+const sheltersRequested = memoize(async (lat, lng, zoom, dispatch) => {
   dispatch({
-    type: FETCH_SHELTERS
+    type: SHELTERS_REQUESTED
   });
 
   const mapWidth = constants.MAP_SIZE;
   const mapRadiusInPixels = Math.sqrt(Math.pow(mapWidth / 2, 2) + Math.pow(mapWidth / 2, 2));
   const mapRadiusInMiles = (97.27130 * Math.cos(lat * Math.PI / 180) / Math.pow(2, zoom)) * mapRadiusInPixels;
-// https://groups.google.com/forum/#!topic/google-maps-js-api-v3/hDRO4oHVSeM
-// https://medium.com/techtrument/how-many-miles-are-in-a-pixel-a0baf4611fff
+  // https://groups.google.com/forum/#!topic/google-maps-js-api-v3/hDRO4oHVSeM
+  // https://medium.com/techtrument/how-many-miles-are-in-a-pixel-a0baf4611fff
 
   const response = await get('/api/shelters')
     .query({
       lat,
-      lng, 
+      lng,
       distance: mapRadiusInMiles
     }).catch((error) => {
-      console.log('Error in fetchShelters: ' + error);
+      console.log('Error in sheltersRequested: ' + error);
     });
 
   return response.body.shelters.map((shelter, idx) => {
@@ -102,9 +88,9 @@ const fetchShelters = memoize(async (lat, lng, zoom, dispatch) => {
   });
 });
 
-export function setMarkerScroll(markerId) {
+export function shelterListItemHovered(markerId) {
   return {
-    type: SET_MARKER_SCROLL,
+    type: SHELTER_LIST_ITEM_HOVERED,
     payload: markerId
   };
 }
