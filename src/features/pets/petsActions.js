@@ -10,6 +10,16 @@ export function petsRequested(shelterIds) {
     dispatch({
       type: PETS_REQUESTED
     });
+
+    if(!shelterIds.length) {
+      dispatch({
+        type: PETS_RECEIVED,
+        payload: {
+          pets: []
+        }
+      });
+      return;
+    }
     
     const response = await get('/api/pets')
       .query({
