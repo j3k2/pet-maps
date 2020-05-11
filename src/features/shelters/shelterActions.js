@@ -36,7 +36,7 @@ export function allSheltersToggled(selected) {
 
 export function mapUpdated({ lat, lng, bounds, zoom }) {
   return async (dispatch) => {
-    const shelters = await sheltersRequested(lat, lng, zoom, dispatch); //memoized
+    const shelters = await fetchShelters(lat, lng, zoom, dispatch); //memoized
     const filteredShelters = filterShelters(shelters, bounds);
 
     dispatch({
@@ -60,7 +60,7 @@ const filterShelters = (shelters, bounds) => {
   });
 }
 
-const sheltersRequested = memoize(async (lat, lng, zoom, dispatch) => {
+const fetchShelters = memoize(async (lat, lng, zoom, dispatch) => {
   dispatch({
     type: SHELTERS_REQUESTED
   });
@@ -77,7 +77,7 @@ const sheltersRequested = memoize(async (lat, lng, zoom, dispatch) => {
       lng,
       distance: mapRadiusInMiles
     }).catch((error) => {
-      console.log('Error in sheltersRequested: ' + error);
+      console.log('Error in fetchShelters: ' + error);
     });
 
   return response.body.shelters.map((shelter, idx) => {
