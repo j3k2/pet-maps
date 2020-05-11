@@ -1,16 +1,17 @@
 import { get } from 'superagent';
 import { memoize } from 'lodash';
 import { constants } from '../../config';
+import {
+  SHELTERS_REQUESTED,
+  SHELTERS_RECEIVED,
+  MARKERS_RECEIVED,
+  SHELTER_SELECTION_TOGGLED,
+  MARKER_SHELTERS_TOGGLED,
+  ALL_SHELTERS_TOGGLED,
+  SHELTER_LIST_ITEM_HOVERED
+} from './sheltersConstants';
 
-export const SHELTERS_REQUESTED = 'SHELTERS_REQUESTED';
-export const SHELTERS_RECEIVED = 'SHELTERS_RECEIVED';
-export const MARKERS_RECEIVED = 'MARKERS_RECEIVED';
-export const SHELTER_SELECTION_TOGGLED = 'SHELTER_SELECTION_TOGGLED'
-export const MARKER_SHELTERS_TOGGLED = 'MARKER_SHELTERS_TOGGLED';
-export const ALL_SHELTERS_TOGGLED = 'ALL_SHELTERS_TOGGLED';
-export const SHELTER_LIST_ITEM_HOVERED = 'SHELTER_LIST_ITEM_HOVERED';
-
-export function shelterSelectionToggled(shelterId, checked) {
+function shelterSelectionToggled(shelterId, checked) {
   return {
     type: SHELTER_SELECTION_TOGGLED,
     payload: {
@@ -20,21 +21,28 @@ export function shelterSelectionToggled(shelterId, checked) {
   }
 }
 
-export function markerSheltersToggled(shelterIds) {
+function markerSheltersToggled(shelterIds) {
   return {
     type: MARKER_SHELTERS_TOGGLED,
     payload: shelterIds
   };
 }
 
-export function allSheltersToggled(selected) {
+function allSheltersToggled(selected) {
   return {
     type: ALL_SHELTERS_TOGGLED,
     payload: selected
   };
 }
 
-export function mapUpdated({ lat, lng, bounds, zoom }) {
+function shelterListItemHovered(markerId) {
+  return {
+    type: SHELTER_LIST_ITEM_HOVERED,
+    payload: markerId
+  };
+}
+
+function mapUpdated({ lat, lng, bounds, zoom }) {
   return async (dispatch) => {
     const shelters = await fetchShelters(lat, lng, zoom, dispatch); //memoized
     const filteredShelters = filterShelters(shelters, bounds);
@@ -88,9 +96,10 @@ const fetchShelters = memoize(async (lat, lng, zoom, dispatch) => {
   });
 });
 
-export function shelterListItemHovered(markerId) {
-  return {
-    type: SHELTER_LIST_ITEM_HOVERED,
-    payload: markerId
-  };
+export {
+  shelterSelectionToggled,
+  markerSheltersToggled,
+  allSheltersToggled,
+  mapUpdated,
+  shelterListItemHovered
 }

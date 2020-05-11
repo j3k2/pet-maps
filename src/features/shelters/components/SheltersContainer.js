@@ -4,7 +4,7 @@ import { Segment, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import SheltersList from './SheltersList';
 import { petsRequested } from '../../pets/petsActions';
-import { shelterSelectionToggled, allSheltersToggled, shelterListItemHovered } from '../shelterActions';
+import { shelterSelectionToggled, allSheltersToggled, shelterListItemHovered } from '../sheltersActions';
 
 function SheltersContainer(props) {
   return (
@@ -51,7 +51,6 @@ function SheltersContainer(props) {
       </Segment>
     </div>
   )
-
 }
 
 export default connect(state => {

@@ -8,7 +8,7 @@ import {
 import {
   markerSheltersToggled,
   mapUpdated
-} from '../../shelters/shelterActions';
+} from '../../shelters/sheltersActions';
 import { Checkbox } from 'semantic-ui-react';
 
 function MapContainer(props) {

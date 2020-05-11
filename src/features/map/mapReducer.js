@@ -1,9 +1,13 @@
-import { LOCATION_SEARCHED, MARKER_HOVERED, UPDATE_TOGGLED } from './mapActions';
+import {
+  LOCATION_SEARCHED,
+  MARKER_HOVERED,
+  UPDATE_TOGGLED
+} from './mapConstants';
 
 import {
   MARKERS_RECEIVED,
   SHELTER_LIST_ITEM_HOVERED
-} from '../shelters/shelterActions';
+} from '../shelters/sheltersConstants';
 
 export default (state = {
   center: null,

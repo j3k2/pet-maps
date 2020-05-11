@@ -1,11 +1,12 @@
 import { get } from 'superagent';
-export const PETS_REQUESTED = 'PETS_REQUESTED';
-export const PETS_RECEIVED = 'PETS_RECEIVED';
-// export const SET_ACTIVE_PET_FILTERS = 'SET_ACTIVE_PET_FILTERS';
-// export const MORE_PETS_REQUESTED = 'MORE_PETS_REQUESTED';
-export const MORE_PETS_RECEIVED = 'MORE_PETS_RECEIVED';
+import {
+  PETS_RECEIVED,
+  PETS_REQUESTED,
+  MORE_PETS_RECEIVED,
+  // SET_ACTIVE_PET_FILTERS,
+} from './petsConstants';
 
-export function petsRequested(shelterIds) {
+function petsRequested(shelterIds) {
   return async (dispatch, getState) => {
     dispatch({
       type: PETS_REQUESTED
@@ -41,7 +42,7 @@ export function petsRequested(shelterIds) {
   }
 }
 
-export function morePetsRequested(currentPage) {
+function morePetsRequested(currentPage) {
   return async (dispatch, getState) => {
     dispatch({
       type: PETS_REQUESTED
@@ -67,7 +68,7 @@ export function morePetsRequested(currentPage) {
   }
 }
 
-// export function setActivePetFilters(value, field) {
+// function setActivePetFilters(value, field) {
 //   return {
 //     type: SET_ACTIVE_PET_FILTERS,
 //     payload: {
@@ -76,3 +77,8 @@ export function morePetsRequested(currentPage) {
 //     }
 //   };
 // };
+
+export {
+  petsRequested,
+  morePetsRequested
+}

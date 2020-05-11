@@ -5,10 +5,10 @@ import {
   PETS_REQUESTED,
   MORE_PETS_RECEIVED,
   // SET_ACTIVE_PET_FILTERS,
-} from './petsActions';
+} from './petsConstants';
 import {
   SHELTERS_RECEIVED
-} from '../shelters/shelterActions';
+} from '../shelters/sheltersConstants';
 
 export default (state = {
   loading: false,
