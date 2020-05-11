@@ -3,7 +3,7 @@ import { debounce } from 'lodash';
 import { connect } from 'react-redux';
 import {
   // setActivePetFilters,
-  morePetsRequested
+  petsRequested
 } from '../petsActions';
 import { Loader, Segment } from 'semantic-ui-react'
 import PetCardsGroup from './PetCardsGroup';
@@ -16,7 +16,7 @@ class PetsContainer extends React.Component {
         !this.props.loading &&
         this.props.currentPage < this.props.totalPages &&
         document.documentElement.scrollTop + document.body.clientHeight === document.getElementById('root').clientHeight) {
-        this.props.morePetsRequested(this.props.currentPage);
+        this.props.petsRequested(this.props.currentPage);
       }
     }, 500));
   }
@@ -27,7 +27,7 @@ class PetsContainer extends React.Component {
         <div style={{ padding: 20 }}>
           {/* <PetFiltersMenu petFilters={this.props.petFilters} setActivePetFilters={this.props.setActivePetFilters} /> */}
           <PetCardsGroup pets={this.props.pets}
-            activePetFilters={this.props.activePetFilters}
+          // activePetFilters={this.props.activePetFilters}
           />
         </div>
         {this.props.loading && <Loader active inline='centered'>Loading Pets</Loader>}
@@ -41,15 +41,14 @@ class PetsContainer extends React.Component {
 
 export default connect(state => {
   return {
-    shelters: state.shelters.items,
     currentPage: state.pets.pagination ? state.pets.pagination.current_page : 0,
     totalPages: state.pets.pagination ? state.pets.pagination.total_pages : 0,
     pets: state.pets.items,
     loading: state.pets.loading,
-    petFilters: state.pets.petFilters,
-    activePetFilters: state.pets.activePetFilters
+    // petFilters: state.pets.petFilters,
+    // activePetFilters: state.pets.activePetFilters
   }
 }, {
   // setActivePetFilters,
-  morePetsRequested
+  petsRequested
 })(PetsContainer);

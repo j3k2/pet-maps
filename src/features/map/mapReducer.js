@@ -3,7 +3,6 @@ import {
   MARKER_HOVERED,
   UPDATE_TOGGLED
 } from './mapConstants';
-
 import {
   MARKERS_RECEIVED,
   SHELTER_LIST_ITEM_HOVERED

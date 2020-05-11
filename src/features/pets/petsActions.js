@@ -1,18 +1,19 @@
 import { get } from 'superagent';
 import {
-  PETS_RECEIVED,
   PETS_REQUESTED,
-  MORE_PETS_RECEIVED,
+  PETS_RECEIVED,
   // SET_ACTIVE_PET_FILTERS,
 } from './petsConstants';
 
-function petsRequested(shelterIds) {
+function petsRequested(currentPage) {
   return async (dispatch, getState) => {
     dispatch({
       type: PETS_REQUESTED
     });
 
-    if(!shelterIds.length) {
+    const sheltersState = getState().shelters;
+
+    if (!sheltersState.activeShelterIds.length) {
       dispatch({
         type: PETS_RECEIVED,
         payload: {
@@ -21,48 +22,21 @@ function petsRequested(shelterIds) {
       });
       return;
     }
-    
+
     const response = await get('/api/pets')
       .query({
-        shelterIds,
-        page: 1
+        shelterIds: sheltersState.activeShelterIds,
+        page: (currentPage ? currentPage : 0) + 1
       }).catch((error) => {
         console.log('Error in petsRequested: ' + error);
       });
 
-    const { shelters } = getState();
     dispatch({
       type: PETS_RECEIVED,
       payload: {
         pets: response.body.pets,
         pagination: response.body.pagination,
-        shelters
-      }
-    });
-  }
-}
-
-function morePetsRequested(currentPage) {
-  return async (dispatch, getState) => {
-    dispatch({
-      type: PETS_REQUESTED
-    });
-
-    const response = await get('/api/pets')
-      .query({
-        shelterIds: getState().shelters.activeShelterIds,
-        page: currentPage + 1
-      }).catch((error) => {
-        console.log('Error in petsRequested: ' + error);
-      });
-      const { shelters } = getState();
-
-    dispatch({
-      type: MORE_PETS_RECEIVED,
-      payload: {
-        pets: response.body.pets,
-        pagination: response.body.pagination,
-        shelters
+        shelters: sheltersState.items
       }
     });
   }
@@ -79,6 +53,5 @@ function morePetsRequested(currentPage) {
 // };
 
 export {
-  petsRequested,
-  morePetsRequested
+  petsRequested
 }

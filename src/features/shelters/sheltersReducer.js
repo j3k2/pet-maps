@@ -6,7 +6,6 @@ import {
   ALL_SHELTERS_TOGGLED,
   MARKER_SHELTERS_TOGGLED
 } from './sheltersConstants';
-
 import {
   MARKER_HOVERED
 } from '../map/mapConstants';

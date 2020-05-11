@@ -22,7 +22,7 @@ function SheltersContainer(props) {
         <div style={{
           display: 'inline-block',
         }}>
-          <MapContainer/>
+          <MapContainer />
         </div>
         <div style={{
           display: 'inline-block',
@@ -44,7 +44,7 @@ function SheltersContainer(props) {
             position: 'relative'
           }}
           onClick={() => {
-            props.petsRequested(props.activeShelterIds);
+            props.petsRequested();
           }}>
           Find Pets
                 </Button>
