@@ -12,12 +12,13 @@ class MapComponent extends React.Component {
       >
         <GoogleMap
           mapContainerStyle={{
-            height: constants.mapWidth,
-            width: constants.mapWidth
+            height: constants.MAP_SIZE,
+            width: constants.MAP_SIZE
           }}
           zoom={13}
           center={this.props.center}
           options={{
+            minZoom: 12,
             zoomControl: false,
             mapTypeControl: false,
             scaleControl: false,
