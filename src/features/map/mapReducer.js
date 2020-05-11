@@ -2,12 +2,10 @@ import { LOCATION_SEARCHED, MARKER_HOVERED, UPDATE_TOGGLED } from './mapActions'
 
 import {
   MARKERS_RECEIVED,
-  SHELTERS_RECEIVED,
   SHELTER_LIST_ITEM_HOVERED
 } from '../shelters/shelterActions';
 
 export default (state = {
-  loading: {},
   center: null,
   update: true,
   markers: {},
@@ -25,12 +23,6 @@ export default (state = {
         ...state,
         update: action.payload
       }
-    case SHELTERS_RECEIVED: {
-      return {
-        ...state,
-        markers: []
-      }
-    }
     case MARKERS_RECEIVED: {
       const shelters = action.payload;
       const markers = {};
