@@ -5,11 +5,10 @@ import {
   SHELTER_SELECTION_TOGGLED,
   ALL_SHELTERS_TOGGLED,
   MARKER_SHELTERS_TOGGLED
-} from './shelterActions';
-
+} from './sheltersConstants';
 import {
   MARKER_HOVERED
-} from '../map/mapActions';
+} from '../map/mapConstants';
 
 export default (state = {
   loading: false,

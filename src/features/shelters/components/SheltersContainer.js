@@ -4,7 +4,7 @@ import { Segment, Button } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import SheltersList from './SheltersList';
 import { petsRequested } from '../../pets/petsActions';
-import { shelterSelectionToggled, allSheltersToggled, shelterListItemHovered } from '../shelterActions';
+import { shelterSelectionToggled, allSheltersToggled, shelterListItemHovered } from '../sheltersActions';
 
 function SheltersContainer(props) {
   return (
@@ -22,7 +22,7 @@ function SheltersContainer(props) {
         <div style={{
           display: 'inline-block',
         }}>
-          <MapContainer/>
+          <MapContainer />
         </div>
         <div style={{
           display: 'inline-block',
@@ -44,14 +44,13 @@ function SheltersContainer(props) {
             position: 'relative'
           }}
           onClick={() => {
-            props.petsRequested(props.activeShelterIds);
+            props.petsRequested();
           }}>
           Find Pets
                 </Button>
       </Segment>
     </div>
   )
-
 }
 
 export default connect(state => {

@@ -1,10 +1,11 @@
 import { get } from 'superagent';
+import {
+  LOCATION_SEARCHED,
+  MARKER_HOVERED,
+  UPDATE_TOGGLED
+} from './mapConstants';
 
-export const LOCATION_SEARCHED = 'LOCATION_SEARCHED';
-export const MARKER_HOVERED = 'MARKER_HOVERED';
-export const UPDATE_TOGGLED = 'UPDATE_TOGGLED';
-
-export function locationSearched(query) {
+function locationSearched(query) {
   return async (dispatch) => {
     const response = await get('/api/location')
       .query({ query }).catch((error) => {
@@ -20,16 +21,22 @@ export function locationSearched(query) {
   }
 }
 
-export function updateToggled(val) {
+function updateToggled(val) {
   return {
     type: UPDATE_TOGGLED,
     payload: val
   };
 }
 
-export function markerHovered(markerId) {
+function markerHovered(markerId) {
   return {
     type: MARKER_HOVERED,
     payload: markerId
   };
+}
+
+export {
+  locationSearched,
+  updateToggled,
+  markerHovered
 }
